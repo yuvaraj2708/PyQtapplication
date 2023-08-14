@@ -1,11 +1,15 @@
 import sys
 import sqlite3
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QLineEdit, QPushButton, QVBoxLayout, QWidget, QFormLayout, QComboBox, QDateEdit, QMessageBox
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QLineEdit, QPushButton, QVBoxLayout, QHBoxLayout, QWidget, QFormLayout, QComboBox, QDateEdit, QMessageBox, QMenuBar, QAction
 
 class RegistrationPage(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Patient Registration")
+        self.setGeometry(100, 100, 500, 400)  # Set window position and size
+
+        # Apply styles
+        self.setStyleSheet("background-color: #f2f2f2;")  # Set background color
 
         # Create database connection
         self.connection = sqlite3.connect("user_database.db")
@@ -14,7 +18,7 @@ class RegistrationPage(QMainWindow):
         # Create UI elements
         self.uhid_label = QLabel("UHID:")
         self.uhid_input = QLineEdit()
-
+        
         self.title_label = QLabel("Title:")
         self.title_combobox = QComboBox()
         self.title_combobox.addItems(["Mr.", "Mrs.", "Miss", "Dr."])
@@ -39,59 +43,57 @@ class RegistrationPage(QMainWindow):
         self.mobile_input = QLineEdit()
 
         self.register_button = QPushButton("Register")
-        self.register_button.clicked.connect(self.register_patient)
+        self.register_button.setStyleSheet("background-color: #4CAF50; color: white;")  # Style the button
 
-        # Create layout and add widgets
-        layout = QFormLayout()
-        layout.addRow(self.uhid_label, self.uhid_input)
-        layout.addRow(self.title_label, self.title_combobox)
-        layout.addRow(self.gender_label, self.gender_combobox)
-        layout.addRow(self.name_label, self.name_input)
-        layout.addRow(self.dob_label, self.dob_input)
-        layout.addRow(self.age_label, self.age_input)
-        layout.addRow(self.email_label, self.email_input)
-        layout.addRow(self.mobile_label, self.mobile_input)
-        layout.addRow(self.register_button)
+        self.setup_ui()
+
+    def setup_ui(self):
+        # Create layout for the first row (UHID, Title, Gender)
+        first_row_layout = QHBoxLayout()
+        first_row_layout.addWidget(self.uhid_label)
+        first_row_layout.addWidget(self.uhid_input)
+        first_row_layout.addWidget(self.title_label)
+        first_row_layout.addWidget(self.title_combobox)
+        first_row_layout.addWidget(self.gender_label)
+        first_row_layout.addWidget(self.gender_combobox)
+
+        # Create layout for the second row (Patient Name, DOB, Age)
+        second_row_layout = QHBoxLayout()
+        second_row_layout.addWidget(self.name_label)
+        second_row_layout.addWidget(self.name_input)
+        second_row_layout.addWidget(self.dob_label)
+        second_row_layout.addWidget(self.dob_input)
+        second_row_layout.addWidget(self.age_label)
+        second_row_layout.addWidget(self.age_input)
+
+        # Create layout for the subsequent rows
+        third_rows_layout = QFormLayout()
+        third_rows_layout.addWidget(self.name_label)
+        third_rows_layout.addWidget(self.email_input)
+        third_rows_layout.addWidget(self.mobile_label)
+        third_rows_layout.addWidget(self.mobile_input)
+
+        # Combine layouts into the main layout
+        main_layout = QVBoxLayout()
+        main_layout.addLayout(first_row_layout)
+        main_layout.addLayout(second_row_layout)
+        main_layout.addLayout(third_rows_layout)
+        main_layout.addWidget(self.register_button)
 
         central_widget = QWidget()
-        central_widget.setLayout(layout)
+        central_widget.setLayout(main_layout)
         self.setCentralWidget(central_widget)
 
-    def register_patient(self):
-        uhid = self.uhid_input.text()
-        title = self.title_combobox.currentText()
-        gender = self.gender_combobox.currentText()
-        name = self.name_input.text()
-        dob = self.dob_input.date().toString("yyyy-MM-dd")
-        age = self.age_input.text()
-        email = self.email_input.text()
-        mobile = self.mobile_input.text()
+    def create_menu(self):
+        self.menu_bar = QMenuBar(self)
 
-        # Insert patient details into the database
-        insert_patient_query = '''
-            INSERT INTO patients (uhid, title, gender, name, dob, age, email, mobile)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?);
-        '''
-        try:
-            self.cursor.execute(insert_patient_query, (uhid, title, gender, name, dob, age, email, mobile))
-            self.connection.commit()
-            QMessageBox.information(self, "Success", "Patient registered successfully.")
-            self.clear_fields()
-        except sqlite3.Error as e:
-            QMessageBox.critical(self, "Error", "Failed to register patient. Error: " + str(e))
+        file_menu = self.menu_bar.addMenu("File")
 
-    def clear_fields(self):
-        self.uhid_input.clear()
-        self.title_combobox.setCurrentIndex(0)
-        self.gender_combobox.setCurrentIndex(0)
-        self.name_input.clear()
-        self.dob_input.setDate(QDateEdit.currentDate())
-        self.age_input.clear()
-        self.email_input.clear()
-        self.mobile_input.clear()
+        exit_action = QAction("Exit", self)
+        exit_action.setShortcut("Ctrl+Q")
+        exit_action.triggered.connect(self.close)
 
-    def closeEvent(self, event):
-        self.connection.close()
+        file_menu.addAction(exit_action)
 
 class LoginPage(QMainWindow):
     def __init__(self):
@@ -143,6 +145,8 @@ class LoginPage(QMainWindow):
 
     def closeEvent(self, event):
         self.connection.close()
+
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
