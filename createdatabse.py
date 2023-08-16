@@ -35,7 +35,7 @@
 import sqlite3
 
 # Connect to or create the database
-connection = sqlite3.connect("user_database.db")
+connection = sqlite3.connect("patient_data.db")
 cursor = connection.cursor()
 
 # Create the patients table if it doesn't exist
@@ -44,12 +44,15 @@ create_patients_table_query = '''
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         uhid TEXT NOT NULL UNIQUE,
         title TEXT NOT NULL,
-        gender TEXT NOT NULL,
-        name TEXT NOT NULL,
+        patientname TEXT NOT NULL,
         dob DATE NOT NULL,
         age TEXT NOT NULL,
-        email TEXT NOT NULL,
-        mobile TEXT NOT NULL
+        gender TEXT NOT NULL,
+        mobile TEXT NOT NULL,
+        email TEXT NOT NULL
+        
+        
+        
     );
 '''
 
