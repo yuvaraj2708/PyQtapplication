@@ -10,10 +10,37 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from addtest  import Ui_addtestForm
+import sqlite3
 
 class Ui_testForm(object):
+    def update_tests_list(self):
+     # Clear the table before updating
+     self.tableWidget.clearContents()
+     self.tableWidget.setRowCount(0)
+ 
+     # Connect to the database
+     conn = sqlite3.connect("patient_data.db")
+     cursor = conn.cursor()
+ 
+     # Fetch patient data from the database
+     cursor.execute("SELECT * FROM tests")
+     tests = cursor.fetchall()
+ 
+     # Populate the QTableWidget with data
+     for row_num, test in enumerate(tests):
+         self.tableWidget.insertRow(row_num)
+         for col_num, value in enumerate(test):
+             item = QtWidgets.QTableWidgetItem(str(value))
+             self.tableWidget.setItem(row_num, col_num, item)
+ 
+     conn.close()
+     
     def setupUi(self, Form):
-        Form.setObjectName("Form")
+        self.tableWidget = QtWidgets.QTableWidget(Form)
+        self.tableWidget.setGeometry(QtCore.QRect(20, 220, 771, 341))
+        self.tableWidget.setColumnCount(6)  # Adjust this based on your database schema
+        self.tableWidget.setHorizontalHeaderLabels(["Testcode", "TestName", "specimentype", "reportingrate", "department", "reportformat"])
+        self.tableWidget.setObjectName("tableWidget")             
         Form.resize(811, 588)
         Form.setMaximumSize(QtCore.QSize(811, 16777215))
         font = QtGui.QFont()
