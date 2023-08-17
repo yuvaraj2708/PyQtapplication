@@ -9,10 +9,12 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import sqlite3
 
-
-class Ui_Form(object):
+class Ui_refdrForm(object):
     def setupUi(self, Form):
+        self.conn = sqlite3.connect("patient_data.db")
+        self.cursor = self.conn.cursor()       
         Form.setObjectName("Form")
         Form.resize(811, 588)
         Form.setMaximumSize(QtCore.QSize(811, 16777215))
@@ -386,13 +388,41 @@ class Ui_Form(object):
         self.label_6.setText(_translate("Form", "Address"))
         self.label_14.setText(_translate("Form", "Mobile "))
         self.label_15.setText(_translate("Form", "Email ID"))
+        self.pushButton.clicked.connect(self.save_refdr_data)
+    
+    def clear_input_fields(self):
+        self.lineEdit_16.clear()
+        self.lineEdit_15.clear()
+        self.lineEdit_18.clear()
+        self.lineEdit_6.clear()
+        self.lineEdit_12.clear()
+        self.lineEdit_10.clear()
+        self.lineEdit_14.clear()
+        self.lineEdit_21.clear()
+     
+    def save_refdr_data(self):
+        DoctorCode = self.lineEdit_16.text()
+        DoctorName = self.lineEdit_15.text()
+        Qualification = self.lineEdit_18.text()
+        Specialisation = self.lineEdit_6.text()
+        Address = self.lineEdit_12.text()
+        PINCode = self.lineEdit_10.text()
+        Mobile = self.lineEdit_14.text()
+        Emailid = self.lineEdit_21.text()
 
+        # Insert patient data into the database
+        self.cursor.execute("INSERT INTO refdr (DoctorCode, DoctorName, Qualification, Specialisation, Address, PINCode, Mobile,Emailid) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                            (DoctorCode, DoctorName, Qualification, Specialisation, Address, PINCode, Mobile,Emailid))
+        self.conn.commit()
+
+        # Clear the input fields after saving
+        self.clear_input_fields()
 
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     Form = QtWidgets.QWidget()
-    ui = Ui_Form()
+    ui = Ui_refdrForm()
     ui.setupUi(Form)
     Form.show()
     sys.exit(app.exec_())

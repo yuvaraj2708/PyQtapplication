@@ -9,7 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+from addtest  import Ui_addtestForm
 
 class Ui_testForm(object):
     def setupUi(self, Form):
@@ -140,6 +140,9 @@ class Ui_testForm(object):
         self.lineEdit_19.setObjectName("lineEdit_19")
         self.pushButton_2 = QtWidgets.QPushButton(Form)
         self.pushButton_2.setGeometry(QtCore.QRect(560, 120, 91, 31))
+        self.pushButton_2.setObjectName("pushButton_2")
+        self.pushButton_2.clicked.connect(self.open_add_test_form)  # Connect the clicked signal
+
         font = QtGui.QFont()
         font.setPointSize(-1)
         font.setBold(True)
@@ -198,8 +201,13 @@ class Ui_testForm(object):
         self.label_16.setText(_translate("Form", "Department"))
         self.label_17.setText(_translate("Form", "Specimen Type"))
         self.label_18.setText(_translate("Form", "Reporting Rate    "))
-
-
+   
+    def open_add_test_form(self):
+        self.add_test_form = QtWidgets.QWidget()
+        self.ui_add_test = Ui_addtestForm()
+        self.ui_add_test.setupUi(self.add_test_form)
+        self.add_test_form.show()
+   
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)

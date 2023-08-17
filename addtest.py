@@ -9,10 +9,12 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import sqlite3
 
-
-class Ui_Form(object):
+class Ui_addtestForm(object):
     def setupUi(self, Form):
+        self.conn = sqlite3.connect("patient_data.db")
+        self.cursor = self.conn.cursor()       
         Form.setObjectName("Form")
         Form.resize(811, 588)
         Form.setMaximumSize(QtCore.QSize(811, 16777215))
@@ -314,13 +316,46 @@ class Ui_Form(object):
         self.pushButton_2.setText(_translate("Form", "Clear"))
         self.label_5.setText(_translate("Form", "department"))
         self.label_6.setText(_translate("Form", "report format"))
+        self.pushButton.clicked.connect(self.save_test_data)
+    
+    def clear_input_fields_test(self):
+        self.lineEdit_16.clear()
+        self.lineEdit_15.clear()
+        self.lineEdit_18.clear()
+        self.lineEdit_6.clear()
+        self.lineEdit_12.clear()
+        self.lineEdit_10.clear()
+        
+    
+    
 
+    def save_test_data(self):
+        try:
+            Testcode = self.lineEdit_16.text()
+            TestName = self.lineEdit_15.text()
+            specimentype = self.lineEdit_18.text()
+            reportingrate = self.lineEdit_6.text()
+            department = self.lineEdit_12.text()
+            reportformat = self.lineEdit_10.text()
+    
+            # Insert patient data into the database
+            self.cursor.execute("INSERT INTO tests (Testcode, TestName, specimentype, reportingrate, department, reportformat) VALUES (?, ?, ?, ?, ?, ?)",
+                                (Testcode, TestName, specimentype, reportingrate, department, reportformat))
+            self.conn.commit()
+    
+            # Clear the input fields after saving
+            self.clear_input_fields_test()
 
+        except Exception as e:
+            print("Error:", str(e))
+        
+    
+    
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     Form = QtWidgets.QWidget()
-    ui = Ui_Form()
+    ui = Ui_addtestForm()
     ui.setupUi(Form)
     Form.show()
     sys.exit(app.exec_())

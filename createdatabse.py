@@ -64,3 +64,65 @@ connection.close()
 
 print("Patients table created successfully.")
 
+
+import sqlite3
+
+# Connect to or create the database
+connection = sqlite3.connect("patient_data.db")
+cursor = connection.cursor()
+
+# Create the patients table if it doesn't exist
+create_tests_table_query = '''
+    CREATE TABLE IF NOT EXISTS tests (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        Testcode TEXT NOT NULL UNIQUE,
+        TestName TEXT NOT NULL,
+        specimentype TEXT NOT NULL,
+        reportingrate TEXT NOT NULL,
+        department DATE NOT NULL,
+        reportformat TEXT NOT NULL
+        
+        
+        
+        
+    );
+'''
+
+cursor.execute(create_tests_table_query)
+connection.commit()
+
+# Close the connection
+connection.close()
+
+print("tests table created successfully.")
+
+# import sqlite3
+
+# # Connect to or create the database
+# connection = sqlite3.connect("patient_data.db")
+# cursor = connection.cursor()
+
+# # Create the patients table if it doesn't exist
+# create_refdr_table_query = '''
+#     CREATE TABLE IF NOT EXISTS refdr (
+#         id INTEGER PRIMARY KEY AUTOINCREMENT,
+#         DoctorCode TEXT NOT NULL UNIQUE,
+#         DoctorName TEXT NOT NULL,
+#         Qualification TEXT NOT NULL,
+#         Specialisation TEXT NOT NULL,
+#         Address DATE NOT NULL,
+#         PINCode TEXT NOT NULL,
+#         Mobile  TEXT NOT NULL,
+#         Emailid TEXT NOT NULL
+        
+        
+#     );
+# '''
+
+# cursor.execute(create_refdr_table_query)
+# connection.commit()
+
+# # Close the connection
+# connection.close()
+
+# print("refdr table created successfully.")
