@@ -61,29 +61,71 @@ class TextEdit(QTextEdit):
         super(TextEdit, self).insertFromMimeData(source)
     
     def insert_table(self, rows, columns):
-        cursor = self.textCursor()
-        table = cursor.insertTable(rows, columns)
-        format = QTextTableFormat()
-        format.setBorder(1)
-        table.setFormat(format)    
+     cursor = self.textCursor()
+     table = cursor.insertTable(rows, columns)
+ 
+     format = QTextTableFormat()
+     format.setBorder(1)
+     format.setBorderStyle(QTextFrameFormat.BorderStyle_Solid)
+     format.setWidth(QTextLength(QTextLength.PercentageLength, 100))
+ 
+     for row in range(rows):
+         for col in range(columns):
+             cell = table.cellAt(row, col)
+             
+             # Set cell alignment using QTextCursor
+             cell_cursor = cell.firstCursorPosition()
+             cell_cursor.select(QTextCursor.BlockUnderCursor)
+             cell_format = cell_cursor.blockFormat()
+             cell_format.setAlignment(Qt.AlignCenter)
+             cell_cursor.setBlockFormat(cell_format)
+ 
+     table.setFormat(format)
+
+    
     
     def insert_image(self):
-        options = QFileDialog.Options()
-        options |= QFileDialog.ReadOnly
+     options = QFileDialog.Options()
+     options |= QFileDialog.ReadOnly
+ 
+     file_name, _ = QFileDialog.getOpenFileName(self, "Insert Image", "", "Images (*.png *.jpg *.bmp);;All Files (*)", options=options)
+ 
+     if file_name:
+         image = QImage(file_name)
+         if not image.isNull():
+            cursor = self.textCursor()
+            document = self.document()
 
-        file_name, _ = QFileDialog.getOpenFileName(self, "Insert Image", "", "Images (*.png *.jpg *.bmp);;All Files (*)", options=options)
+            uuid = hexuuid()
+            image_url = QUrl.fromLocalFile(file_name)
 
-        if file_name:
-            image = QImage(file_name)
-            if not image.isNull():
-                cursor = self.editor.textCursor()
-                document = self.editor.document()
+            image_format = QTextImageFormat()
+            image_format.setName(image_url.toString())
+            document.addResource(QTextDocument.ImageResource, image_url, image)
 
-                uuid = hexuuid()
-                document.addResource(QTextDocument.ImageResource, uuid, image)
+            # Insert an empty frame to hold the image
+            frame_format = QTextFrameFormat()
+            frame_format.setWidth(image.width())  # Set initial width
+            frame_format.setHeight(image.height())  # Set initial height
+            frame = cursor.insertFrame(frame_format)
 
-                cursor.insertImage(uuid)
-    
+            # Insert the image into the frame
+            frame_cursor = frame.lastCursorPosition()
+            frame_cursor.insertImage(image_format)
+
+            cursor = self.textCursor()
+            cursor.movePosition(QTextCursor.End)
+
+            # Insert a line break after the frame to continue typing
+            cursor.insertBlock()
+
+            self.setFocus()
+
+
+
+
+
+
 class MainWindow(QMainWindow):
 
     def __init__(self, *args, **kwargs):
@@ -187,13 +229,13 @@ class MainWindow(QMainWindow):
         edit_toolbar.addAction(paste_action)
         edit_menu.addAction(paste_action)
         
-        insert_table_action = QAction(QIcon(os.path.join('images', 'table.png')), "Insert Table", self)
+        insert_table_action = QAction(QIcon(os.path.join('images', 'table.PNG')), "Insert Table", self)
         insert_table_action.setStatusTip("Insert a table")
         insert_table_action.triggered.connect(self.add_table)
         edit_toolbar.addAction(insert_table_action)
         edit_menu.addAction(insert_table_action)
         
-        insert_image_action = QAction(QIcon(os.path.join('images', 'image.png')), "Insert Image", self)
+        insert_image_action = QAction(QIcon(os.path.join('images', 'image.PNG')), "Insert Image", self)
         insert_image_action.setStatusTip("Insert an image")
         insert_image_action.triggered.connect(self.editor.insert_image)
         edit_toolbar.addAction(insert_image_action)
