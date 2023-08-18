@@ -241,12 +241,36 @@ class Ui_patientForm(object):
 "background-color: #089598;\n"
 "}\n"
 "\n"
-"")
+"")      
         self.pushButton_2.setObjectName("pushButton_2")
         self.textEdit = QtWidgets.QTextEdit(Form)
         self.textEdit.setGeometry(QtCore.QRect(-27, 280, 921, 421))
         self.textEdit.setObjectName("textEdit")
+        
+        self.uhid_lineEdit = QtWidgets.QLineEdit(Form)
+        self.uhid_lineEdit.setGeometry(QtCore.QRect(30, 320, 201, 31))
 
+        self.title_lineEdit = QtWidgets.QLineEdit(Form)
+        self.title_lineEdit.setGeometry(QtCore.QRect(30, 360, 201, 31))
+
+        self.name_lineEdit = QtWidgets.QLineEdit(Form)
+        self.name_lineEdit.setGeometry(QtCore.QRect(30, 400, 201, 31))
+        
+        self.dob_lineEdit = QtWidgets.QLineEdit(Form)
+        self.dob_lineEdit.setGeometry(QtCore.QRect(30, 440, 201, 31))
+        
+        self.age_lineEdit = QtWidgets.QLineEdit(Form)
+        self.age_lineEdit.setGeometry(QtCore.QRect(30, 480, 201, 31))
+        
+        self.gender_lineEdit = QtWidgets.QLineEdit(Form)
+        self.gender_lineEdit.setGeometry(QtCore.QRect(30, 520, 201, 31))
+        
+        self.mobile_lineEdit = QtWidgets.QLineEdit(Form)
+        self.mobile_lineEdit.setGeometry(QtCore.QRect(30, 560, 201, 31))
+        
+        self.email_lineEdit = QtWidgets.QLineEdit(Form)
+        self.email_lineEdit.setGeometry(QtCore.QRect(30, 600, 201, 31)) 
+        
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
         self.fetch_and_display_patient_data()
@@ -267,17 +291,16 @@ class Ui_patientForm(object):
   
         if patient_data:
             # Populate UI fields with patient data
-            self.lineEdit_15.setText(patient_data[1])  # Assuming column order is consistent
-            self.lineEdit_18.setText(patient_data[2])  # Adjust column index as needed
-            self.lineEdit_6.setText(patient_data[3])
-            self.lineEdit_18.setText(patient_data[4])
-            self.lineEdit_18.setText(patient_data[5])
-            self.lineEdit_18.setText(patient_data[6])
-            self.lineEdit_18.setText(patient_data[7])
-            self.lineEdit_16.setText(patient_data[8])
-            self.lineEdit_16.setText(patient_data[8])
-            
-            
+            if patient_data:
+                self.uhid_lineEdit.setText(patient_data[1])
+                self.title_lineEdit.setText(patient_data[2])   
+                self.name_lineEdit.setText(patient_data[3])  # Adjust the index based on your database schema
+                self.dob_lineEdit.setText(patient_data[4])
+                self.age_lineEdit.setText(patient_data[5])
+                self.gender_lineEdit.setText(patient_data[6])
+                self.mobile_lineEdit.setText(patient_data[7])
+                self.email_lineEdit.setText(patient_data[8])
+                          
             # Populate other fields similarly
   
         # Close the database connection
