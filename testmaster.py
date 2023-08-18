@@ -19,12 +19,20 @@ class Ui_testForm(object):
      self.tableWidget.setRowCount(0)
  
      # Connect to the database
-     conn = sqlite3.connect("patient_data.db")
-     cursor = conn.cursor()
- 
-     # Fetch patient data from the database
-     cursor.execute("SELECT * FROM tests")
-     tests = cursor.fetchall()
+     try:
+        conn = sqlite3.connect("patient_data.db")
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM tests")
+        tests = cursor.fetchall()
+    
+        # Rest of the code for populating the table
+
+     except sqlite3.Error as e:
+         print("Database error:", e)
+     finally:
+         if conn:
+           conn.close()
+
  
      # Populate the QTableWidget with data
      for row_num, test in enumerate(tests):

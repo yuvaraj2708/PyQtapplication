@@ -3,7 +3,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 import sqlite3
 
 
-class Ui_Form(object):
+class Ui_addpatientForm(object):
     def setupUi(self, Form):
         self.conn = sqlite3.connect("patient_data.db")
         self.cursor = self.conn.cursor()    
@@ -428,12 +428,12 @@ class Ui_Form(object):
 
         # Clear the input fields after saving
         self.clear_input_fields()
-
+        
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     Form = QtWidgets.QWidget()
-    ui = Ui_Form()
+    ui = Ui_addpatientForm()
     ui.setupUi(Form)
     Form.show()
     sys.exit(app.exec_())

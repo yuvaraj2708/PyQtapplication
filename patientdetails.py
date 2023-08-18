@@ -9,6 +9,10 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from patientregister import Ui_addpatientForm
+import sys
+import sqlite3
+
 
 
 class Ui_patientForm(object):
@@ -239,10 +243,48 @@ class Ui_patientForm(object):
 "\n"
 "")
         self.pushButton_2.setObjectName("pushButton_2")
+        self.textEdit = QtWidgets.QTextEdit(Form)
+        self.textEdit.setGeometry(QtCore.QRect(-27, 280, 921, 421))
+        self.textEdit.setObjectName("textEdit")
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
-
+        self.fetch_and_display_patient_data()
+        
+        
+        self.lineEdit_16.textChanged.connect(self.fetch_and_display_patient_data)
+        
+    def fetch_and_display_patient_data(self):
+  
+        # Connect to the database
+        conn = sqlite3.connect('patient_data.db')
+        cursor = conn.cursor()
+  
+        # Fetch patient data based on the entered UHID
+        # uhid = self.lineEdit_16.text()
+        cursor.execute("SELECT * FROM patients")
+        patient_data = cursor.fetchone()
+  
+        if patient_data:
+            # Populate UI fields with patient data
+            self.lineEdit_15.setText(patient_data[1])  # Assuming column order is consistent
+            self.lineEdit_18.setText(patient_data[2])  # Adjust column index as needed
+            self.lineEdit_6.setText(patient_data[3])
+            self.lineEdit_18.setText(patient_data[4])
+            self.lineEdit_18.setText(patient_data[5])
+            self.lineEdit_18.setText(patient_data[6])
+            self.lineEdit_18.setText(patient_data[7])
+            self.lineEdit_16.setText(patient_data[8])
+            self.lineEdit_16.setText(patient_data[8])
+            
+            
+            # Populate other fields similarly
+  
+        # Close the database connection
+        conn.close()
+        
+  
+    
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
@@ -258,10 +300,16 @@ class Ui_patientForm(object):
         self.label_4.setText(_translate("Form", "Patient Name"))
         self.label_11.setText(_translate("Form", "Patient Details"))
         self.pushButton_2.setText(_translate("Form", "Add Patient"))
-
+        self.pushButton_2.setObjectName("pushButton_2")
+        self.pushButton_2.clicked.connect(self.open_add_patient_form) 
+    
+    def open_add_patient_form(self):
+        self.add_test_form = QtWidgets.QWidget()
+        self.ui_add_test = Ui_addpatientForm()
+        self.ui_add_test.setupUi(self.add_test_form)
+        self.add_test_form.show()
 
 if __name__ == "__main__":
-    import sys
     app = QtWidgets.QApplication(sys.argv)
     Form = QtWidgets.QWidget()
     ui = Ui_patientForm()

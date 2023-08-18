@@ -1,10 +1,10 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-from patientregister import Ui_Form
+from patientregister import Ui_addpatientForm
 from patientdetails import Ui_patientForm 
 from refdrmaster import Ui_refdrmasterForm 
 from testmaster import Ui_testForm
 from registrationsummary import Ui_visitsummaryForm
-
+from reportformat import Ui_reportFormatFrame
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -86,7 +86,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.setupUi(self)
 
         self.patient_register_frame = QtWidgets.QFrame()
-        self.patient_register_ui = Ui_Form()#patient register
+        self.patient_register_ui = Ui_addpatientForm()#patient register
         self.patient_register_ui.setupUi(self.patient_register_frame)
 
         self.patient_master_frame = QtWidgets.QFrame()
@@ -105,12 +105,18 @@ class MainWindow(QtWidgets.QMainWindow):
         self.add_visitsummary_ui = Ui_visitsummaryForm()# Test master
         self.add_visitsummary_ui.setupUi(self.add_visitsummary_frame)
         
+        self.reportformat_frame = QtWidgets.QFrame()
+        self.reportformat_ui = Ui_reportFormatFrame()# report format
+        self.reportformat_ui.__init__(self.reportformat_frame)
+        
+        
         self.ui.actionPatientregister.triggered.connect(self.show_patient_register_frame)
         self.ui.actionAdd_Patient.triggered.connect(self.show_patient_master_frame)
         self.ui.actionRefDr_Master.triggered.connect(self.show_refdr_frame)
         self.ui.actionTest_Master.triggered.connect(self.show_testmaster_frame) 
         self.ui.menuVisit_Summary.triggered.connect(self.show_visitsummary_frame)
-        
+        self.ui.menuVisit_Summary.triggered.connect(self.show_visitsummary_frame)
+        self.ui.actionReport_Format.triggered.connect(self.show_reportformat_frame)
         
         self.stacked_widget = QtWidgets.QStackedWidget(self)
         self.stacked_widget.addWidget(self.ui.centralwidget)
@@ -119,6 +125,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.stacked_widget.addWidget(self.add_refdr_frame)
         self.stacked_widget.addWidget(self.add_testmaster_frame)
         self.stacked_widget.addWidget(self.add_visitsummary_frame)
+        self.stacked_widget.addWidget(self.reportformat_frame)
         self.setCentralWidget(self.stacked_widget)
 
     def show_patient_register_frame(self):
@@ -135,7 +142,9 @@ class MainWindow(QtWidgets.QMainWindow):
     
     def show_visitsummary_frame(self):
         self.stacked_widget.setCurrentWidget(self.add_visitsummary_frame) 
-        
+          
+    def show_reportformat_frame(self):
+        self.stacked_widget.setCurrentWidget(self.reportformat_frame)     
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)

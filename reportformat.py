@@ -18,14 +18,14 @@ def hexuuid():
 def splitext(p):
     return os.path.splitext(p)[1].lower()
 
-class TextEdit(QTextEdit):
+class Ui_reportFormatFrame(QTextEdit):
 
     def canInsertFromMimeData(self, source):
 
         if source.hasImage():
             return True
         else:
-            return super(TextEdit, self).canInsertFromMimeData(source)
+            return super(Ui_reportFormatFrame, self).canInsertFromMimeData(source)
 
     def insertFromMimeData(self, source):
 
@@ -58,7 +58,7 @@ class TextEdit(QTextEdit):
             cursor.insertImage(uuid)
             return
 
-        super(TextEdit, self).insertFromMimeData(source)
+        super(Ui_reportFormatFrame, self).insertFromMimeData(source)
     
     def insert_table(self, rows, columns):
      cursor = self.textCursor()
@@ -127,12 +127,12 @@ class TextEdit(QTextEdit):
 
 
 class MainWindow(QMainWindow):
-
+    
     def __init__(self, *args, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
 
         layout = QVBoxLayout()
-        self.editor = TextEdit()
+        self.editor = Ui_reportFormatFrame()
         # Setup the QTextEdit editor configuration
         self.editor.setAutoFormatting(QTextEdit.AutoAll)
         self.editor.selectionChanged.connect(self.update_format)

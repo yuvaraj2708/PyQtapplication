@@ -1,7 +1,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+from patientregister import Ui_addpatientForm
 
 class Ui_visitsummaryForm(object):
     def setupUi(self, Form):
@@ -210,7 +210,14 @@ class Ui_visitsummaryForm(object):
         self.label_4.setText(_translate("Form", "Pt.Name / Visit ID / Pt.ID"))
         self.label_11.setText(_translate("Form", "Patient Details"))
         self.pushButton_2.setText(_translate("Form", "Add Patient"))
-
+        self.pushButton_2.setObjectName("pushButton_2")
+        self.pushButton_2.clicked.connect(self.open_add_patient_form) 
+    
+    def open_add_patient_form(self):
+        self.add_test_form = QtWidgets.QWidget()
+        self.ui_add_test = Ui_addpatientForm()
+        self.ui_add_test.setupUi(self.add_test_form)
+        self.add_test_form.show()
 
 if __name__ == "__main__":
     import sys
