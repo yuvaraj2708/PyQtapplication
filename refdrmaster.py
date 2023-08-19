@@ -10,11 +10,12 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from addrefdr import Ui_refdrForm
+import sqlite3
 
 class Ui_refdrmasterForm(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(811, 588)
+        Form.resize(900, 600)
         Form.setMaximumSize(QtCore.QSize(811, 16777215))
         font = QtGui.QFont()
         font.setPointSize(10)
@@ -286,10 +287,70 @@ class Ui_refdrmasterForm(object):
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
+        self.pushButton_2.setObjectName("pushButton_2")
+      
+ 
+        self.retranslateUi(Form)
+        QtCore.QMetaObject.connectSlotsByName(Form)
+        self.pushButton_2.setObjectName("pushButton_2")
+        self.textEdit = QtWidgets.QTextEdit(Form)
+        self.textEdit.setGeometry(QtCore.QRect(-27, 280, 921, 421))
+        self.textEdit.setObjectName("textEdit")
+        
+        
+
+        
+        self.retranslateUi(Form)
+        QtCore.QMetaObject.connectSlotsByName(Form)
+        self.fetch_and_display_redr_data()
+        
+        
+        # self.lineEdit_16.textChanged.connect(self.fetch_and_display_test_data)
+    
+    
+    
+    def fetch_and_display_redr_data(self):
+    # Connect to the database
+     conn = sqlite3.connect('patient_data.db')
+     cursor = conn.cursor()
+ 
+     # Fetch reference data
+     cursor.execute("SELECT * FROM refdr")
+     refdr_data = cursor.fetchall()
+ 
+     if refdr_data:
+         # Clear previous data from textEdit
+         self.textEdit.clear()
+ 
+         # Create a new vertical layout to hold rows of data
+         vertical_layout = QtWidgets.QVBoxLayout()
+ 
+         # Loop through each row in the refdr_data
+         for row in refdr_data:
+             # Create a new horizontal layout for this row
+             layout = QtWidgets.QHBoxLayout()
+ 
+             # Loop through each column in the row
+             for column in row:
+                 label = QtWidgets.QLabel(str(column))
+                 layout.addWidget(label)
+ 
+             # Add the horizontal layout (row) to the vertical layout
+             vertical_layout.addLayout(layout)
+ 
+         # Add the vertical layout to the textEdit
+         self.textEdit.setLayout(vertical_layout)
+ 
+     # Close the database connection
+     conn.close()
+ 
+ 
+
+
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
+        Form.setWindowTitle(_translate("Form", "Ekon"))
         self.label.setText(_translate("Form", "Ref Dr Master"))
         self.label_2.setText(_translate("Form", "From Date"))
         self.label_3.setText(_translate("Form", "To Date"))

@@ -12,6 +12,13 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 import sqlite3
 
 class Ui_addtestForm(object):
+        
+#     def __init__(self):
+#         super().__init__()
+#         self.conn = sqlite3.connect("patient_data.db")
+#         self.cursor = self.conn.cursor()
+#         self.current_test_number = 0  # To store the latest test number    
+        
     def setupUi(self, Form):
         self.conn = sqlite3.connect("patient_data.db")
         self.cursor = self.conn.cursor()       
@@ -303,7 +310,40 @@ class Ui_addtestForm(object):
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
+        
+        self.fetch_latest_test_number()
+        latest_test_number = self.fetch_latest_test_number()
+        next_test_number = self.generate_next_test_number(latest_test_number)
+        self.lineEdit_16.setText(next_test_number)  # Set the generated test code
+        
+    def fetch_latest_test_number(self):
+        try:
+            self.cursor.execute("SELECT MAX(Testcode) FROM tests")
+            latest_test_number = self.cursor.fetchone()[0]
+            return latest_test_number
+        except Exception as e:
+            print("Error fetching latest test number:", str(e))
+            return None
 
+    def generate_next_test_number(self, latest_test_number):
+        if latest_test_number is None:
+            return "T00001"
+
+        prefix = "T"
+        numeric_part = int(latest_test_number[1:])  # Convert the numeric part to integer
+        next_numeric_part = numeric_part + 1
+        next_test_number = f"{prefix}{next_numeric_part:05}"  # Format as "T00001"
+        return next_test_number
+
+    def save_test_data(self):
+        try:
+            Testcode = self.generate_next_test_code()
+            # ... rest of your save_test_data function ...
+
+        except Exception as e:
+            print("Error:", str(e))
+    
+    
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))

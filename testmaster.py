@@ -13,42 +13,7 @@ from addtest  import Ui_addtestForm
 import sqlite3
 
 class Ui_testForm(object):
-    def update_tests_list(self):
-     # Clear the table before updating
-     self.tableWidget.clearContents()
-     self.tableWidget.setRowCount(0)
- 
-     # Connect to the database
-     try:
-        conn = sqlite3.connect("patient_data.db")
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM tests")
-        tests = cursor.fetchall()
-    
-        # Rest of the code for populating the table
-
-     except sqlite3.Error as e:
-         print("Database error:", e)
-     finally:
-         if conn:
-           conn.close()
-
- 
-     # Populate the QTableWidget with data
-     for row_num, test in enumerate(tests):
-         self.tableWidget.insertRow(row_num)
-         for col_num, value in enumerate(test):
-             item = QtWidgets.QTableWidgetItem(str(value))
-             self.tableWidget.setItem(row_num, col_num, item)
- 
-     conn.close()
-     
-    def setupUi(self, Form):
-        self.tableWidget = QtWidgets.QTableWidget(Form)
-        self.tableWidget.setGeometry(QtCore.QRect(20, 220, 771, 341))
-        self.tableWidget.setColumnCount(6)  # Adjust this based on your database schema
-        self.tableWidget.setHorizontalHeaderLabels(["Testcode", "TestName", "specimentype", "reportingrate", "department", "reportformat"])
-        self.tableWidget.setObjectName("tableWidget")             
+    def setupUi(self, Form):            
         Form.resize(811, 588)
         Form.setMaximumSize(QtCore.QSize(811, 16777215))
         font = QtGui.QFont()
@@ -216,10 +181,63 @@ class Ui_testForm(object):
         self.label_18 = QtWidgets.QLabel(Form)
         self.label_18.setGeometry(QtCore.QRect(510, 260, 96, 13))
         self.label_18.setObjectName("label_18")
-
+ 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
-
+        self.pushButton_2.setObjectName("pushButton_2")
+        self.textEdit = QtWidgets.QTextEdit(Form)
+        self.textEdit.setGeometry(QtCore.QRect(-27, 280, 921, 421))
+        self.textEdit.setObjectName("textEdit")
+        
+        
+        
+        self.retranslateUi(Form)
+        QtCore.QMetaObject.connectSlotsByName(Form)
+        self.fetch_and_display_test_data()
+        
+        
+        # self.lineEdit_16.textChanged.connect(self.fetch_and_display_test_data)
+    
+    
+    
+    def fetch_and_display_test_data(self):
+    
+    # Connect to the database
+     conn = sqlite3.connect('patient_data.db')
+     cursor = conn.cursor()
+ 
+     # Fetch reference data
+     cursor.execute("SELECT * FROM tests")
+     test_data = cursor.fetchall()
+ 
+     if test_data:
+         # Clear previous data from textEdit
+         self.textEdit.clear()
+ 
+         # Create a new vertical layout to hold rows of data
+         vertical_layout = QtWidgets.QVBoxLayout()
+ 
+         # Loop through each row in the refdr_data
+         for row in test_data:
+             # Create a new horizontal layout for this row
+             layout = QtWidgets.QHBoxLayout()
+ 
+             # Loop through each column in the row
+             for column in row:
+                 label = QtWidgets.QLabel(str(column))
+                 layout.addWidget(label)
+ 
+             # Add the horizontal layout (row) to the vertical layout
+             vertical_layout.addLayout(layout)
+ 
+         # Add the vertical layout to the textEdit
+         self.textEdit.setLayout(vertical_layout)
+ 
+     # Close the database connection
+     conn.close()
+         
+        
+        
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))

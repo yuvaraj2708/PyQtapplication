@@ -31,7 +31,7 @@
 # print("Database tables created and admin user added successfully.")
 
 
-#patient registration
+# #patient registration
 import sqlite3
 
 # Connect to or create the database
@@ -96,33 +96,58 @@ connection.close()
 
 print("tests table created successfully.")
 
-# import sqlite3
+import sqlite3
 
-# # Connect to or create the database
-# connection = sqlite3.connect("patient_data.db")
-# cursor = connection.cursor()
+# Connect to or create the database
+connection = sqlite3.connect("patient_data.db")
+cursor = connection.cursor()
 
-# # Create the patients table if it doesn't exist
-# create_refdr_table_query = '''
-#     CREATE TABLE IF NOT EXISTS refdr (
-#         id INTEGER PRIMARY KEY AUTOINCREMENT,
-#         DoctorCode TEXT NOT NULL UNIQUE,
-#         DoctorName TEXT NOT NULL,
-#         Qualification TEXT NOT NULL,
-#         Specialisation TEXT NOT NULL,
-#         Address DATE NOT NULL,
-#         PINCode TEXT NOT NULL,
-#         Mobile  TEXT NOT NULL,
-#         Emailid TEXT NOT NULL
+# Create the patients table if it doesn't exist
+create_refdr_table_query = '''
+    CREATE TABLE IF NOT EXISTS refdr (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        DoctorCode TEXT NOT NULL UNIQUE,
+        DoctorName TEXT NOT NULL,
+        Qualification TEXT NOT NULL,
+        Specialisation TEXT NOT NULL,
+        Address DATE NOT NULL,
+        PINCode TEXT NOT NULL,
+        Mobile  TEXT NOT NULL,
+        Emailid TEXT NOT NULL
         
         
-#     );
-# '''
+    );
+'''
 
-# cursor.execute(create_refdr_table_query)
-# connection.commit()
+cursor.execute(create_refdr_table_query)
+connection.commit()
 
-# # Close the connection
-# connection.close()
+# Close the connection
+connection.close()
 
-# print("refdr table created successfully.")
+print("refdr table created successfully.")
+
+import sqlite3
+
+conn = sqlite3.connect('patient_data.db')
+cursor = conn.cursor()
+
+# Create the Visit table with the foreign key constraint
+cursor.execute('''
+    CREATE TABLE IF NOT EXISTS visit (
+        id INTEGER PRIMARY KEY,
+        patient_id INTEGER,
+        patient_category TEXT,
+        ref_dr TEXT,
+        selected_test TEXT,
+        visit_id TEXT,
+        date DATE,
+        FOREIGN KEY (patient_id) REFERENCES patients(id)
+    )
+''')
+
+# Commit changes and close the connection
+conn.commit()
+conn.close()
+
+print("visit table created successfully.")

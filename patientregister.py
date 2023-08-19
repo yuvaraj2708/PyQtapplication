@@ -385,6 +385,39 @@ class Ui_addpatientForm(object):
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
+        
+        
+        self.fetch_latest_patient_number()
+        latest_patient_number = self.fetch_latest_patient_number()
+        next_patient_number = self.generate_next_patient_number(latest_patient_number)
+        self.lineEdit_16.setText(next_patient_number)  # Set the generated test code
+        
+    def fetch_latest_patient_number(self):
+        try:
+            self.cursor.execute("SELECT MAX(uhid) FROM patients")
+            latest_test_number = self.cursor.fetchone()[0]
+            return latest_test_number
+        except Exception as e:
+            print("Error fetching latest patient number:", str(e))
+            return None
+
+    def generate_next_patient_number(self, latest_patient_number):
+        if latest_patient_number is None:
+            return "P00001"
+
+        prefix = "P"
+        numeric_part = int(latest_patient_number[1:])  # Convert the numeric part to integer
+        next_numeric_part = numeric_part + 1
+        next_patient_number = f"{prefix}{next_numeric_part:05}"  # Format as "T00001"
+        return next_patient_number
+
+    def save_patient_data(self):
+        try:
+            DoctorCode = self.generate_next_patient_number()
+            # ... rest of your save_test_data function ...
+
+        except Exception as e:
+            print("Error:", str(e))
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
@@ -411,6 +444,8 @@ class Ui_addpatientForm(object):
         self.lineEdit_10.clear()
         self.lineEdit_14.clear()
         self.lineEdit_13.clear()
+        
+        
     def save_patient_data(self):
         uhid = self.lineEdit_16.text()
         title = self.lineEdit_15.text()

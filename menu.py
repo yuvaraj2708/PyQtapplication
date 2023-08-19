@@ -9,7 +9,8 @@ from reportformat import Ui_reportFormatFrame
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(800, 600)
+        MainWindow.resize(811, 588)
+        MainWindow.setMaximumSize(QtCore.QSize(811, 16777215))
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         MainWindow.setCentralWidget(self.centralwidget)
@@ -81,7 +82,7 @@ class Ui_MainWindow(object):
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
-
+    
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
@@ -127,7 +128,40 @@ class MainWindow(QtWidgets.QMainWindow):
         self.stacked_widget.addWidget(self.add_visitsummary_frame)
         self.stacked_widget.addWidget(self.reportformat_frame)
         self.setCentralWidget(self.stacked_widget)
+    
+    def refresh_main_window(self):
+       # Update the content of the main window here
+       # For example, you can reset the stacked widget to the central widget
+       self.stacked_widget.clear()  # Remove all existing widgets from the stacked widget
+       self.stacked_widget.addWidget(self.ui.centralwidget)
+       self.stacked_widget.addWidget(self.patient_register_frame)
+       self.stacked_widget.addWidget(self.patient_master_frame)
+       self.stacked_widget.addWidget(self.add_refdr_frame)
+       self.stacked_widget.addWidget(self.add_testmaster_frame)
+       self.stacked_widget.addWidget(self.add_visitsummary_frame)
+       self.stacked_widget.addWidget(self.reportformat_frame)
+       self.setCentralWidget(self.stacked_widget)
 
+       
+    def show_patient_register_frame(self):
+        self.stacked_widget.setCurrentWidget(self.patient_register_frame)
+        self.patient_register_ui.clear_input_fields_patient()  # Clear patient registration form fields
+        self.refresh_main_window()  # Refresh the main window content
+
+    def show_patient_master_frame(self):
+        self.stacked_widget.setCurrentWidget(self.patient_master_frame)
+        self.refresh_main_window()  # Refresh the main window content
+
+    def show_refdr_frame(self):
+        self.stacked_widget.setCurrentWidget(self.add_refdr_frame)
+        self.add_refdr_ui.clear_input_fields_refdr()  # Clear refdr form fields
+        self.refresh_main_window()  # Refresh the main window content
+
+    def show_testmaster_frame(self):
+        self.stacked_widget.setCurrentWidget(self.add_testmaster_frame)
+        self.add_testmaster_ui.clear_input_fields_test()  # Clear test form fields
+        self.refresh_main_window()  # Refresh the main window content
+    
     def show_patient_register_frame(self):
         self.stacked_widget.setCurrentWidget(self.patient_register_frame)
 

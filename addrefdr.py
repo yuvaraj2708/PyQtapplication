@@ -373,7 +373,40 @@ class Ui_refdrForm(object):
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
+        
+        self.fetch_latest_refdr_number()
+        latest_test_number = self.fetch_latest_refdr_number()
+        next_test_number = self.generate_next_refdr_number(latest_test_number)
+        self.lineEdit_16.setText(next_test_number)  # Set the generated test code
+        
+    def fetch_latest_refdr_number(self):
+        try:
+            self.cursor.execute("SELECT MAX(DoctorCode) FROM refdr")
+            latest_test_number = self.cursor.fetchone()[0]
+            return latest_test_number
+        except Exception as e:
+            print("Error fetching latest test number:", str(e))
+            return None
 
+    def generate_next_refdr_number(self, latest_refdr_number):
+        if latest_refdr_number is None:
+            return "D00001"
+
+        prefix = "D"
+        numeric_part = int(latest_refdr_number[1:])  # Convert the numeric part to integer
+        next_numeric_part = numeric_part + 1
+        next_refdr_number = f"{prefix}{next_numeric_part:05}"  # Format as "T00001"
+        return next_refdr_number
+
+    def save_refdr_data(self):
+        try:
+            DoctorCode = self.generate_next_refdr_number()
+            # ... rest of your save_test_data function ...
+
+        except Exception as e:
+            print("Error:", str(e))
+            
+            
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
