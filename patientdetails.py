@@ -239,11 +239,19 @@ class Ui_patientForm(object):
         self.textEdit.setObjectName("textEdit")
         
         self.patient_data = {}
+        self.listWidget = QtWidgets.QListWidget(Form)
+        self.listWidget.setGeometry(QtCore.QRect(-27, 280, 921, 421))
+        self.listWidget.setObjectName("listWidget")
+
+        self.patient_data = {}
+
+      
+        self.fetch_and_display_patient_data()
+       
+       
         
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
-        self.fetch_and_display_patient_data()
-        
         # delete_patient_signal = QtCore.pyqtSignal(int)
         # self.lineEdit_16.textChanged.connect(self.fetch_and_display_patient_data)
     
@@ -259,43 +267,53 @@ class Ui_patientForm(object):
      patient_data = cursor.fetchall()
 
      if patient_data:
-        # Clear previous data from textEdit
-        self.textEdit.clear()
-
         for row in patient_data:
-            patient_id = row[0]
-            # Create a new line of formatted data with a "Delete" button and "Add Visit" button
-            formatted_row = f" {row[0]:<10} {row[1]:<10}  {row[2]:<20}  {row[3]:<5}  {row[4]:<10}  {row[5]:<30}  {row[6]:<15}"
-            formatted_row += f"  <button id='delete_{row[0]}'>Delete</button>"
-            formatted_row += f"  <button id='add_visit_{row[0]}'>Add Visit</button>"
+            item = QtWidgets.QListWidgetItem()
+            self.listWidget.addItem(item)
 
-            # Append the formatted row to the textEdit
-            self.textEdit.append(formatted_row)
+            custom_widget = QtWidgets.QWidget()
+            custom_layout = QtWidgets.QHBoxLayout(custom_widget)
 
-            # Connect the button click to the slot functions
-            delete_button = self.textEdit.findChild(QtWidgets.QPushButton, f"delete_{row[0]}")
-            if delete_button:
-                self.patient_data[delete_button] = row  # Store patient data
-                delete_button.clicked.connect(self.open_add_visit_form)
+            label = QtWidgets.QLabel(f"{row[0]:<10} {row[1]:<10} {row[2]:<20} ...")
+            custom_layout.addWidget(label)
 
-            add_visit_button = self.textEdit.findChild(QtWidgets.QPushButton, f"add_visit_{row[0]}")
-            if add_visit_button:
-                self.patient_data[add_visit_button] = row  # Store patient data
-                add_visit_button.clicked.connect(self.open_add_visit_form)
-                
-    def open_add_visit_form(self):
-        sender = self.sender()  # Get the button that was clicked
-        # patient_id = int(sender.objectName().split('_')[1])  # Extract patient ID
-        patient_data = self.patient_data[sender]  # Get patient data
+            delete_button = QtWidgets.QPushButton("Delete")
+            custom_layout.addWidget(delete_button)
+            delete_button.clicked.connect(lambda _, row=row: self.delete_patient(row[0]))
+
+            add_visit_button = QtWidgets.QPushButton("Add Visit")
+            custom_layout.addWidget(add_visit_button)
+            add_visit_button.clicked.connect(lambda _, row=row: self.open_add_visit_form(row))
+            
+            item.setSizeHint(custom_widget.sizeHint())
+            self.listWidget.setItemWidget(item, custom_widget)
+
+            item.patient_data = row
         
-        self.add_visit_form = QtWidgets.QWidget()
-        self.ui_add_visit = Ui_addvisitForm()
-        self.ui_add_visit.setupUi(self.add_visit_form)
-        
-        # Pass patient data to Ui_addvisitForm
-        self.ui_add_visit.set_patient_data(patient_data)
-        
-        self.add_visit_form.show() 
+    def delete_patient(self, patient_id):
+       # Connect to the database
+       conn = sqlite3.connect('patient_data.db')
+       cursor = conn.cursor()
+
+       # Delete patient data from the database
+       cursor.execute("DELETE FROM patients WHERE id = ?", (patient_id,))
+       conn.commit()
+
+       # Refresh the displayed patient data immediately after deletion
+       self.fetch_and_display_patient_data()
+
+            
+    def open_add_visit_form(self, patient_data):
+       self.add_visit_form = QtWidgets.QWidget()
+       self.ui_add_visit = Ui_addvisitForm()
+       self.ui_add_visit.setupUi(self.add_visit_form)
+       
+       # Pass patient data to Ui_addvisitForm
+       self.ui_add_visit.set_patient_data(patient_data)
+       
+       self.add_visit_form.show()
+
+   
      
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate

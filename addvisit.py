@@ -451,7 +451,24 @@ class Ui_addvisitForm(object):
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
-
+        
+        
+    def set_patient_data(self, patient_data):
+    # Assuming patient_data is a tuple containing patient information
+    # Modify this according to the structure of your patient_data tuple
+      patient_id,uhid, title, patient_name, gender, dob, age, email, mobile = patient_data
+      
+      # Update line edit fields to display patient information
+      self.lineEdit_18.setText(f"{uhid}")
+      self.lineEdit_14.setText(f"{title}")
+      self.lineEdit_6.setText(f"{patient_name}")
+      self.lineEdit_16.setText(f"{gender}")
+      self.lineEdit_10.setText(f"{dob}")
+      self.lineEdit_12.setText(f"{age}")
+      self.lineEdit_13.setText(f"{email}")
+      self.lineEdit_15.setText(f"{mobile}")
+          # Update other line edit fields as needed
+        
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))

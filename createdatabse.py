@@ -151,3 +151,24 @@ conn.commit()
 conn.close()
 
 print("visit table created successfully.")
+
+
+import sqlite3
+
+conn = sqlite3.connect('patient_data.db')
+cursor = conn.cursor()
+
+# Create the Visit table with the foreign key constraint
+cursor.execute('''
+    CREATE TABLE IF NOT EXISTS category (
+        id INTEGER PRIMARY KEY,
+        categoryvalue TEXT
+        
+    )
+''')
+
+# Commit changes and close the connection
+conn.commit()
+conn.close()
+
+print("patientcategory table created successfully.")
