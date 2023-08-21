@@ -9,6 +9,11 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import QComboBox
+import sqlite3
+import datetime
+from PyQt5.QtWidgets import QStackedWidget
+from registrationsummary import Ui_visitsummaryForm  # Import the UI class for the visitsummary frame
 
 
 class Ui_addvisitForm(object):
@@ -75,6 +80,8 @@ class Ui_addvisitForm(object):
         self.lineEdit_6.setObjectName("lineEdit_6")
         self.pushButton = QtWidgets.QPushButton(self.groupBox)
         self.pushButton.setGeometry(QtCore.QRect(300, 300, 111, 31))
+        self.pushButton.clicked.connect(self.submit_form)
+
         font = QtGui.QFont()
         font.setPointSize(-1)
         font.setBold(True)
@@ -448,16 +455,23 @@ class Ui_addvisitForm(object):
         self.lineEdit_26.setInputMethodHints(QtCore.Qt.ImhNone)
         self.lineEdit_26.setFrame(True)
         self.lineEdit_26.setObjectName("lineEdit_26")
-
+        
+        
+        self.comboBox_24 = QComboBox(self.groupBox)
+        self.comboBox_24.setGeometry(QtCore.QRect(20, 210, 201, 31)) 
+        self.comboBox_25 = QComboBox(self.groupBox)
+        self.comboBox_25.setGeometry(QtCore.QRect(240, 210, 201, 31)) 
+        self.comboBox_26 = QComboBox(self.groupBox)
+        self.comboBox_26.setGeometry(QtCore.QRect(460, 210, 201, 31)) 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
         
         
     def set_patient_data(self, patient_data):
-    # Assuming patient_data is a tuple containing patient information
-    # Modify this according to the structure of your patient_data tuple
-      patient_id,uhid, title, patient_name, gender, dob, age, email, mobile = patient_data
-      
+      # Assuming patient_data is a tuple containing patient information
+      # Modify this according to the structure of your patient_data tuple
+      patient_id, uhid, title, patient_name, gender, dob, age, email, mobile = patient_data
+
       # Update line edit fields to display patient information
       self.lineEdit_18.setText(f"{uhid}")
       self.lineEdit_14.setText(f"{title}")
@@ -467,8 +481,103 @@ class Ui_addvisitForm(object):
       self.lineEdit_12.setText(f"{age}")
       self.lineEdit_13.setText(f"{email}")
       self.lineEdit_15.setText(f"{mobile}")
-          # Update other line edit fields as needed
-        
+      
+      categories = self.fetch_categories_from_database()
+      refdr = self.fetch_refdr_from_database()
+      selecttest = self.fetch_selecttest_from_database()
+      self.populate_categorydropdown(self.comboBox_24, categories)
+      self.populate_refdrdropdown(self.comboBox_25, refdr)
+      self.populate_testdropdown(self.comboBox_26, selecttest)
+
+      # Generate and display the visit ID
+      visit_id = self.generate_visit_id(patient_id)
+      self.lineEdit_26.setText(visit_id)  # Assuming lineEdit_26 is the visit ID field
+
+    def generate_visit_id(self, patient_id):
+      # Generate a visit ID based on patient ID and current date/time
+      current_time = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+      visit_id = f"{patient_id}_{current_time}"
+      return visit_id
+    
+    def submit_form(self):
+     try:       
+    # Extract data from UI elements
+        patient_id = int(self.lineEdit_18.text())  # Assuming lineEdit_18 is the patient ID field
+        patient_category = self.comboBox_24.currentText()  # Assuming comboBox_24 is the patient category dropdown
+        ref_dr = self.comboBox_25.currentText()  # Assuming comboBox_25 is the referring doctor dropdown
+        selected_test = self.comboBox_26.currentText()  # Assuming comboBox_26 is the selected test dropdown
+        visit_id = self.lineEdit_26.text()  # Assuming lineEdit_26 is the visit ID field
+        date = datetime.datetime.now().strftime("%Y-%m-%d")  # Get current date
+  
+      # Insert data into the "visit" table
+        connection = sqlite3.connect("patient_data.db")
+        cursor = connection.cursor()
+        cursor.execute("INSERT INTO visit (patient_id, patient_category, ref_dr, selected_test, visit_id, date) VALUES (?, ?, ?, ?, ?, ?)",
+                       (patient_id, patient_category, ref_dr, selected_test, visit_id, date))
+        connection.commit()
+        connection.close()
+
+        print("Visit data inserted successfully.")
+     except Exception as e:
+        print("An error occurred:", str(e))
+      
+      
+    def fetch_categories_from_database(self):
+    # Connect to your database
+      connection = sqlite3.connect("patient_data.db")
+      cursor = connection.cursor()
+  
+      # Fetch categories from the "category" table
+      cursor.execute("SELECT * FROM category")
+      categories = cursor.fetchall()
+  
+      # Close the connection
+      connection.close()
+  
+      return [category[1] for category in categories]
+
+    def fetch_refdr_from_database(self):
+    # Connect to your database
+      connection = sqlite3.connect("patient_data.db")
+      cursor = connection.cursor()
+  
+      # Fetch categories from the "category" table
+      cursor.execute("SELECT * FROM refdr")
+      refdr = cursor.fetchall()
+      
+      # Close the connection
+      connection.close()
+  
+      return [refdrs[1] for refdrs in refdr]
+    
+      
+    def fetch_selecttest_from_database(self):
+       connection = sqlite3.connect("patient_data.db")
+       cursor = connection.cursor()
+  
+       # Fetch data from the "tests" table
+       cursor.execute("SELECT * FROM tests")
+       tests = cursor.fetchall()
+
+       # Print the fetched data for debugging
+  
+       connection.close()
+  
+       return [test[1] for test in tests]  # Extract category names
+
+
+    def populate_categorydropdown(self, combo_box, data):
+        combo_box.clear()
+        combo_box.addItems(data)
+
+    def populate_refdrdropdown(self, combo_box, data):
+        combo_box.clear()
+        combo_box.addItems(data)
+    
+    def populate_testdropdown(self, combo_box, data):
+        combo_box.clear()
+        combo_box.addItems(data)   
+       
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))

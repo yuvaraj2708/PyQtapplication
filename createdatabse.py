@@ -50,9 +50,6 @@ create_patients_table_query = '''
         gender TEXT NOT NULL,
         mobile TEXT NOT NULL,
         email TEXT NOT NULL
-        
-        
-        
     );
 '''
 
@@ -133,24 +130,26 @@ conn = sqlite3.connect('patient_data.db')
 cursor = conn.cursor()
 
 # Create the Visit table with the foreign key constraint
-cursor.execute('''
+create_visit_table_query = '''
     CREATE TABLE IF NOT EXISTS visit (
         id INTEGER PRIMARY KEY,
-        patient_id INTEGER,
+        patient_id TEXT,
         patient_category TEXT,
         ref_dr TEXT,
         selected_test TEXT,
         visit_id TEXT,
         date DATE,
         FOREIGN KEY (patient_id) REFERENCES patients(id)
-    )
-''')
+    );
+'''
 
-# Commit changes and close the connection
+cursor.execute(create_visit_table_query)
 conn.commit()
+
+# Close the connection
 conn.close()
 
-print("visit table created successfully.")
+print("Database schema and tables created successfully.")
 
 
 import sqlite3

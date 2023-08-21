@@ -2,6 +2,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from patientregister import Ui_addpatientForm
+import sqlite3
 
 class Ui_visitsummaryForm(object):
     def setupUi(self, Form):
@@ -193,10 +194,43 @@ class Ui_visitsummaryForm(object):
 "\n"
 "")
         self.pushButton_2.setObjectName("pushButton_2")
-
+        
+        self.visit_data = {}
+        self.listWidget = QtWidgets.QListWidget(Form)
+        self.listWidget.setGeometry(QtCore.QRect(-27, 280, 921, 421))
+        self.listWidget.setObjectName("listWidget")
+        
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
+        
+        self.fetch_and_display_visit_data()
+    
+    def fetch_and_display_visit_data(self):
+     # Connect to the database
+     conn = sqlite3.connect('patient_data.db')
+     cursor = conn.cursor()
 
+     # Fetch patient data
+     cursor.execute("SELECT * FROM visit")
+     visit_data = cursor.fetchall()
+     print(visit_data)
+     if visit_data:
+            for row in visit_data:
+                item = QtWidgets.QListWidgetItem()
+                self.listWidget.addItem(item)
+
+                custom_widget = QtWidgets.QWidget()
+                custom_layout = QtWidgets.QHBoxLayout(custom_widget)
+
+                label = QtWidgets.QLabel(f"{row[0]:<10} {row[1]:<10} {row[2]:<20} ...")
+                custom_layout.addWidget(label)
+                # ... Other layout customization ...
+
+                self.listWidget.setItemWidget(item, custom_widget)
+
+        
+    
+               
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
