@@ -214,86 +214,84 @@ class Ui_visitsummaryForm(object):
         self.fetch_and_display_visit_data()
     
     def fetch_and_display_visit_data(self):
+       conn = sqlite3.connect('patient_data.db')
+       cursor = conn.cursor()
+   
+       cursor.execute("SELECT * FROM visit")
+       visit_data = cursor.fetchall()
+       print(visit_data)
+   
+       if visit_data:
+           self.textEdit.clear()
+           vertical_layout = QtWidgets.QVBoxLayout()
+   
+           for row in visit_data:
+               layout = QtWidgets.QHBoxLayout()
+   
+               button = QtWidgets.QPushButton('Generate QR Code')
+               layout.addWidget(button)
+               
+               # Connect the button click to the generate_qr_code_pdf function
+               button.clicked.connect(lambda _, data=row: self.generate_qr_code_pdf(data))
+   
+               for column in row:
+                   label = QtWidgets.QLabel(str(column))
+                   layout.addWidget(label)
+   
+               vertical_layout.addLayout(layout)
+   
+           self.textEdit.setLayout(vertical_layout)
+       
+       conn.close()
+   
     
-    # Connect to the database
-     conn = sqlite3.connect('patient_data.db')
-     cursor = conn.cursor()
+    def generate_qr_code_pdf(self, visit_data):
+     # Extract relevant information from visit_data
+     visit_id, patient_id, patient_category, ref_dr, selected_test, _, patient_name = visit_data
  
-     # Fetch reference data
-     cursor.execute("SELECT * FROM visit")
-     visit_data = cursor.fetchall()
+     # Create a formatted string with all the details
+     details_string = (
+         f"Visit ID: {visit_id}\n"
+         f"Patient ID: {patient_id}\n"
+         f"Patient Name: {patient_name}\n"
+         f"Patient Category: {patient_category}\n"
+         f"Referring Doctor: {ref_dr}\n"
+         f"Selected Test: {selected_test}\n"
+     )
  
-     if visit_data:
-         # Clear previous data from textEdit
-         self.textEdit.clear()
+     # Generate the QR code using the formatted details string
+     qr = qrcode.QRCode(
+         version=1,
+         error_correction=qrcode.constants.ERROR_CORRECT_L,
+         box_size=10,
+         border=4,
+     )
+     qr.add_data(details_string)
+     qr.make(fit=True)
  
-         # Create a new vertical layout to hold rows of data
-         vertical_layout = QtWidgets.QVBoxLayout()
- 
-         # Loop through each row in the refdr_data
-         for row in visit_data:
-            layout = QtWidgets.QHBoxLayout()
-            visit_id = row[0]
-            button = QtWidgets.QPushButton('Generate QR Code')
-            layout.addWidget(button)
-            button.clicked.connect(lambda _, id=visit_id: self.generate_qr_code_pdf(id))
-
-             # Loop through each column in the row
-            for column in row:
-                 label = QtWidgets.QLabel(str(column))
-                 layout.addWidget(label)
-                 
-                 
-             # Add the horizontal layout (row) to the vertical layout
-            vertical_layout.addLayout(layout)
-
-            self.textEdit.setLayout(vertical_layout)
-            conn.close()
+     qr_img = qr.make_image(fill_color="black", back_color="white")
+     qr_img.save(f'qr_code_{visit_id}.png')
+     
+     pdf = FPDF()
+     pdf.add_page()
+     pdf.image(f'qr_code_{visit_id}.png', x=10, y=10, w=190)
+     
+     # Add visit details to the PDF
+     pdf.set_font("Arial", size=12)
+     pdf.cell(200, 10, f"Visit ID: {visit_id}", ln=True)
+     pdf.cell(200, 10, f"Patient ID: {patient_id}", ln=True)
+     pdf.cell(200, 10, f"Patient Name: {patient_name}", ln=True)
+     pdf.cell(200, 10, f"Patient Category: {patient_category}", ln=True)
+     pdf.cell(200, 10, f"Referring Doctor: {ref_dr}", ln=True)
+     pdf.cell(200, 10, f"Selected Test: {selected_test}", ln=True)
     
-     # Close the database connection
-     conn.close()
+     pdf_file_path = f'qr_code_{visit_id}.pdf'
+     pdf.output(pdf_file_path)
     
-    def generate_qr_code_pdf(self, visit_id):
-        
-        conn = sqlite3.connect('patient_data.db')
-        cursor = conn.cursor()
-
-        # Fetch visit details using the visit_id
-        cursor.execute('''
-            SELECT visit.*, patients.patientname
-            FROM visit
-            JOIN patients ON visit.patient_id = patients.id
-            WHERE visit.visit_id = ?
-        ''', (visit_id,))
-        visit_details = cursor.fetchone()
-
-        if visit_details:
-            visit_id, patient_id, patient_category, ref_dr, selected_test, _, _, patient_name = visit_details
-
-            # Now you have all the visit and patient details, you can proceed with generating the PDF
-
-        conn.close()# Assuming 
-           
-           
-        qr = qrcode.QRCode(
-            version=1,
-            error_correction=qrcode.constants.ERROR_CORRECT_L,
-            box_size=10,
-            border=4,
-        )
-        qr.add_data(str(visit_id))
-        qr.make(fit=True)
-
-        qr_img = qr.make_image(fill_color="black", back_color="white")
-        qr_img.save(f'qr_code_{visit_id}.png')  # Save the QR code as an image
-        
-        pdf = FPDF()
-        pdf.add_page()
-        pdf.image(f'qr_code_{visit_id}.png', x=10, y=10, w=190)
-        pdf_file_path = f'qr_code_{visit_id}.pdf'
-        pdf.output(pdf_file_path)
-        
-        QtWidgets.QMessageBox.information(None, 'QR Code PDF', f'QR code PDF for Visit ID {visit_id} has been generated as "{pdf_file_path}"')
+     QtWidgets.QMessageBox.information(
+         None, 'QR Code PDF',
+         f'QR code PDF for Visit ID {visit_id} has been generated as "{pdf_file_path}"'
+     )
 
     
                

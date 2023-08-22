@@ -137,7 +137,7 @@ create_visit_table_query = '''
         patient_category TEXT,
         ref_dr TEXT,
         selected_test TEXT,
-        visit_id TEXT,
+        visitid TEXT,
         date DATE,
         FOREIGN KEY (patient_id) REFERENCES patients(id)
     );
