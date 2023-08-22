@@ -13,8 +13,6 @@ from PyQt5.QtWidgets import QComboBox
 import sqlite3
 import datetime
 from PyQt5.QtWidgets import QStackedWidget
-from registrationsummary import Ui_visitsummaryForm  # Import the UI class for the visitsummary frame
-
 
 class Ui_addvisitForm(object):
     def setupUi(self, Form):

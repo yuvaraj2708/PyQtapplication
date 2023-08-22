@@ -1,8 +1,11 @@
-
-
 from PyQt5 import QtCore, QtGui, QtWidgets
-from patientregister import Ui_addpatientForm
 import sqlite3
+import qrcode
+from PyQt5.QtGui import QPixmap
+from PyQt5.QtWidgets import QLabel, QPushButton, QVBoxLayout, QDialog
+from patientregister import Ui_addpatientForm
+from PyQt5.QtGui import QImage, QPixmap
+from fpdf import FPDF
 
 class Ui_visitsummaryForm(object):
     def setupUi(self, Form):
@@ -199,6 +202,11 @@ class Ui_visitsummaryForm(object):
         self.listWidget = QtWidgets.QListWidget(Form)
         self.listWidget.setGeometry(QtCore.QRect(-27, 280, 921, 421))
         self.listWidget.setObjectName("listWidget")
+        self.pushButton_2.setObjectName("pushButton_2")
+        self.textEdit = QtWidgets.QTextEdit(Form)
+        self.textEdit.setGeometry(QtCore.QRect(-27, 280, 921, 421))
+        self.textEdit.setObjectName("textEdit")
+        
         
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -206,29 +214,87 @@ class Ui_visitsummaryForm(object):
         self.fetch_and_display_visit_data()
     
     def fetch_and_display_visit_data(self):
-     # Connect to the database
+    
+    # Connect to the database
      conn = sqlite3.connect('patient_data.db')
      cursor = conn.cursor()
-
-     # Fetch patient data
+ 
+     # Fetch reference data
      cursor.execute("SELECT * FROM visit")
      visit_data = cursor.fetchall()
-     print(visit_data)
+ 
      if visit_data:
-            for row in visit_data:
-                item = QtWidgets.QListWidgetItem()
-                self.listWidget.addItem(item)
+         # Clear previous data from textEdit
+         self.textEdit.clear()
+ 
+         # Create a new vertical layout to hold rows of data
+         vertical_layout = QtWidgets.QVBoxLayout()
+ 
+         # Loop through each row in the refdr_data
+         for row in visit_data:
+            layout = QtWidgets.QHBoxLayout()
+            visit_id = row[0]
+            button = QtWidgets.QPushButton('Generate QR Code')
+            layout.addWidget(button)
+            button.clicked.connect(lambda _, id=visit_id: self.generate_qr_code_pdf(id))
 
-                custom_widget = QtWidgets.QWidget()
-                custom_layout = QtWidgets.QHBoxLayout(custom_widget)
+             # Loop through each column in the row
+            for column in row:
+                 label = QtWidgets.QLabel(str(column))
+                 layout.addWidget(label)
+                 
+                 
+             # Add the horizontal layout (row) to the vertical layout
+            vertical_layout.addLayout(layout)
 
-                label = QtWidgets.QLabel(f"{row[0]:<10} {row[1]:<10} {row[2]:<20} ...")
-                custom_layout.addWidget(label)
-                # ... Other layout customization ...
-
-                self.listWidget.setItemWidget(item, custom_widget)
-
+            self.textEdit.setLayout(vertical_layout)
+            conn.close()
+    
+     # Close the database connection
+     conn.close()
+    
+    def generate_qr_code_pdf(self, visit_id):
         
+        conn = sqlite3.connect('patient_data.db')
+        cursor = conn.cursor()
+
+        # Fetch visit details using the visit_id
+        cursor.execute('''
+            SELECT visit.*, patients.patientname
+            FROM visit
+            JOIN patients ON visit.patient_id = patients.id
+            WHERE visit.visit_id = ?
+        ''', (visit_id,))
+        visit_details = cursor.fetchone()
+
+        if visit_details:
+            visit_id, patient_id, patient_category, ref_dr, selected_test, _, _, patient_name = visit_details
+
+            # Now you have all the visit and patient details, you can proceed with generating the PDF
+
+        conn.close()# Assuming 
+           
+           
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=10,
+            border=4,
+        )
+        qr.add_data(str(visit_id))
+        qr.make(fit=True)
+
+        qr_img = qr.make_image(fill_color="black", back_color="white")
+        qr_img.save(f'qr_code_{visit_id}.png')  # Save the QR code as an image
+        
+        pdf = FPDF()
+        pdf.add_page()
+        pdf.image(f'qr_code_{visit_id}.png', x=10, y=10, w=190)
+        pdf_file_path = f'qr_code_{visit_id}.pdf'
+        pdf.output(pdf_file_path)
+        
+        QtWidgets.QMessageBox.information(None, 'QR Code PDF', f'QR code PDF for Visit ID {visit_id} has been generated as "{pdf_file_path}"')
+
     
                
     def retranslateUi(self, Form):
