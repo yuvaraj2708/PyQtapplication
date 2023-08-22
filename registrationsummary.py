@@ -219,8 +219,7 @@ class Ui_visitsummaryForm(object):
    
        cursor.execute("SELECT * FROM visit")
        visit_data = cursor.fetchall()
-       print(visit_data)
-   
+       
        if visit_data:
            self.textEdit.clear()
            vertical_layout = QtWidgets.QVBoxLayout()
@@ -247,13 +246,13 @@ class Ui_visitsummaryForm(object):
     
     def generate_qr_code_pdf(self, visit_data):
      # Extract relevant information from visit_data
-     visit_id, patient_id, patient_category, ref_dr, selected_test, _, patient_name = visit_data
+     visit_id, patient_id, patient_category, ref_dr, selected_test, _, patientname = visit_data
  
      # Create a formatted string with all the details
      details_string = (
          f"Visit ID: {visit_id}\n"
          f"Patient ID: {patient_id}\n"
-         f"Patient Name: {patient_name}\n"
+         f"Patient Name: {patientname}\n"
          f"Patient Category: {patient_category}\n"
          f"Referring Doctor: {ref_dr}\n"
          f"Selected Test: {selected_test}\n"
@@ -280,7 +279,7 @@ class Ui_visitsummaryForm(object):
      pdf.set_font("Arial", size=12)
      pdf.cell(200, 10, f"Visit ID: {visit_id}", ln=True)
      pdf.cell(200, 10, f"Patient ID: {patient_id}", ln=True)
-     pdf.cell(200, 10, f"Patient Name: {patient_name}", ln=True)
+     pdf.cell(200, 10, f"Patient Name: {patientname}", ln=True)
      pdf.cell(200, 10, f"Patient Category: {patient_category}", ln=True)
      pdf.cell(200, 10, f"Referring Doctor: {ref_dr}", ln=True)
      pdf.cell(200, 10, f"Selected Test: {selected_test}", ln=True)
