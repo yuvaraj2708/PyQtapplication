@@ -221,6 +221,11 @@ class Ui_testForm(object):
          for row in test_data:
              # Create a new horizontal layout for this row
              layout = QtWidgets.QHBoxLayout()
+             custom_widget = QtWidgets.QWidget()
+             custom_layout = QtWidgets.QHBoxLayout(custom_widget)
+
+             label = QtWidgets.QLabel(f"{row[0]:<10} {row[1]:<10} {row[2]:<10} {row[3]:<10} {row[4]:<10} {row[5]:<10} {row[6]:<10} ")
+             custom_layout.addWidget(label)
  
              # Loop through each column in the row
              for column in row:

@@ -3,6 +3,7 @@ from patientregister import Ui_addpatientForm
 import sys
 import sqlite3
 from addvisit import Ui_addvisitForm
+import os
 
 
 class Ui_patientForm(object):
@@ -274,14 +275,18 @@ class Ui_patientForm(object):
             custom_widget = QtWidgets.QWidget()
             custom_layout = QtWidgets.QHBoxLayout(custom_widget)
 
-            label = QtWidgets.QLabel(f"{row[0]:<10} {row[1]:<10} {row[2]:<20} ...")
+            label = QtWidgets.QLabel(f"{row[0]:<10} {row[1]:<10} {row[2]:<10} {row[3]:<10} {row[4]:<10} {row[5]:<10} {row[6]:<10} {row[7]:<10} {row[8]:<40}")
             custom_layout.addWidget(label)
 
-            delete_button = QtWidgets.QPushButton("Delete")
+            delete_button = QtWidgets.QPushButton()
+            delete_button.setIcon(QtGui.QIcon(os.path.join('images', 'delete.png')))
+            delete_button.setFixedSize(20, 20)
             custom_layout.addWidget(delete_button)
             delete_button.clicked.connect(lambda _, row=row: self.delete_patient(row[0]))
 
-            add_visit_button = QtWidgets.QPushButton("Add Visit")
+            add_visit_button = QtWidgets.QPushButton()
+            add_visit_button.setIcon(QtGui.QIcon(os.path.join('images', 'addvisit.png')))
+        #     add_visit_button.setFixedSize(20, 20)  # Increase the size if needed
             custom_layout.addWidget(add_visit_button)
             add_visit_button.clicked.connect(lambda _, row=row: self.open_add_visit_form(row))
             

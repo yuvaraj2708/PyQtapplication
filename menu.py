@@ -4,7 +4,7 @@ from patientdetails import Ui_patientForm
 from refdrmaster import Ui_refdrmasterForm 
 from testmaster import Ui_testForm
 from registrationsummary import Ui_visitsummaryForm
-from reportformat import Ui_reportFormatFrame
+from reportformat import Ui_reportForm
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -65,7 +65,7 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.menusdsa.setTitle(_translate("MainWindow", "Dasboard"))
+        # self.menusdsa.setTitle(_translate("MainWindow", "Dasboard"))
         self.menuPatientRegister.setTitle(_translate("MainWindow", "Front Desk"))
         self.menuVisit_Summary.setTitle(_translate("MainWindow", "Visit"))
         self.actionregistrationsummary.setText(_translate("MainWindow", "Registration Summary"))
@@ -107,8 +107,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.add_visitsummary_ui.setupUi(self.add_visitsummary_frame)
         
         self.reportformat_frame = QtWidgets.QFrame()
-        self.reportformat_ui = Ui_reportFormatFrame()# report format
-        self.reportformat_ui.__init__(self.reportformat_frame)
+        self.reportformat_ui = Ui_reportForm()# report format
+        self.reportformat_ui.setupUi(self.reportformat_frame)
         
         
         self.ui.actionPatientregister.triggered.connect(self.show_patient_register_frame)
@@ -116,8 +116,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.actionRefDr_Master.triggered.connect(self.show_refdr_frame)
         self.ui.actionTest_Master.triggered.connect(self.show_testmaster_frame) 
         self.ui.menuVisit_Summary.triggered.connect(self.show_visitsummary_frame)
-        self.ui.menuVisit_Summary.triggered.connect(self.show_visitsummary_frame)
         self.ui.actionReport_Format.triggered.connect(self.show_reportformat_frame)
+        
+        
         
         self.stacked_widget = QtWidgets.QStackedWidget(self)
         self.stacked_widget.addWidget(self.ui.centralwidget)
@@ -128,6 +129,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.stacked_widget.addWidget(self.add_visitsummary_frame)
         self.stacked_widget.addWidget(self.reportformat_frame)
         self.setCentralWidget(self.stacked_widget)
+    
+        self.show_patient_master_frame()
     
     def refresh_main_window(self):
        # Update the content of the main window here

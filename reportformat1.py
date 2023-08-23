@@ -9,9 +9,14 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QTextCursor,QTextListFormat,QTextImageFormat
+from PyQt5.QtWidgets import QFileDialog
+from PyQt5.QtGui import QTextCursor, QTextTableFormat, QTextCharFormat, QFont
+from PyQt5.QtWidgets import QFileDialog
+import os
 
-
-class Ui_Form(object):
+class Ui_reportForm(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
         Form.resize(811, 588)
@@ -138,64 +143,244 @@ class Ui_Form(object):
         self.tableView = QtWidgets.QTableView(Form)
         self.tableView.setGeometry(QtCore.QRect(10, 210, 791, 41))
         self.tableView.setObjectName("tableView")
-        self.toolButton = QtWidgets.QToolButton(Form)
-        self.toolButton.setGeometry(QtCore.QRect(60, 220, 25, 19))
-        self.toolButton.setObjectName("toolButton")
-        self.toolButton_2 = QtWidgets.QToolButton(Form)
-        self.toolButton_2.setGeometry(QtCore.QRect(210, 220, 25, 19))
-        self.toolButton_2.setObjectName("toolButton_2")
-        self.toolButton_3 = QtWidgets.QToolButton(Form)
-        self.toolButton_3.setGeometry(QtCore.QRect(150, 220, 25, 19))
-        self.toolButton_3.setObjectName("toolButton_3")
-        self.toolButton_4 = QtWidgets.QToolButton(Form)
-        self.toolButton_4.setGeometry(QtCore.QRect(180, 220, 25, 19))
-        self.toolButton_4.setObjectName("toolButton_4")
-        self.toolButton_5 = QtWidgets.QToolButton(Form)
-        self.toolButton_5.setGeometry(QtCore.QRect(270, 220, 25, 19))
-        self.toolButton_5.setObjectName("toolButton_5")
-        self.toolButton_6 = QtWidgets.QToolButton(Form)
-        self.toolButton_6.setGeometry(QtCore.QRect(300, 220, 25, 19))
-        self.toolButton_6.setObjectName("toolButton_6")
         self.toolButton_7 = QtWidgets.QToolButton(Form)
-        self.toolButton_7.setGeometry(QtCore.QRect(360, 220, 25, 19))
+        self.toolButton_7.setGeometry(QtCore.QRect(180, 220, 25, 19))
         self.toolButton_7.setObjectName("toolButton_7")
+        self.toolButton_7.clicked.connect(self.makeSelectedTextBold)# bold
+        self.toolButton_7.setIcon(QtGui.QIcon(os.path.join('images', 'bold.png')))
         self.toolButton_8 = QtWidgets.QToolButton(Form)
-        self.toolButton_8.setGeometry(QtCore.QRect(510, 220, 25, 19))
+        self.toolButton_8.setGeometry(QtCore.QRect(330, 220, 25, 19))
         self.toolButton_8.setObjectName("toolButton_8")
+        self.toolButton_8.clicked.connect(self.insertTable) #insert table
+        self.toolButton_8.setIcon(QtGui.QIcon(os.path.join('images', 'table.png')))
         self.toolButton_9 = QtWidgets.QToolButton(Form)
-        self.toolButton_9.setGeometry(QtCore.QRect(480, 220, 25, 19))
+        self.toolButton_9.setGeometry(QtCore.QRect(300, 220, 25, 19))
         self.toolButton_9.setObjectName("toolButton_9")
+        self.toolButton_9.clicked.connect(self.insertImage) # insert image
+        self.toolButton_9.setIcon(QtGui.QIcon(os.path.join('images', 'image.png')))
         self.toolButton_10 = QtWidgets.QToolButton(Form)
-        self.toolButton_10.setGeometry(QtCore.QRect(570, 220, 25, 19))
+        self.toolButton_10.setGeometry(QtCore.QRect(390, 220, 25, 19))
         self.toolButton_10.setObjectName("toolButton_10")
+        self.toolButton_10.clicked.connect(self.alignTableTextCenter) #align center 
+        self.toolButton_10.setIcon(QtGui.QIcon(os.path.join('images', 'aligncenter.png'))) 
         self.toolButton_11 = QtWidgets.QToolButton(Form)
-        self.toolButton_11.setGeometry(QtCore.QRect(540, 220, 25, 19))
+        self.toolButton_11.setGeometry(QtCore.QRect(360, 220, 25, 19))
         self.toolButton_11.setObjectName("toolButton_11")
+        self.toolButton_11.clicked.connect(self.alignTableTextLeft) # leftalign
+        self.toolButton_11.setIcon(QtGui.QIcon(os.path.join('images', 'alignleft.png')))
         self.toolButton_12 = QtWidgets.QToolButton(Form)
-        self.toolButton_12.setGeometry(QtCore.QRect(390, 220, 25, 19))
+        self.toolButton_12.setGeometry(QtCore.QRect(210, 220, 25, 19))
         self.toolButton_12.setObjectName("toolButton_12")
+        self.toolButton_12.clicked.connect(self.makeSelectedTextItalic)# italic
+        self.toolButton_12.setIcon(QtGui.QIcon(os.path.join('images', 'italic.png')))
         self.toolButton_13 = QtWidgets.QToolButton(Form)
-        self.toolButton_13.setGeometry(QtCore.QRect(420, 220, 25, 19))
+        self.toolButton_13.setGeometry(QtCore.QRect(240, 220, 25, 19))
         self.toolButton_13.setObjectName("toolButton_13")
-        self.toolButton_14 = QtWidgets.QToolButton(Form)
-        self.toolButton_14.setGeometry(QtCore.QRect(330, 220, 25, 19))
-        self.toolButton_14.setObjectName("toolButton_14")
-        self.toolButton_15 = QtWidgets.QToolButton(Form)
-        self.toolButton_15.setGeometry(QtCore.QRect(120, 220, 25, 19))
-        self.toolButton_15.setObjectName("toolButton_15")
+        self.toolButton_13.clicked.connect(self.toggleBulletList)# bullet
+        self.toolButton_13.setIcon(QtGui.QIcon(os.path.join('images', 'bullet.png')))
         self.toolButton_16 = QtWidgets.QToolButton(Form)
-        self.toolButton_16.setGeometry(QtCore.QRect(450, 220, 25, 19))
+        self.toolButton_16.setGeometry(QtCore.QRect(270, 220, 25, 19))
         self.toolButton_16.setObjectName("toolButton_16")
+        self.toolButton_16.clicked.connect(self.toggleNumberedList)# number list
+        self.toolButton_16.setIcon(QtGui.QIcon(os.path.join('images', 'number.png')))
+        self.fontComboBox = QtWidgets.QFontComboBox(Form)
+        self.fontComboBox.setGeometry(QtCore.QRect(70, 220, 111, 22))
+        self.fontComboBox.setObjectName("fontComboBox")
+        self.fontComboBox.currentFontChanged.connect(self.changeFontInTextEdit)
+        self.comboBox = QtWidgets.QComboBox(Form)
+        self.comboBox.setGeometry(QtCore.QRect(30, 220, 41, 22))
+        self.comboBox.setObjectName("comboBox")
+        self.comboBox.currentIndexChanged.connect(self.changeFontSizeInTextEdit)
+        self.comboBox.addItems(["8", "10", "12", "14", "16", "18", "20", "24", "28", "32"])
+        self.toolButton_14 = QtWidgets.QToolButton(Form)
+        self.toolButton_14.setGeometry(QtCore.QRect(420, 220, 25, 19))
+        self.toolButton_14.setObjectName("toolButton_14")
+        self.toolButton_14.clicked.connect(self.alignTableTextRight)#alignright
+        self.toolButton_14.setIcon(QtGui.QIcon(os.path.join('images', 'alignright.png')))
+        self.toolButton_15 = QtWidgets.QToolButton(Form)
+        self.toolButton_15.setGeometry(QtCore.QRect(480, 220, 25, 19))
+        self.toolButton_15.setObjectName("toolButton_15")
+        self.toolButton_15.setIcon(QtGui.QIcon(os.path.join('images', 'redo.png')))
+        self.toolButton_15.clicked.connect(self.textEdit.redo) 
+        self.toolButton_15.setToolTip("Redo")
         self.toolButton_17 = QtWidgets.QToolButton(Form)
-        self.toolButton_17.setGeometry(QtCore.QRect(90, 220, 25, 19))
+        self.toolButton_17.setGeometry(QtCore.QRect(450, 220, 25, 19))
         self.toolButton_17.setObjectName("toolButton_17")
-        self.toolButton_18 = QtWidgets.QToolButton(Form)
-        self.toolButton_18.setGeometry(QtCore.QRect(240, 220, 25, 19))
-        self.toolButton_18.setObjectName("toolButton_18")
+        self.toolButton_17.setIcon(QtGui.QIcon(os.path.join('images', 'undo.png')))
+        self.toolButton_17.clicked.connect(self.textEdit.undo)
+        self.toolButton_17.setToolTip("Undo")  # Set the tooltip for the button
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
+    
+    def changeFontSizeInTextEdit(self, index):
+        font_size = int(self.comboBox.itemText(index))
+        cursor = self.textEdit.textCursor()
+        char_format = cursor.charFormat()
+        char_format.setFontPointSize(font_size)
+        cursor.setCharFormat(char_format)
+    
+    def changeFontInTextEdit(self, font):
+       cursor = self.textEdit.textCursor()
+       char_format = cursor.charFormat()
+       char_format.setFont(font)
+       cursor.setCharFormat(char_format)
+       self.textEdit.setCurrentFont(font)
+    
+    def alignTableTextLeft(self):
+      cursor = self.textEdit.textCursor()
+  
+      # Check if a table is not selected (i.e., the cursor is within regular text)
+      if cursor.currentTable() is None:
+          block_format = cursor.blockFormat()
+          block_format.setAlignment(Qt.AlignLeft)
+          cursor.setBlockFormat(block_format)
 
+            
+    def alignTableTextCenter(self):
+         cursor = self.textEdit.textCursor()
+  
+      # Check if a table is not selected (i.e., the cursor is within regular text)
+         if cursor.currentTable() is None:
+             block_format = cursor.blockFormat()
+             block_format.setAlignment(Qt.AlignCenter)
+             cursor.setBlockFormat(block_format)   
+               
+    def alignTableTextRight(self):
+         cursor = self.textEdit.textCursor()
+  
+      # Check if a table is not selected (i.e., the cursor is within regular text)
+         if cursor.currentTable() is None:
+             block_format = cursor.blockFormat()
+             block_format.setAlignment(Qt.AlignRight)
+             cursor.setBlockFormat(block_format)      
+            
+        # cursor = self.textEdit.textCursor()
+
+        # # Find the table at the cursor position
+        # table = cursor.currentTable()
+        # if table:
+        #     table_format = table.format()
+
+        #     # Set table properties
+        #     table_format.setAlignment(Qt.AlignRight)  # Set alignment to left
+
+        #     table.setFormat(table_format)
+    
+    
+    def insertTable(self):
+        cursor = self.textEdit.textCursor()
+
+        # Get the number of rows and columns from the user
+        rows, ok1 = QtWidgets.QInputDialog.getInt(None, "Table Rows", "Enter number of rows:")
+        cols, ok2 = QtWidgets.QInputDialog.getInt(None, "Table Columns", "Enter number of columns:")
+        
+        if ok1 and ok2:
+            table = cursor.insertTable(rows, cols)
+            table_format = table.format()
+
+            # Set table properties
+            table_format.setAlignment(Qt.AlignCenter)
+            table_format.setBorder(1)
+            table_format.setCellSpacing(0)
+            table_format.setCellPadding(10)
+
+            table.setFormat(table_format)
+
+            # Set cell font properties
+            new_font = QFont("Arial", 14)  # Adjust font size and family
+            cell_format = QTextCharFormat()
+            cell_format.setFont(new_font)
+
+            # Apply the new font to all cells in the table
+            for row in range(rows):
+                for col in range(cols):
+                    cell_cursor = table.cellAt(row, col).firstCursorPosition()
+                    cell_cursor.setCharFormat(cell_format)
+                    
+    def insertImage(self):
+        cursor = self.textEdit.textCursor()
+
+        # Get the path to the image file
+        image_path, _ = QFileDialog.getOpenFileName(None, "Insert Image", "", "Image Files (*.png *.jpg *.bmp *.gif)")
+        if not image_path:
+            return
+
+        # Create an image format and insert it at the cursor position
+        image_format = QTextImageFormat()
+        image_format.setName(image_path)
+
+        # Specify the desired image size (adjust these values as needed)
+        image_width = 200  # in pixels
+        image_height = 150  # in pixels
+        image_format.setWidth(image_width)
+        image_format.setHeight(image_height)
+
+        cursor.insertImage(image_format)
+        
+        
+    def toggleNumberedList(self):
+        cursor = self.textEdit.textCursor()
+        list_format = QTextListFormat()
+
+        if cursor.currentList():
+            cursor.endEditBlock()
+            cursor.createList(list_format)
+        else:
+            cursor.beginEditBlock()
+            list_format.setStyle(QTextListFormat.ListDecimal)
+            cursor.createList(list_format)
+            cursor.insertText("")  # Inserts an empty item to start the list
+
+        cursor.endEditBlock()
+    
+    def toggleBulletList(self):
+        cursor = self.textEdit.textCursor()
+        list_format = QTextListFormat()
+
+        if cursor.currentList():
+            cursor.endEditBlock()
+            cursor.createList(list_format)
+        else:
+            cursor.beginEditBlock()
+            list_format.setStyle(QTextListFormat.ListDisc)
+            cursor.createList(list_format)
+            cursor.insertText("")  # Inserts an empty item to start the list
+
+        cursor.endEditBlock()
+        
+    
+    
+    def makeSelectedTextItalic(self):
+        cursor = self.textEdit.textCursor()
+        if not cursor.hasSelection():
+            return
+
+        current_format = cursor.charFormat()
+        font = current_format.font()
+        font.setItalic(not font.italic())
+
+        new_format = QtGui.QTextCharFormat()
+        new_format.setFont(font)
+        
+        cursor.mergeCharFormat(new_format)
+        self.textEdit.mergeCurrentCharFormat(new_format)
+        
+    def makeSelectedTextBold(self):
+        cursor = self.textEdit.textCursor()
+        if not cursor.hasSelection():
+            return
+
+        current_format = cursor.charFormat()
+        font = current_format.font()
+        font.setBold(not font.bold())
+
+        new_format = QtGui.QTextCharFormat()
+        new_format.setFont(font)
+        
+        cursor.mergeCharFormat(new_format)
+        self.textEdit.mergeCurrentCharFormat(new_format)
+        
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
@@ -209,31 +394,24 @@ class Ui_Form(object):
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>"))
-        self.toolButton.setText(_translate("Form", "..."))
-        self.toolButton_2.setText(_translate("Form", "..."))
-        self.toolButton_3.setText(_translate("Form", "..."))
-        self.toolButton_4.setText(_translate("Form", "..."))
-        self.toolButton_5.setText(_translate("Form", "..."))
-        self.toolButton_6.setText(_translate("Form", "..."))
-        self.toolButton_7.setText(_translate("Form", "..."))
-        self.toolButton_8.setText(_translate("Form", "..."))
-        self.toolButton_9.setText(_translate("Form", "..."))
-        self.toolButton_10.setText(_translate("Form", "..."))
-        self.toolButton_11.setText(_translate("Form", "..."))
-        self.toolButton_12.setText(_translate("Form", "..."))
-        self.toolButton_13.setText(_translate("Form", "..."))
-        self.toolButton_14.setText(_translate("Form", "..."))
-        self.toolButton_15.setText(_translate("Form", "..."))
-        self.toolButton_16.setText(_translate("Form", "..."))
-        self.toolButton_17.setText(_translate("Form", "..."))
-        self.toolButton_18.setText(_translate("Form", "..."))
+        self.toolButton_7.setText(_translate("Form", "B"))
+        self.toolButton_8.setText(_translate("Form", "tab"))
+        self.toolButton_9.setText(_translate("Form", "img"))
+        self.toolButton_10.setText(_translate("Form", "c"))
+        self.toolButton_11.setText(_translate("Form", "al"))
+        self.toolButton_12.setText(_translate("Form", "I"))
+        self.toolButton_13.setText(_translate("Form", "BU"))
+        self.toolButton_16.setText(_translate("Form", "num"))
+        self.toolButton_14.setText(_translate("Form", "ra"))
+        self.toolButton_15.setText(_translate("Form", "rd"))
+        self.toolButton_17.setText(_translate("Form", "ud"))
 
 
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     Form = QtWidgets.QWidget()
-    ui = Ui_Form()
+    ui = Ui_reportForm()
     ui.setupUi(Form)
     Form.show()
     sys.exit(app.exec_())
