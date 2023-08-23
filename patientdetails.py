@@ -4,7 +4,7 @@ import sys
 import sqlite3
 from addvisit import Ui_addvisitForm
 import os
-
+from editpatientregister import Ui_editpatientForm
 
 class Ui_patientForm(object):
     def setupUi(self, Form):
@@ -258,6 +258,7 @@ class Ui_patientForm(object):
     
     
     
+    
     def fetch_and_display_patient_data(self):
      # Connect to the database
      conn = sqlite3.connect('patient_data.db')
@@ -278,23 +279,58 @@ class Ui_patientForm(object):
             label = QtWidgets.QLabel(f"{row[0]:<10} {row[1]:<10} {row[2]:<10} {row[3]:<10} {row[4]:<10} {row[5]:<10} {row[6]:<10} {row[7]:<10} {row[8]:<40}")
             custom_layout.addWidget(label)
 
+            button_layout = QtWidgets.QHBoxLayout()  # Create a layout for the buttons
+
             delete_button = QtWidgets.QPushButton()
             delete_button.setIcon(QtGui.QIcon(os.path.join('images', 'delete.png')))
             delete_button.setFixedSize(20, 20)
-            custom_layout.addWidget(delete_button)
-            delete_button.clicked.connect(lambda _, row=row: self.delete_patient(row[0]))
+            button_layout.addWidget(delete_button)
+            delete_button.clicked.connect(lambda _, row=row: self.delete_patient(row[0]))            
+
+            spacer = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+            button_layout.addItem(spacer)  # Add an expanding spacer between buttons            
+
+            edit_button = QtWidgets.QPushButton("Edit")  # Create an "Edit" button
+            edit_button.setFixedSize(40, 20)  # Set the desired size
+            button_layout.addWidget(edit_button)
+            edit_button.clicked.connect(lambda _, row=row: self.edit_patient(row[0]))  # Connect to edit function            
 
             add_visit_button = QtWidgets.QPushButton()
             add_visit_button.setIcon(QtGui.QIcon(os.path.join('images', 'addvisit.png')))
-        #     add_visit_button.setFixedSize(20, 20)  # Increase the size if needed
-            custom_layout.addWidget(add_visit_button)
+            add_visit_button.setFixedSize(40, 20)  # Set the desired size
+            button_layout.addWidget(add_visit_button)
             add_visit_button.clicked.connect(lambda _, row=row: self.open_add_visit_form(row))
+
             
+            custom_layout.addLayout(button_layout)  # Add the button layout to the custom layout
             item.setSizeHint(custom_widget.sizeHint())
             self.listWidget.setItemWidget(item, custom_widget)
 
             item.patient_data = row
-        
+
+    def edit_patient(self, patient_id):
+        self.edit_patient_form = QtWidgets.QWidget()
+        self.ui_edit_patient = Ui_editpatientForm()  # Replace with the correct class name
+        self.ui_edit_patient.setupUi(self.edit_patient_form, patient_id)  # Pass the patient ID
+        self.edit_patient_form.show()
+        # Fetch patient data for the specified patient_id
+        patient_data = self.fetch_patient_data_by_id(patient_id)
+        if patient_data:
+            self.ui_edit_patient.patient_data = patient_data  # Set the patient data in the edit form
+
+        self.edit_patient_form.show()
+
+
+    def fetch_patient_data_by_id(self, patient_id):
+        # Connect to the database
+        conn = sqlite3.connect('patient_data.db')
+        cursor = conn.cursor()
+
+        # Fetch patient data by ID
+        cursor.execute("SELECT * FROM patients WHERE id = ?", (patient_id,))
+        patient_data = cursor.fetchone()
+
+        return patient_data    
     def delete_patient(self, patient_id):
        # Connect to the database
        conn = sqlite3.connect('patient_data.db')
@@ -345,6 +381,7 @@ class Ui_patientForm(object):
         self.add_test_form.show()
 
 if __name__ == "__main__":
+    import sys
     app = QtWidgets.QApplication(sys.argv)
     Form = QtWidgets.QWidget()
     ui = Ui_patientForm()

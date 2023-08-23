@@ -3,8 +3,8 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 import sqlite3
 
 
-class Ui_addpatientForm(object):
-    def setupUi(self, Form):
+class Ui_editpatientForm(object):
+    def setupUi(self, Form,patient_id):
         self.conn = sqlite3.connect("patient_data.db")
         self.cursor = self.conn.cursor()    
         Form.setObjectName("Form")
@@ -379,43 +379,35 @@ class Ui_addpatientForm(object):
         self.frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_2.setObjectName("frame_2")
         self.horizontalLayout.addWidget(self.frame_2)
-
+        self.patient_id = patient_id  # Store the patient ID
+        self.populate_patient_data()
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
         
         
-        self.fetch_latest_patient_number()
-        latest_patient_number = self.fetch_latest_patient_number()
-        next_patient_number = self.generate_next_patient_number(latest_patient_number)
-        self.lineEdit_16.setText(next_patient_number)  # Set the generated test code
         
-    def fetch_latest_patient_number(self):
-        try:
-            self.cursor.execute("SELECT MAX(uhid) FROM patients")
-            latest_test_number = self.cursor.fetchone()[0]
-            return latest_test_number
-        except Exception as e:
-            print("Error fetching latest patient number:", str(e))
-            return None
-
-    def generate_next_patient_number(self, latest_patient_number):
-        if latest_patient_number is None:
-            return "P00001"
-
-        prefix = "P"
-        numeric_part = int(latest_patient_number[1:])  # Convert the numeric part to integer
-        next_numeric_part = numeric_part + 1
-        next_patient_number = f"{prefix}{next_numeric_part:05}"  # Format as "T00001"
-        return next_patient_number
-
-    def save_patient_data(self):
-        try:
-            DoctorCode = self.generate_next_patient_number()
-            # ... rest of your save_test_data function ...
-
-        except Exception as e:
-            print("Error:", str(e))
-
+    def populate_patient_data(self):
+        if self.patient_id:
+            # Fetch patient data for the specified patient_id
+            patient_data = self.fetch_patient_data_by_id(self.patient_id)
+            if patient_data:
+                # Populate the form fields with the patient data
+                self.lineEdit_16.setText(str(patient_data[0]))
+                self.lineEdit_15.setText(patient_data[1])  # Assuming the second item is the title
+                self.lineEdit_18.setText(patient_data[2])  # Assuming the third item is the patient name
+                self.lineEdit_6.setText(patient_data[3])
+                self.lineEdit_12.setText(patient_data[4])
+                self.lineEdit_10.setText(patient_data[5])
+                self.lineEdit_14.setText(patient_data[6])
+                self.lineEdit_13.setText(patient_data[7])
+            
+    
+    def fetch_patient_data_by_id(self, patient_id):
+        self.cursor.execute("SELECT * FROM patients WHERE id=?", (patient_id,))
+        patient_data = self.cursor.fetchone()
+        return patient_data
+    
+    
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
@@ -465,7 +457,7 @@ if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     Form = QtWidgets.QWidget()
-    ui = Ui_addpatientForm()
+    ui = Ui_editpatientForm()
     ui.setupUi(Form)
     Form.show()
     sys.exit(app.exec_())
