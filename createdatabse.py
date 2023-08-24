@@ -41,7 +41,6 @@ cursor = connection.cursor()
 # Create the patients table if it doesn't exist
 create_patients_table_query = '''
     CREATE TABLE IF NOT EXISTS patients (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
         uhid TEXT NOT NULL UNIQUE,
         title TEXT NOT NULL,
         patientname TEXT NOT NULL,
@@ -49,9 +48,13 @@ create_patients_table_query = '''
         age TEXT NOT NULL,
         gender TEXT NOT NULL,
         mobile TEXT NOT NULL,
-        email TEXT NOT NULL
+        email TEXT NOT NULL,
+        date DATE NOT NULL
     );
 '''
+
+cursor.execute(create_patients_table_query)
+connection.commit()
 
 cursor.execute(create_patients_table_query)
 connection.commit()
@@ -71,7 +74,6 @@ cursor = connection.cursor()
 # Create the patients table if it doesn't exist
 create_tests_table_query = '''
     CREATE TABLE IF NOT EXISTS tests (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
         Testcode TEXT NOT NULL UNIQUE,
         TestName TEXT NOT NULL,
         specimentype TEXT NOT NULL,
@@ -102,7 +104,6 @@ cursor = connection.cursor()
 # Create the patients table if it doesn't exist
 create_refdr_table_query = '''
     CREATE TABLE IF NOT EXISTS refdr (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
         DoctorCode TEXT NOT NULL UNIQUE,
         DoctorName TEXT NOT NULL,
         Qualification TEXT NOT NULL,
@@ -132,7 +133,6 @@ cursor = conn.cursor()
 # Create the Visit table with the foreign key constraint
 create_visit_table_query = '''
     CREATE TABLE IF NOT EXISTS visit (
-        id INTEGER PRIMARY KEY,
         patient_id TEXT,
         patient_category TEXT,
         ref_dr TEXT,
@@ -160,7 +160,6 @@ cursor = conn.cursor()
 # Create the Visit table with the foreign key constraint
 cursor.execute('''
     CREATE TABLE IF NOT EXISTS category (
-        id INTEGER PRIMARY KEY,
         categoryvalue TEXT
         
     )

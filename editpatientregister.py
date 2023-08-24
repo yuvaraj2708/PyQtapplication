@@ -1,10 +1,10 @@
 import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sqlite3
-
+import datetime
 
 class Ui_editpatientForm(object):
-    def setupUi(self, Form,patient_id):
+    def setupUi(self, Form,patient_uhid):
         self.conn = sqlite3.connect("patient_data.db")
         self.cursor = self.conn.cursor()    
         Form.setObjectName("Form")
@@ -379,7 +379,7 @@ class Ui_editpatientForm(object):
         self.frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_2.setObjectName("frame_2")
         self.horizontalLayout.addWidget(self.frame_2)
-        self.patient_id = patient_id  # Store the patient ID
+        self.patient_uhid = patient_uhid  # Store the patient ID
         self.populate_patient_data()
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -387,9 +387,9 @@ class Ui_editpatientForm(object):
         
         
     def populate_patient_data(self):
-        if self.patient_id:
+        if self.patient_uhid:
             # Fetch patient data for the specified patient_id
-            patient_data = self.fetch_patient_data_by_id(self.patient_id)
+            patient_data = self.fetch_patient_data_by_id(self.patient_uhid)
             if patient_data:
                 # Populate the form fields with the patient data
                 self.lineEdit_16.setText(str(patient_data[0]))
@@ -402,8 +402,8 @@ class Ui_editpatientForm(object):
                 self.lineEdit_13.setText(patient_data[7])
             
     
-    def fetch_patient_data_by_id(self, patient_id):
-        self.cursor.execute("SELECT * FROM patients WHERE id=?", (patient_id,))
+    def fetch_patient_data_by_id(self, patient_uhid):
+        self.cursor.execute("SELECT * FROM patients WHERE uhid=?", (patient_uhid,))
         patient_data = self.cursor.fetchone()
         return patient_data
     
@@ -444,12 +444,17 @@ class Ui_editpatientForm(object):
         gender = self.lineEdit_10.text()
         mobile = self.lineEdit_14.text()
         email = self.lineEdit_13.text()
-
+        
+        current_datetime = datetime.datetime.now()
+        current_date = current_datetime.strftime("%d%m%Y")
+        
         # Insert patient data into the database
-        self.cursor.execute("INSERT INTO patients (uhid, title, patientname, dob, age, gender, mobile, email) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-                            (uhid, title, patientname, dob, age, gender, mobile, email))
+        
+        self.cursor.execute("UPDATE patients SET title=?, patientname=?, dob=?, age=?, gender=?, mobile=?, email=?, date=? WHERE uhid=?",
+                    (title, patientname, dob, age, gender, mobile, email, current_date, uhid))
         self.conn.commit()
 
+        
         # Clear the input fields after saving
         self.clear_input_fields()
         

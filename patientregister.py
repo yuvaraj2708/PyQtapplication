@@ -1,7 +1,7 @@
 import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sqlite3
-
+import datetime
 
 class Ui_addpatientForm(object):
     def setupUi(self, Form):
@@ -444,22 +444,27 @@ class Ui_addpatientForm(object):
         
         
     def save_patient_data(self):
-        uhid = self.lineEdit_16.text()
-        title = self.lineEdit_15.text()
-        patientname = self.lineEdit_18.text()
-        dob = self.lineEdit_6.text()
-        age = self.lineEdit_12.text()
-        gender = self.lineEdit_10.text()
-        mobile = self.lineEdit_14.text()
-        email = self.lineEdit_13.text()
+      uhid = self.lineEdit_16.text()
+      title = self.lineEdit_15.text()
+      patientname = self.lineEdit_18.text()
+      dob = self.lineEdit_6.text()
+      age = self.lineEdit_12.text()
+      gender = self.lineEdit_10.text()
+      mobile = self.lineEdit_14.text()
+      email = self.lineEdit_13.text()
+  
+      # Insert patient data into the database
+      current_datetime = datetime.datetime.now()
+      current_date = current_datetime.strftime("%d%m%Y")
 
         # Insert patient data into the database
-        self.cursor.execute("INSERT INTO patients (uhid, title, patientname, dob, age, gender, mobile, email) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-                            (uhid, title, patientname, dob, age, gender, mobile, email))
-        self.conn.commit()
-
-        # Clear the input fields after saving
-        self.clear_input_fields()
+      self.cursor.execute("INSERT INTO patients (uhid, title, patientname, dob, age, gender, mobile, email, date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                          (uhid, title, patientname, dob, age, gender, mobile, email, current_date))
+      self.conn.commit()
+  
+      # Clear the input fields after saving
+      self.clear_input_fields()
+  
         
 if __name__ == "__main__":
     import sys

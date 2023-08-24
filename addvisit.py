@@ -466,41 +466,40 @@ class Ui_addvisitForm(object):
         
         
     def set_patient_data(self, patient_data):
-      # Assuming patient_data is a tuple containing patient information
-      # Modify this according to the structure of your patient_data tuple
-      patient_id, uhid, title, patient_name, gender, dob, age, email, mobile = patient_data
+      uhid, title, patient_name, gender, dob, age, email, mobile,date = patient_data
 
       # Update line edit fields to display patient information
-      self.lineEdit_18.setText(f"{uhid}")
-      self.lineEdit_14.setText(f"{title}")
-      self.lineEdit_6.setText(f"{patient_name}")
-      self.lineEdit_16.setText(f"{gender}")
-      self.lineEdit_10.setText(f"{dob}")
-      self.lineEdit_12.setText(f"{age}")
-      self.lineEdit_13.setText(f"{email}")
-      self.lineEdit_15.setText(f"{mobile}")
-      
+      self.lineEdit_16.setText(uhid)
+      self.lineEdit_15.setText(title)
+      self.lineEdit_18.setText(patient_name)
+      self.lineEdit_6.setText(gender)
+      self.lineEdit_12.setText(dob)
+      self.lineEdit_10.setText(age)
+      self.lineEdit_14.setText(email)
+      self.lineEdit_13.setText(mobile)
+       
       categories = self.fetch_categories_from_database()
       refdr = self.fetch_refdr_from_database()
       selecttest = self.fetch_selecttest_from_database()
+      
       self.populate_categorydropdown(self.comboBox_24, categories)
       self.populate_refdrdropdown(self.comboBox_25, refdr)
       self.populate_testdropdown(self.comboBox_26, selecttest)
 
       # Generate and display the visit ID
-      visit_id = self.generate_visit_id(patient_id)
+      visit_id = self.generate_visit_id(uhid)
       self.lineEdit_26.setText(visit_id)  # Assuming lineEdit_26 is the visit ID field
 
-    def generate_visit_id(self, patient_id):
+    def generate_visit_id(self, patient_uhid):
       # Generate a visit ID based on patient ID and current date/time
       current_time = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-      visit_id = f"{patient_id}_{current_time}"
+      visit_id = f"{patient_uhid}_{current_time}"
       return visit_id
     
     def submit_form(self):
      try:       
     # Extract data from UI elements
-        patient_id = int(self.lineEdit_18.text())  # Assuming lineEdit_18 is the patient ID field
+        patient_uhid = int(self.lineEdit_18.text())  # Assuming lineEdit_18 is the patient ID field
         patient_category = self.comboBox_24.currentText()  # Assuming comboBox_24 is the patient category dropdown
         ref_dr = self.comboBox_25.currentText()  # Assuming comboBox_25 is the referring doctor dropdown
         selected_test = self.comboBox_26.currentText()  # Assuming comboBox_26 is the selected test dropdown
@@ -510,8 +509,8 @@ class Ui_addvisitForm(object):
       # Insert data into the "visit" table
         connection = sqlite3.connect("patient_data.db")
         cursor = connection.cursor()
-        cursor.execute("INSERT INTO visit (patient_id, patient_category, ref_dr, selected_test, visit_id, date) VALUES (?, ?, ?, ?, ?, ?)",
-                       (patient_id, patient_category, ref_dr, selected_test, visit_id, date))
+        cursor.execute("INSERT INTO visit (patient_uhid, patient_category, ref_dr, selected_test, visit_id, date) VALUES (?, ?, ?, ?, ?, ?)",
+                       (patient_uhid, patient_category, ref_dr, selected_test, visit_id, date))
         connection.commit()
         connection.close()
 
