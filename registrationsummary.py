@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import QLabel, QPushButton, QVBoxLayout, QDialog
 from patientregister import Ui_addpatientForm
 from PyQt5.QtGui import QImage, QPixmap
 from fpdf import FPDF
+import os
 
 class Ui_visitsummaryForm(object):
     def setupUi(self, Form):
@@ -207,46 +208,73 @@ class Ui_visitsummaryForm(object):
         self.textEdit.setGeometry(QtCore.QRect(-27, 280, 921, 421))
         self.textEdit.setObjectName("textEdit")
         
-        
+        self.listWidget = QtWidgets.QListWidget(Form)  # Initialize the listWidget
+        self.listWidget.setGeometry(QtCore.QRect(-27, 280, 921, 421))
+        self.listWidget.setObjectName("listWidget")
+
+        # Use the listWidget to display data
+        self.fetch_and_display_visit_data()
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
         
-        self.fetch_and_display_visit_data()
-    
     def fetch_and_display_visit_data(self):
+        conn = sqlite3.connect('patient_data.db')
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT * FROM visit")
+        visit_data = cursor.fetchall()
+
+        if visit_data:
+            self.listWidget.clear()
+
+            for row in visit_data:
+                item = QtWidgets.QListWidgetItem()
+                self.listWidget.addItem(item)
+
+                custom_widget = QtWidgets.QWidget()
+                custom_layout = QtWidgets.QHBoxLayout(custom_widget)
+                label = QtWidgets.QLabel(f"{row[0]:<10} {row[1]:<10} {row[2]:<10} {row[3]:<10} {row[4]:<10} {row[5]:<10}  ")
+                custom_layout.addWidget(label)
+                button_layout = QtWidgets.QHBoxLayout()  
+               
+                delete_button = QtWidgets.QPushButton()
+                delete_button.setIcon(QtGui.QIcon(os.path.join('images', 'delete.png')))
+                delete_button.setFixedSize(20, 20)
+                delete_button.clicked.connect(lambda _, row=row: self.delete_visit(row[0])) 
+                button_layout.addWidget(delete_button)
+                
+                QR_button = QtWidgets.QPushButton()
+                QR_button.setIcon(QtGui.QIcon(os.path.join('images', 'qr.png')))
+                QR_button.setFixedSize(20, 20)
+                QR_button.clicked.connect(lambda _, row=row: self.generate_qr_code_pdf(row[0])) 
+                
+                button_layout.addWidget(QR_button)
+                button_layout.addSpacing(90)
+                custom_layout.addLayout(button_layout)  # Add the button layout to the custom layout
+                item.setSizeHint(custom_widget.sizeHint())
+                self.listWidget.setItemWidget(item, custom_widget)
+                item.visit_data = row
+ 
+        conn.close()
+
+ 
+    def delete_visit(self, visit_id):
+       print("Deleting visit with visitid:", visit_id)
+       # Connect to the database
        conn = sqlite3.connect('patient_data.db')
        cursor = conn.cursor()
-   
-       cursor.execute("SELECT * FROM visit")
-       visit_data = cursor.fetchall()
-       
-       if visit_data:
-           self.textEdit.clear()
-           vertical_layout = QtWidgets.QVBoxLayout()
-   
-           for row in visit_data:
-               layout = QtWidgets.QHBoxLayout()
-   
-               button = QtWidgets.QPushButton('Generate QR Code')
-               layout.addWidget(button)
-               
-               # Connect the button click to the generate_qr_code_pdf function
-               button.clicked.connect(lambda _, data=row: self.generate_qr_code_pdf(data))
-   
-               for column in row:
-                   label = QtWidgets.QLabel(str(column))
-                   layout.addWidget(label)
-   
-               vertical_layout.addLayout(layout)
-   
-           self.textEdit.setLayout(vertical_layout)
-       
-       conn.close()
-   
+
+       # Delete patient data from the database
+       cursor.execute("DELETE FROM visit WHERE visitid = ?", (visit_id,))
+       conn.commit()
+
+       # Refresh the displayed patient data immediately after deletion
+       self.fetch_and_display_visit_data()
+    
     
     def generate_qr_code_pdf(self, visit_data):
      # Extract relevant information from visit_data
-     visitid, patient_id, patient_category, ref_dr, selected_test, _, patientname = visit_data
+     visitid, patient_id, patient_category, ref_dr, selected_test,  patientname = visit_data
  
      # Create a formatted string with all the details
      details_string = (
