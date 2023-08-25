@@ -11,12 +11,14 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from addrefdr import Ui_refdrForm
 import sqlite3
+import os
+from editrefdr import Ui_editrefdrForm
 
 class Ui_refdrmasterForm(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
         Form.resize(900, 600)
-        Form.setMaximumSize(QtCore.QSize(811, 16777215))
+        Form.setMaximumSize(QtCore.QSize(851, 16777215))
         font = QtGui.QFont()
         font.setPointSize(10)
         Form.setFont(font)
@@ -297,20 +299,21 @@ class Ui_refdrmasterForm(object):
         self.textEdit.setGeometry(QtCore.QRect(-27, 280, 921, 421))
         self.textEdit.setObjectName("textEdit")
         
-        
-
+       
+        self.listWidget = QtWidgets.QListWidget(Form)
+        self.listWidget.setGeometry(QtCore.QRect(-27, 280, 921, 421))
+        self.listWidget.setObjectName("listWidget")
         
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
-        self.fetch_and_display_redr_data()
+        self.fetch_and_display_refdr_data()
         
         
         # self.lineEdit_16.textChanged.connect(self.fetch_and_display_test_data)
     
     
     
-    def fetch_and_display_redr_data(self):
-    # Connect to the database
+    def fetch_and_display_refdr_data(self):
      conn = sqlite3.connect('patient_data.db')
      cursor = conn.cursor()
  
@@ -319,34 +322,73 @@ class Ui_refdrmasterForm(object):
      refdr_data = cursor.fetchall()
  
      if refdr_data:
-         # Clear previous data from textEdit
-         self.textEdit.clear()
- 
-         # Create a new vertical layout to hold rows of data
-         vertical_layout = QtWidgets.QVBoxLayout()
- 
-         # Loop through each row in the refdr_data
          for row in refdr_data:
-             # Create a new horizontal layout for this row
-             layout = QtWidgets.QHBoxLayout()
+             item = QtWidgets.QListWidgetItem()
+             self.listWidget.addItem(item)
+     
+             custom_widget = QtWidgets.QWidget()
+             custom_layout = QtWidgets.QHBoxLayout(custom_widget)
+             label = QtWidgets.QLabel(f"{row[0]:<10} {row[1]:<10} {row[2]:<10} {row[3]:<10} {row[4]:<10} {row[5]:<10} {row[6]:<10} {row[7]:<10}  ")
+             custom_layout.addWidget(label)
+             button_layout = QtWidgets.QHBoxLayout()  # Create a layout for the buttons 
+             
+             delete_button = QtWidgets.QPushButton()
+             delete_button.setIcon(QtGui.QIcon(os.path.join('images', 'delete.png')))
+             delete_button.setFixedSize(20, 20)
+             delete_button.clicked.connect(lambda _, row=row: self.delete_refdr(row[0])) 
+             button_layout.addWidget(delete_button)
+             
+             edit_button = QtWidgets.QPushButton()
+             edit_button.setIcon(QtGui.QIcon(os.path.join('images', 'edit.png')))  # Change to the correct icon
+             edit_button.setFixedSize(20, 20)
+             edit_button.clicked.connect(lambda _, row=row: self.edit_refdr(row[0]))
+             button_layout.addWidget(edit_button)
+             
+             
+             button_layout.addSpacing(90)
+     
+             custom_layout.addLayout(button_layout)  # Add the button layout to the custom layout
+             item.setSizeHint(custom_widget.sizeHint())
+             self.listWidget.setItemWidget(item, custom_widget)
+             item.refdr_data = row
  
-             # Loop through each column in the row
-             for column in row:
-                 label = QtWidgets.QLabel(str(column))
-                 layout.addWidget(label)
- 
-             # Add the horizontal layout (row) to the vertical layout
-             vertical_layout.addLayout(layout)
- 
-         # Add the vertical layout to the textEdit
-         self.textEdit.setLayout(vertical_layout)
- 
-     # Close the database connection
-     conn.close()
- 
- 
+    def edit_refdr(self, DoctorCode):
+        self.edit_refdr_form = QtWidgets.QWidget()
+        self.ui_edit_refdr = Ui_editrefdrForm()  # Replace with the correct class name
+        self.ui_edit_refdr.setupUi(self.edit_refdr_form, DoctorCode)  # Pass the DoctorCode argument
+        self.edit_refdr_form.show()
 
+        # Fetch refdr data for the specified DoctorCode
+        refdr_data = self.fetch_refdr_data_by_id(DoctorCode)
+        if refdr_data:
+            self.edit_refdr_form.refdr_data = refdr_data  
+        
+        self.edit_refdr_form.show()
+        self.fetch_and_display_refdr_data()
+   
+    def fetch_refdr_data_by_id(self, DoctorCode):
+        # Connect to the database
+        conn = sqlite3.connect('patient_data.db')
+        cursor = conn.cursor()
 
+        # Fetch patient data by ID
+        cursor.execute("SELECT * FROM refdr WHERE DoctorCode = ?", (DoctorCode,))
+        refdr_data = cursor.fetchone()
+
+        return refdr_data   
+   
+   
+    def delete_refdr(self, DoctorCode):
+       # Connect to the database
+       conn = sqlite3.connect('patient_data.db')
+       cursor = conn.cursor()
+
+       # Delete patient data from the database
+       cursor.execute("DELETE FROM refdr WHERE DoctorCode = ?", (DoctorCode,))
+       conn.commit()
+
+       # Refresh the displayed patient data immediately after deletion
+       self.fetch_and_display_refdr_data()     
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate

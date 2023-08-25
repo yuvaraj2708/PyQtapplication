@@ -10,8 +10,8 @@ from fpdf import FPDF
 class Ui_visitsummaryForm(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(811, 588)
-        Form.setMaximumSize(QtCore.QSize(811, 16777215))
+        Form.resize(900, 588)
+        Form.setMaximumSize(QtCore.QSize(851, 16777215))
         font = QtGui.QFont()
         font.setPointSize(10)
         Form.setFont(font)
@@ -246,11 +246,11 @@ class Ui_visitsummaryForm(object):
     
     def generate_qr_code_pdf(self, visit_data):
      # Extract relevant information from visit_data
-     visit_id, patient_id, patient_category, ref_dr, selected_test, _, patientname = visit_data
+     visitid, patient_id, patient_category, ref_dr, selected_test, _, patientname = visit_data
  
      # Create a formatted string with all the details
      details_string = (
-         f"Visit ID: {visit_id}\n"
+         f"Visit ID: {visitid}\n"
          f"Patient ID: {patient_id}\n"
          f"Patient Name: {patientname}\n"
          f"Patient Category: {patient_category}\n"
@@ -269,27 +269,27 @@ class Ui_visitsummaryForm(object):
      qr.make(fit=True)
  
      qr_img = qr.make_image(fill_color="black", back_color="white")
-     qr_img.save(f'qr_code_{visit_id}.png')
+     qr_img.save(f'qr_code_{visitid}.png')
      
      pdf = FPDF()
      pdf.add_page()
-     pdf.image(f'qr_code_{visit_id}.png', x=10, y=10, w=190)
+     pdf.image(f'qr_code_{visitid}.png', x=10, y=10, w=190)
      
      # Add visit details to the PDF
      pdf.set_font("Arial", size=12)
-     pdf.cell(200, 10, f"Visit ID: {visit_id}", ln=True)
+     pdf.cell(200, 10, f"Visit ID: {visitid}", ln=True)
      pdf.cell(200, 10, f"Patient ID: {patient_id}", ln=True)
      pdf.cell(200, 10, f"Patient Name: {patientname}", ln=True)
      pdf.cell(200, 10, f"Patient Category: {patient_category}", ln=True)
      pdf.cell(200, 10, f"Referring Doctor: {ref_dr}", ln=True)
      pdf.cell(200, 10, f"Selected Test: {selected_test}", ln=True)
     
-     pdf_file_path = f'qr_code_{visit_id}.pdf'
+     pdf_file_path = f'qr_code_{visitid}.pdf'
      pdf.output(pdf_file_path)
     
      QtWidgets.QMessageBox.information(
          None, 'QR Code PDF',
-         f'QR code PDF for Visit ID {visit_id} has been generated as "{pdf_file_path}"'
+         f'QR code PDF for Visit ID {visitid} has been generated as "{pdf_file_path}"'
      )
 
     

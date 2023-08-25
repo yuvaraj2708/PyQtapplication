@@ -11,11 +11,15 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from addtest  import Ui_addtestForm
 import sqlite3
+import os
+from edittest import Ui_edittestForm
+
+
 
 class Ui_testForm(object):
     def setupUi(self, Form):            
-        Form.resize(811, 588)
-        Form.setMaximumSize(QtCore.QSize(811, 16777215))
+        Form.resize(900, 588)
+        Form.setMaximumSize(QtCore.QSize(851, 16777215))
         font = QtGui.QFont()
         font.setPointSize(10)
         Form.setFont(font)
@@ -190,15 +194,15 @@ class Ui_testForm(object):
         self.textEdit.setObjectName("textEdit")
         
         
-        
+        self.test_data = {}
+        self.listWidget = QtWidgets.QListWidget(Form)
+        self.listWidget.setGeometry(QtCore.QRect(-27, 280, 921, 421))
+        self.listWidget.setObjectName("listWidget")
+
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
         self.fetch_and_display_test_data()
         
-        
-        # self.lineEdit_16.textChanged.connect(self.fetch_and_display_test_data)
-    
-    
     
     def fetch_and_display_test_data(self):
     
@@ -211,37 +215,78 @@ class Ui_testForm(object):
      test_data = cursor.fetchall()
  
      if test_data:
-         # Clear previous data from textEdit
-         self.textEdit.clear()
- 
-         # Create a new vertical layout to hold rows of data
-         vertical_layout = QtWidgets.QVBoxLayout()
- 
-         # Loop through each row in the refdr_data
          for row in test_data:
-             # Create a new horizontal layout for this row
-             layout = QtWidgets.QHBoxLayout()
+             item = QtWidgets.QListWidgetItem()
+             self.listWidget.addItem(item)
+     
              custom_widget = QtWidgets.QWidget()
              custom_layout = QtWidgets.QHBoxLayout(custom_widget)
-
-             label = QtWidgets.QLabel(f"{row[0]:<10} {row[1]:<10} {row[2]:<10} {row[3]:<10} {row[4]:<10} {row[5]:<10} {row[6]:<10} ")
+             label = QtWidgets.QLabel(f"{row[0]:<10} {row[1]:<10} {row[2]:<10} {row[3]:<10} {row[4]:<10} {row[5]:<10}  ")
              custom_layout.addWidget(label)
- 
-             # Loop through each column in the row
-             for column in row:
-                 label = QtWidgets.QLabel(str(column))
-                 layout.addWidget(label)
- 
-             # Add the horizontal layout (row) to the vertical layout
-             vertical_layout.addLayout(layout)
- 
-         # Add the vertical layout to the textEdit
-         self.textEdit.setLayout(vertical_layout)
- 
-     # Close the database connection
-     conn.close()
-         
+             button_layout = QtWidgets.QHBoxLayout()  # Create a layout for the buttons 
+             
+             delete_button = QtWidgets.QPushButton()
+             delete_button.setIcon(QtGui.QIcon(os.path.join('images', 'delete.png')))
+             delete_button.setFixedSize(20, 20)
+             delete_button.clicked.connect(lambda _, row=row: self.delete_test(row[0])) 
+             button_layout.addWidget(delete_button)
+             
+             edit_button = QtWidgets.QPushButton()
+             edit_button.setIcon(QtGui.QIcon(os.path.join('images', 'edit.png')))  # Change to the correct icon
+             edit_button.setFixedSize(20, 20)
+             edit_button.clicked.connect(lambda _, row=row: self.edit_refdr(row[0]))
+             button_layout.addWidget(edit_button)
+             
+             
+             
+             button_layout.addSpacing(90)
+     
+             custom_layout.addLayout(button_layout)  # Add the button layout to the custom layout
+             item.setSizeHint(custom_widget.sizeHint())
+             self.listWidget.setItemWidget(item, custom_widget)
+             item.test_data = row
+       
+       
+       
+    def edit_refdr(self, Testcode):
+        self.edit_test_form = QtWidgets.QWidget()
+        self.ui_edit_test = Ui_edittestForm()  # Replace with the correct class name
+        self.ui_edit_test.setupUi(self.edit_test_form, Testcode)  # Pass the DoctorCode argument
+        self.edit_test_form.show()
+
+        # Fetch refdr data for the specified DoctorCode
+        test_data = self.fetch_test_data_by_id(Testcode)
+        if test_data:
+            self.edit_test_form.test_data = test_data  
         
+        self.edit_test_form.show()
+        self.fetch_and_display_test_data()
+   
+    def fetch_test_data_by_id(self, Testcode):
+        # Connect to the database
+        conn = sqlite3.connect('patient_data.db')
+        cursor = conn.cursor()
+
+        # Fetch patient data by ID
+        cursor.execute("SELECT * FROM refdr WHERE DoctorCode = ?", (Testcode,))
+        test_data = cursor.fetchone()
+
+        return test_data   
+    
+    def delete_test(self, Testcode):
+       # Connect to the database
+       conn = sqlite3.connect('patient_data.db')
+       cursor = conn.cursor()
+
+       # Delete patient data from the database
+       cursor.execute("DELETE FROM tests WHERE testcode = ?", (Testcode,))
+       conn.commit()
+
+       # Refresh the displayed patient data immediately after deletion
+       self.fetch_and_display_test_data()
+    
+    
+     
         
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate

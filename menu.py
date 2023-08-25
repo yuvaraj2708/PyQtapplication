@@ -9,8 +9,8 @@ from reportformat import Ui_reportForm
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(811, 588)
-        MainWindow.setMaximumSize(QtCore.QSize(811, 16777215))
+        MainWindow.resize(900, 588)
+        MainWindow.setMaximumSize(QtCore.QSize(851, 17777415))
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         MainWindow.setCentralWidget(self.centralwidget)

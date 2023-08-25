@@ -56,9 +56,6 @@ create_patients_table_query = '''
 cursor.execute(create_patients_table_query)
 connection.commit()
 
-cursor.execute(create_patients_table_query)
-connection.commit()
-
 # Close the connection
 connection.close()
 
@@ -133,13 +130,13 @@ cursor = conn.cursor()
 # Create the Visit table with the foreign key constraint
 create_visit_table_query = '''
     CREATE TABLE IF NOT EXISTS visit (
-        patient_id TEXT,
+        patient_uhid TEXT,
         patient_category TEXT,
         ref_dr TEXT,
         selected_test TEXT,
         visitid TEXT,
         date DATE,
-        FOREIGN KEY (patient_id) REFERENCES patients(id)
+        FOREIGN KEY (patient_uhid) REFERENCES patients(id)
     );
 '''
 

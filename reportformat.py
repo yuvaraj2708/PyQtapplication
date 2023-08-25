@@ -19,8 +19,8 @@ import os
 class Ui_reportForm(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(811, 588)
-        Form.setMaximumSize(QtCore.QSize(811, 16777215))
+        Form.resize(900, 588)
+        Form.setMaximumSize(QtCore.QSize(851, 16777215))
         font = QtGui.QFont()
         font.setPointSize(10)
         Form.setFont(font)

@@ -11,7 +11,7 @@ class Ui_patientForm(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
         Form.resize(811, 588)
-        Form.setMaximumSize(QtCore.QSize(811, 16777215))
+        Form.setMaximumSize(QtCore.QSize(851, 16777215))
         font = QtGui.QFont()
         font.setPointSize(10)
         Form.setFont(font)
@@ -325,7 +325,7 @@ class Ui_patientForm(object):
       conn.close()
   
 
-
+    
     
     def fetch_and_display_patient_data(self):
      # Connect to the database
@@ -387,7 +387,7 @@ class Ui_patientForm(object):
             self.ui_edit_patient.patient_data = patient_data  # Set the patient data in the edit form
 
         self.edit_patient_form.show()
-
+        self.fetch_and_display_patient_data()
 
     def fetch_patient_data_by_id(self, patient_uhid):
         # Connect to the database
@@ -412,7 +412,7 @@ class Ui_patientForm(object):
 
        # Refresh the displayed patient data immediately after deletion
        self.fetch_and_display_patient_data()
-
+       
             
     def open_add_visit_form(self, patient_data):
         self.add_visit_form = QtWidgets.QWidget()

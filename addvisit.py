@@ -17,8 +17,8 @@ from PyQt5.QtWidgets import QStackedWidget
 class Ui_addvisitForm(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(811, 588)
-        Form.setMaximumSize(QtCore.QSize(811, 16777215))
+        Form.resize(900, 588)
+        Form.setMaximumSize(QtCore.QSize(851, 16777215))
         font = QtGui.QFont()
         font.setPointSize(10)
         Form.setFont(font)
@@ -466,7 +466,7 @@ class Ui_addvisitForm(object):
         
         
     def set_patient_data(self, patient_data):
-      uhid, title, patient_name, gender, dob, age, email, mobile,date = patient_data
+      uhid, title, patient_name, gender, dob, age, email, mobile, date = patient_data
 
       # Update line edit fields to display patient information
       self.lineEdit_16.setText(uhid)
@@ -487,30 +487,36 @@ class Ui_addvisitForm(object):
       self.populate_testdropdown(self.comboBox_26, selecttest)
 
       # Generate and display the visit ID
-      visit_id = self.generate_visit_id(uhid)
-      self.lineEdit_26.setText(visit_id)  # Assuming lineEdit_26 is the visit ID field
+      visitid = self.generate_visit_id(uhid)
+      self.lineEdit_26.setText(visitid)  # Assuming lineEdit_26 is the visit ID field
 
-    def generate_visit_id(self, patient_uhid):
-      # Generate a visit ID based on patient ID and current date/time
-      current_time = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-      visit_id = f"{patient_uhid}_{current_time}"
-      return visit_id
+    
+    def generate_visit_id(self, latest_visit_number):
+        if latest_visit_number is None:
+            return "V00001"
+
+        prefix = "V"
+        numeric_part = int(latest_visit_number[1:])  # Convert the numeric part to integer
+        next_numeric_part = numeric_part + 1
+        next_visit_number = f"{prefix}{next_numeric_part:05}"  # Format as "V00001"
+        return next_visit_number
+    
     
     def submit_form(self):
      try:       
     # Extract data from UI elements
-        patient_uhid = int(self.lineEdit_18.text())  # Assuming lineEdit_18 is the patient ID field
+        patient_uhid = self.lineEdit_16.text()  # Assuming lineEdit_18 is the patient ID field
         patient_category = self.comboBox_24.currentText()  # Assuming comboBox_24 is the patient category dropdown
         ref_dr = self.comboBox_25.currentText()  # Assuming comboBox_25 is the referring doctor dropdown
         selected_test = self.comboBox_26.currentText()  # Assuming comboBox_26 is the selected test dropdown
-        visit_id = self.lineEdit_26.text()  # Assuming lineEdit_26 is the visit ID field
+        visitid = self.lineEdit_26.text()  # Assuming lineEdit_26 is the visit ID field
         date = datetime.datetime.now().strftime("%Y-%m-%d")  # Get current date
   
       # Insert data into the "visit" table
         connection = sqlite3.connect("patient_data.db")
         cursor = connection.cursor()
-        cursor.execute("INSERT INTO visit (patient_uhid, patient_category, ref_dr, selected_test, visit_id, date) VALUES (?, ?, ?, ?, ?, ?)",
-                       (patient_uhid, patient_category, ref_dr, selected_test, visit_id, date))
+        cursor.execute("INSERT INTO visit (patient_uhid, patient_category, ref_dr, selected_test, visitid, date) VALUES (?, ?, ?, ?, ?, ?)",
+                       (patient_uhid, patient_category, ref_dr, selected_test, visitid, date))
         connection.commit()
         connection.close()
 
