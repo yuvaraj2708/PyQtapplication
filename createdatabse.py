@@ -130,13 +130,14 @@ cursor = conn.cursor()
 # Create the Visit table with the foreign key constraint
 create_visit_table_query = '''
     CREATE TABLE IF NOT EXISTS visit (
-        patient_uhid TEXT,
+        id INTEGER PRIMARY KEY,
+        patient_id INTEGER,  -- Change this to INTEGER as per the ForeignKey relation
         patient_category TEXT,
         ref_dr TEXT,
         selected_test TEXT,
         visitid TEXT,
         date DATE,
-        FOREIGN KEY (patient_uhid) REFERENCES patients(id)
+        FOREIGN KEY (patient_id) REFERENCES patient(id)  -- Use the correct model name and field name
     );
 '''
 
@@ -147,7 +148,6 @@ conn.commit()
 conn.close()
 
 print("Database schema and tables created successfully.")
-
 
 import sqlite3
 

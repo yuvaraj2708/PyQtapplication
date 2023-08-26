@@ -8,7 +8,7 @@ from PyQt5.QtGui import QImage, QPixmap
 from fpdf import FPDF
 import os
 
-class Ui_visitsummaryForm(object):
+class Ui_scansummaryForm(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
         Form.resize(900, 588)
@@ -238,7 +238,7 @@ class Ui_visitsummaryForm(object):
                 button_layout = QtWidgets.QHBoxLayout()  
                
                 scan_button = QtWidgets.QPushButton()
-                scan_button.setIcon(QtGui.QIcon(os.path.join('images', 'cam.png')))
+                scan_button.setIcon(QtGui.QIcon(os.path.join('images', 'delete.png')))
                 scan_button.setFixedSize(20, 20)
                 scan_button.clicked.connect(lambda _, row=row: self.scan_visit(row[0])) 
                 button_layout.addWidget(scan_button)
@@ -252,7 +252,7 @@ class Ui_visitsummaryForm(object):
                 QR_button = QtWidgets.QPushButton()
                 QR_button.setIcon(QtGui.QIcon(os.path.join('images', 'qr.png')))
                 QR_button.setFixedSize(20, 20)
-                QR_button.clicked.connect(lambda _, row=row: self.generate_qr_code_pdf(row))
+                QR_button.clicked.connect(lambda _, row=row: self.generate_qr_code_pdf(row[0])) 
                 
                 button_layout.addWidget(QR_button)
                 button_layout.addSpacing(90)
@@ -265,58 +265,33 @@ class Ui_visitsummaryForm(object):
 
  
     def delete_visit(self, visit_id):
-     print("Deleting visit with visitid:", visit_id)
-     # Connect to the database
-     conn = sqlite3.connect('patient_data.db')
-     cursor = conn.cursor()
+       print("Deleting visit with visitid:", visit_id)
+       # Connect to the database
+       conn = sqlite3.connect('patient_data.db')
+       cursor = conn.cursor()
 
-     try:
-         # Delete patient data from the database
-         cursor.execute("DELETE FROM visit WHERE visitid = ?", (visit_id,))
-         conn.commit()
-         print("Visit deleted successfully")
-     except sqlite3.Error as e:
-         print("Error deleting visit:", e)
-     finally:
-         conn.close()
+       # Delete patient data from the database
+       cursor.execute("DELETE FROM visit WHERE visitid = ?", (visit_id,))
+       conn.commit()
 
-     # Refresh the displayed patient data immediately after deletion
-     self.fetch_and_display_visit_data()
-     
-    
+       # Refresh the displayed patient data immediately after deletion
+       self.fetch_and_display_visit_data()
     
     
     def generate_qr_code_pdf(self, visit_data):
-     visitid, patient_id, patient_category, ref_dr, selected_test, visitid, date = visit_data
+     # Extract relevant information from visit_data
+     visitid, patient_id, patient_category, ref_dr, selected_test,  patientname = visit_data
  
-     # Retrieve patient information based on patient_id from the patients table
-     conn = sqlite3.connect('patient_data.db')
-     cursor = conn.cursor()
+     # Create a formatted string with all the details
+     details_string = (
+         f"Visit ID: {visitid}\n"
+         f"Patient ID: {patient_id}\n"
+         f"Patient Name: {patientname}\n"
+         f"Patient Category: {patient_category}\n"
+         f"Referring Doctor: {ref_dr}\n"
+         f"Selected Test: {selected_test}\n"
+     )
  
-     cursor.execute("SELECT patientname, dob, age, gender, mobile, email FROM patients WHERE uhid = ?", (patient_id,))
-     patient_info = cursor.fetchone()
- 
-     conn.close()
- 
-     if patient_info:
-        patientname, dob, age, gender, mobile, email = patient_info
-
-        # Create a formatted string with all the details
-        details_string = (
-            f"Visit ID: {visitid}\n"
-            f"Patient ID: {patient_id}\n"
-            f"Patient Name: {patientname}\n"
-            f"DOB: {dob}\n"
-            f"Age: {age}\n"
-            f"Gender: {gender}\n"
-            f"Mobile: {mobile}\n"
-            f"Email: {email}\n"
-            f"Patient Category: {patient_category}\n"
-            f"Referring Doctor: {ref_dr}\n"
-            f"Selected Test: {selected_test}\n"
-            f"Date: {date}\n"
-        )
-
      # Generate the QR code using the formatted details string
      qr = qrcode.QRCode(
          version=1,
@@ -338,7 +313,7 @@ class Ui_visitsummaryForm(object):
      pdf.set_font("Arial", size=12)
      pdf.cell(200, 10, f"Visit ID: {visitid}", ln=True)
      pdf.cell(200, 10, f"Patient ID: {patient_id}", ln=True)
-     pdf.cell(200, 10, f"Patient Name: {date}", ln=True)
+     pdf.cell(200, 10, f"Patient Name: {patientname}", ln=True)
      pdf.cell(200, 10, f"Patient Category: {patient_category}", ln=True)
      pdf.cell(200, 10, f"Referring Doctor: {ref_dr}", ln=True)
      pdf.cell(200, 10, f"Selected Test: {selected_test}", ln=True)
@@ -351,13 +326,12 @@ class Ui_visitsummaryForm(object):
          f'QR code PDF for Visit ID {visitid} has been generated as "{pdf_file_path}"'
      )
 
-  
     
                
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
-        self.label.setText(_translate("Form", "Visit Summary"))
+        self.label.setText(_translate("Form", "Scan Summary"))
         self.label_2.setText(_translate("Form", "From Date"))
         self.label_12.setText(_translate("Form", "Ref By / Test’s Asked"))
         self.label_3.setText(_translate("Form", "To Date"))
@@ -380,7 +354,7 @@ if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     Form = QtWidgets.QWidget()
-    ui = Ui_visitsummaryForm()
+    ui = Ui_scansummaryForm()
     ui.setupUi(Form)
     Form.show()
     sys.exit(app.exec_())

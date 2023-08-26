@@ -492,20 +492,23 @@ class Ui_addvisitForm(object):
 
     
     def generate_visit_id(self, latest_visit_number):
-        if latest_visit_number is None:
-            return "V00001"
-
-        prefix = "V"
-        numeric_part = int(latest_visit_number[1:])  # Convert the numeric part to integer
-        next_numeric_part = numeric_part + 1
-        next_visit_number = f"{prefix}{next_numeric_part:05}"  # Format as "V00001"
-        return next_visit_number
+      print("Latest visit number:", latest_visit_number)
+      if latest_visit_number is None:
+          print("Returning default value.")
+          return "V00001"
+  
+      prefix = "V"
+      numeric_part = int(latest_visit_number[1:])
+      next_numeric_part = numeric_part + 1
+      next_visit_number = f"{prefix}{next_numeric_part:05}"
+      print("Generated visit number:", next_visit_number)
+      return next_visit_number
     
     
     def submit_form(self):
      try:       
     # Extract data from UI elements
-        patient_uhid = self.lineEdit_16.text()  # Assuming lineEdit_18 is the patient ID field
+        patient_id = self.lineEdit_16.text()  # Assuming lineEdit_18 is the patient ID field
         patient_category = self.comboBox_24.currentText()  # Assuming comboBox_24 is the patient category dropdown
         ref_dr = self.comboBox_25.currentText()  # Assuming comboBox_25 is the referring doctor dropdown
         selected_test = self.comboBox_26.currentText()  # Assuming comboBox_26 is the selected test dropdown
@@ -515,8 +518,8 @@ class Ui_addvisitForm(object):
       # Insert data into the "visit" table
         connection = sqlite3.connect("patient_data.db")
         cursor = connection.cursor()
-        cursor.execute("INSERT INTO visit (patient_uhid, patient_category, ref_dr, selected_test, visitid, date) VALUES (?, ?, ?, ?, ?, ?)",
-                       (patient_uhid, patient_category, ref_dr, selected_test, visitid, date))
+        cursor.execute("INSERT INTO visit (patient_id, patient_category, ref_dr, selected_test, visitid, date) VALUES (?, ?, ?, ?, ?, ?)",
+                       (patient_id, patient_category, ref_dr, selected_test, visitid, date))
         connection.commit()
         connection.close()
 
