@@ -241,7 +241,7 @@ class Ui_visitsummaryForm(object):
                 scan_button = QtWidgets.QPushButton()
                 scan_button.setIcon(QtGui.QIcon(os.path.join('images', 'cam.png')))
                 scan_button.setFixedSize(20, 20)
-                scan_button.clicked.connect(lambda _, row=row: self.open_add_scan_form(row[0])) 
+                scan_button.clicked.connect(lambda _, row=row: self.open_add_scan_form(row)) 
                 button_layout.addWidget(scan_button)
                
                 delete_button = QtWidgets.QPushButton()
@@ -285,14 +285,14 @@ class Ui_visitsummaryForm(object):
      self.fetch_and_display_visit_data()
      
     def open_add_scan_form(self, visit_data):
-        self.add_scan_form = QtWidgets.QWidget()
-        self.ui_add_scan = Ui_scanForm()
-        self.ui_add_scan.setupUi(self.add_scan_form)
-
-        # Pass patient data to Ui_addvisitForm
-        # self.ui_add_scan.set_scan_data(visit_data)
-
-        self.add_scan_form.show() 
+       self.add_scan_form = QtWidgets.QWidget()
+       self.ui_add_scan = Ui_scanForm()
+       self.ui_add_scan.setupUi(self.add_scan_form)
+   
+       # Pass visit data to Ui_scanForm and update labels
+       self.ui_add_scan.set_scan_data(visit_data)
+   
+       self.add_scan_form.show()
     
     
     def generate_qr_code_pdf(self, visit_data):

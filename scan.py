@@ -94,10 +94,46 @@ class Ui_scanForm(object):
         self.line_2.setFrameShape(QtWidgets.QFrame.VLine)
         self.line_2.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line_2.setObjectName("line_2")
+        self.patient_details_label = QtWidgets.QLabel(Form)
+        self.patient_details_label.setGeometry(QtCore.QRect(180, 120, 300, 19))
+        font = QtGui.QFont()
+        font.setFamily("Poppins")
+        font.setPointSize(8)
+        self.patient_details_label.setFont(font)
+        self.patient_details_label.setStyleSheet("color: #212529;")
+        self.patient_details_label.setObjectName("patient_details_label")
+
+        self.ref_by_label = QtWidgets.QLabel(Form)
+        self.ref_by_label.setGeometry(QtCore.QRect(380, 120, 200, 19))
+        font = QtGui.QFont()
+        font.setFamily("Poppins")
+        font.setPointSize(8)
+        self.ref_by_label.setFont(font)
+        self.ref_by_label.setStyleSheet("color: #212529;")
+        self.ref_by_label.setObjectName("ref_by_label")
+
+        self.test_asked_label = QtWidgets.QLabel(Form)
+        self.test_asked_label.setGeometry(QtCore.QRect(580, 120, 200, 19))
+        font = QtGui.QFont()
+        font.setFamily("Poppins")
+        font.setPointSize(8)
+        self.test_asked_label.setFont(font)
+        self.test_asked_label.setStyleSheet("color: #212529;")
+        self.test_asked_label.setObjectName("test_asked_label")
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
+    
+    def set_scan_data(self, visit_data):
+        visitid, patient_id, patient_category, ref_dr, selected_test, visitid, date = visit_data
 
+        # Set the text of the labels with the scanned data
+        self.patient_details_label.setText(f"Patient ID: {patient_id}, Category: {patient_category}")
+        self.ref_by_label.setText(f"Ref By: {ref_dr}")
+        self.test_asked_label.setText(f"Test’s Asked: {selected_test}")
+    
+    
+    
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
