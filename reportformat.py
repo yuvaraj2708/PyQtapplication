@@ -15,6 +15,7 @@ from PyQt5.QtWidgets import QFileDialog
 from PyQt5.QtGui import QTextCursor, QTextTableFormat, QTextCharFormat, QFont
 from PyQt5.QtWidgets import QFileDialog
 import os
+import sqlite3
 
 class Ui_reportForm(object):
     def setupUi(self, Form):
@@ -137,6 +138,7 @@ class Ui_reportForm(object):
 "\n"
 "")
         self.pushButton_2.setObjectName("pushButton_2")
+        self.pushButton_2.clicked.connect(self.save_template_to_database)
         self.textEdit = QtWidgets.QTextEdit(Form)
         self.textEdit.setGeometry(QtCore.QRect(10, 250, 791, 201))
         self.textEdit.setObjectName("textEdit")
@@ -417,6 +419,23 @@ class Ui_reportForm(object):
         self.toolButton_15.setText(_translate("Form", "rd"))
         self.toolButton_17.setText(_translate("Form", "ud"))
 
+    def save_template_to_database(self):
+        code = self.lineEdit_18.text()
+        name = self.lineEdit_6.text()
+        template = self.textEdit.toPlainText()  # Get the plain text content of the QTextEdit
+
+        # Connect to the database
+        connection = sqlite3.connect("patient_data.db")
+        cursor = connection.cursor()
+
+        # Insert the template into the report_templates table
+        cursor.execute("INSERT INTO report_templates (code, name, template) VALUES (?, ?, ?)", (code, name, template))
+
+        # Commit changes and close the connection
+        connection.commit()
+        connection.close()
+
+        print("Template saved to database.")
 
 if __name__ == "__main__":
     import sys

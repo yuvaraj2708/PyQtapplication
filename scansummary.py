@@ -237,12 +237,19 @@ class Ui_scansummaryForm(object):
                 custom_layout.addWidget(label)
                 button_layout = QtWidgets.QHBoxLayout()  
                
-                scan_button = QtWidgets.QPushButton()
-                scan_button.setIcon(QtGui.QIcon(os.path.join('images', 'delete.png')))
-                scan_button.setFixedSize(20, 20)
-                scan_button.clicked.connect(lambda _, row=row: self.scan_visit(row[0])) 
-                button_layout.addWidget(scan_button)
-               
+                
+                template_combobox = QtWidgets.QComboBox()
+                template_combobox.addItems(self.fetch_templates_from_database())  # Fetch template names from the database
+                template_combobox.currentIndexChanged.connect(lambda index, row=row: self.view_template(template_combobox.itemText(index)))
+                
+                custom_layout.addWidget(template_combobox)
+                
+                edit_template_button = QtWidgets.QPushButton("Edit Template")
+                edit_template_button.clicked.connect(lambda: self.view_template(template_combobox.currentText()))
+                
+                custom_layout.addWidget(edit_template_button)  # Add the button to the layout
+                
+                
                 delete_button = QtWidgets.QPushButton()
                 delete_button.setIcon(QtGui.QIcon(os.path.join('images', 'delete.png')))
                 delete_button.setFixedSize(20, 20)
@@ -262,8 +269,38 @@ class Ui_scansummaryForm(object):
                 item.visit_data = row
  
         conn.close()
+    def fetch_templates_from_database(self):
+      connection = sqlite3.connect("patient_data.db")
+      cursor = connection.cursor()
+      cursor.execute("SELECT name FROM report_templates")
+      template_names = [row[0] for row in cursor.fetchall()]
+      connection.close()
+      return template_names
 
- 
+    def view_template(self, template_name):
+      connection = sqlite3.connect("patient_data.db")
+      cursor = connection.cursor()
+      cursor.execute("SELECT template FROM report_templates WHERE name=?", (template_name,))
+      template = cursor.fetchone()[0]
+      connection.close()
+      
+    # Display the template in a dialog or another appropriate way
+      self.show_template_dialog(template)
+
+    def show_template_dialog(self, template):
+       dialog = QtWidgets.QDialog(self)
+       dialog.setWindowTitle("Report Template")
+       dialog.setGeometry(100, 100, 600, 400)
+   
+       text_edit = QtWidgets.QTextEdit(dialog)
+       text_edit.setPlainText(template)
+   
+       layout = QtWidgets.QVBoxLayout(dialog)
+       layout.addWidget(text_edit)
+   
+       dialog.exec_()
+   
+    
     def delete_visit(self, visit_id):
        print("Deleting visit with visitid:", visit_id)
        # Connect to the database

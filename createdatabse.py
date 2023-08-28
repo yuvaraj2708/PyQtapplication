@@ -167,3 +167,26 @@ conn.commit()
 conn.close()
 
 print("patientcategory table created successfully.")
+
+
+import sqlite3
+
+# Connect to the database
+connection = sqlite3.connect("patient_data.db")
+cursor = connection.cursor()
+
+# Create the report_templates table
+cursor.execute('''
+    CREATE TABLE IF NOT EXISTS report_templates (
+        id INTEGER PRIMARY KEY,
+        code TEXT,
+        name TEXT,
+        template TEXT
+    )
+''')
+
+# Commit changes and close the connection
+connection.commit()
+connection.close()
+
+print("report_templates table created successfully.")

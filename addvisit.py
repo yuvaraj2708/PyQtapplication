@@ -529,18 +529,19 @@ class Ui_addvisitForm(object):
       
       
     def fetch_categories_from_database(self):
-    # Connect to your database
-      connection = sqlite3.connect("patient_data.db")
-      cursor = connection.cursor()
-  
-      # Fetch categories from the "category" table
-      cursor.execute("SELECT * FROM category")
-      categories = cursor.fetchall()
-  
-      # Close the connection
-      connection.close()
-  
-      return [category[1] for category in categories]
+       # Connect to your database
+       connection = sqlite3.connect("patient_data.db")
+       cursor = connection.cursor()
+   
+       # Fetch categories from the "category" table
+       cursor.execute("SELECT * FROM category")
+       categories = cursor.fetchall()
+   
+       # Close the connection
+       connection.close()
+   
+       return [category[0] for category in categories]
+
 
     def fetch_refdr_from_database(self):
     # Connect to your database

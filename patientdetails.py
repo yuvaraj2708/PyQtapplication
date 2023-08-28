@@ -344,9 +344,16 @@ class Ui_patientForm(object):
          custom_widget = QtWidgets.QWidget()
          custom_layout = QtWidgets.QHBoxLayout(custom_widget)
      
-         label = QtWidgets.QLabel(f"{row[8]:<15} {row[0]:<10} {row[1]:<15} {row[2]:<20} {row[3]:<10} {row[4]:<10} {row[5]:<10} {row[6]:<15} {row[7]:<30}")
-         custom_layout.addWidget(label)
+         # Add an empty spacer for spacing above the patient data
+         spacer = QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+         custom_layout.addItem(spacer)
 
+         label_text = f"{row[8]:>15} {row[0]:>10} {row[1]:>15} {row[2]:>20} {row[3]:>10} {row[4]:>10} {row[5]:>10} {row[6]:>15} {row[7]:>30}"
+         label = QtWidgets.QLabel(label_text)
+         font = QtGui.QFont("Poppins", 8)  # Replace "8" with the desired font size
+         label.setFont(font)
+         custom_layout.addWidget(label)
+         
          button_layout = QtWidgets.QHBoxLayout()  # Create a layout for the buttons
      
          delete_button = QtWidgets.QPushButton()
@@ -374,6 +381,7 @@ class Ui_patientForm(object):
          item.setSizeHint(custom_widget.sizeHint())
          self.listWidget.setItemWidget(item, custom_widget)
          item.patient_data = row
+
 
 
     def edit_patient(self, patient_uhid):

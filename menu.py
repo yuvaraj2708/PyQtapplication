@@ -140,6 +140,18 @@ class Ui_LoginForm(object):
         self.label.setStyleSheet("color: #181C32;")
         self.label.setObjectName("label")
        
+       
+        self.imageLabel = QtWidgets.QLabel(LoginForm)
+        self.imageLabel.setGeometry(QtCore.QRect(250, 150, 300, 30))  # Adjust the geometry and size as needed
+        self.imageLabel.setAlignment(QtCore.Qt.AlignCenter)
+        
+        # Load the image and resize it before setting it to the QLabel
+        image = QtGui.QPixmap('images/rdpl.png')  # Provide the correct path to your image
+        image = image.scaled(self.imageLabel.size(), QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
+        self.imageLabel.setPixmap(image)
+        
+        
+       
         
         self.retranslateUi(LoginForm)
         QtCore.QMetaObject.connectSlotsByName(LoginForm)

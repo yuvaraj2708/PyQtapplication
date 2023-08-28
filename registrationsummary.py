@@ -236,6 +236,9 @@ class Ui_visitsummaryForm(object):
                 custom_layout = QtWidgets.QHBoxLayout(custom_widget)
                 label = QtWidgets.QLabel(f"{row[0]:<10} {row[1]:<10} {row[2]:<10} {row[3]:<10} {row[4]:<10} {row[5]:<10}  ")
                 custom_layout.addWidget(label)
+                font = QtGui.QFont("Poppins", 8)  # Replace "8" with the desired font size
+                label.setFont(font)
+                custom_layout.addWidget(label)
                 button_layout = QtWidgets.QHBoxLayout()  
                
                 scan_button = QtWidgets.QPushButton()
