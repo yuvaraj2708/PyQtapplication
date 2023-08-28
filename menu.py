@@ -7,6 +7,171 @@ from registrationsummary import Ui_visitsummaryForm
 from reportformat import Ui_reportForm
 from scansummary import Ui_scansummaryForm
 
+
+
+class Ui_LoginForm(object):
+    def setupUi(self, LoginForm):
+        LoginForm.setObjectName("LoginForm")
+        LoginForm.resize(811, 588)
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.label = QtWidgets.QLabel(LoginForm)
+        self.label.setEnabled(True)
+        self.label.setGeometry(QtCore.QRect(370, 90, 81, 35))
+        self.label.setMinimumSize(QtCore.QSize(5, 5))
+        self.label.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        self.label.setSizeIncrement(QtCore.QSize(3, 3))
+        font = QtGui.QFont()
+        font.setPointSize(15)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label.setFont(font)
+        self.label.setAutoFillBackground(False)
+        self.label.setStyleSheet("color: #181C32;")
+        self.label.setObjectName("label")
+        
+        self.centralwidget = QtWidgets.QWidget(LoginForm)
+        self.centralwidget.setObjectName("centralwidget")
+        LoginForm.setCentralWidget(self.centralwidget)
+        
+        self.label = QtWidgets.QLabel(self.centralwidget)
+        self.label.setGeometry(QtCore.QRect(160, 30, 81, 20))
+        self.label.setObjectName("label")
+        
+        # self.usernameLineEdit = QtWidgets.QLineEdit(self.centralwidget)
+        # self.usernameLineEdit.setGeometry(QtCore.QRect(100, 80, 201, 31))
+        # self.usernameLineEdit.setObjectName("usernameLineEdit")
+        
+        self.passwordLineEdit = QtWidgets.QLineEdit(LoginForm)
+        self.passwordLineEdit.setGeometry(QtCore.QRect(310, 310, 201, 31))
+        font = QtGui.QFont()
+        font.setPointSize(-1)
+        font.setBold(False)
+        font.setWeight(50)
+        self.passwordLineEdit.setFont(font)
+        self.passwordLineEdit.setStyleSheet("QLineEdit\n"
+"{\n"
+"font-size: 15px;\n"
+"    font-weight: 400;\n"
+"    color: #212529;\n"
+"    background-color: #ffffff;\n"
+"    background-clip: padding-box;\n"
+"    border: 1px solid #ced4da;\n"
+"    border-radius: 20px;\n"
+"    padding:0px 10px;\n"
+"}\n"
+"QLineEdit:focus\n"
+"{\n"
+"border:1px solid #3F4254;\n"
+"}\n"
+"\n"
+"")
+        self.passwordLineEdit.setInputMethodHints(QtCore.Qt.ImhNone)
+        self.passwordLineEdit.setFrame(True)
+        self.passwordLineEdit.setObjectName("lineEdit_6")
+        self.passwordLineEdit.setEchoMode(QtWidgets.QLineEdit.Password)
+        
+        self.usernameLineEdit = QtWidgets.QLineEdit(LoginForm)
+        self.usernameLineEdit.setGeometry(QtCore.QRect(310, 230, 201, 31))
+        font = QtGui.QFont()
+        font.setPointSize(-1)
+        font.setBold(False)
+        font.setWeight(50)
+        self.usernameLineEdit.setFont(font)
+        self.usernameLineEdit.setStyleSheet("QLineEdit\n"
+"{\n"
+"font-size: 15px;\n"
+"    font-weight: 400;\n"
+"    color: #212529;\n"
+"    background-color: #ffffff;\n"
+"    background-clip: padding-box;\n"
+"    border: 1px solid #ced4da;\n"
+"    border-radius: 20px;\n"
+"    padding:0px 10px;\n"
+"}\n"
+"QLineEdit:focus\n"
+"{\n"
+"border:1px solid #3F4254;\n"
+"}\n"
+"\n"
+"")
+        self.usernameLineEdit.setInputMethodHints(QtCore.Qt.ImhNone)
+        self.usernameLineEdit.setFrame(True)
+        self.usernameLineEdit.setObjectName("lineEdit_18")    
+        
+        
+        self.loginButton = QtWidgets.QPushButton(LoginForm)
+        self.loginButton.setGeometry(QtCore.QRect(350, 370, 131, 31))
+        font = QtGui.QFont()
+        font.setPointSize(-1)
+        font.setBold(True)
+        font.setWeight(62)
+        self.loginButton.setFont(font)
+        self.loginButton.setStyleSheet("QPushButton\n"
+"{\n"
+"    background-color: #0DBCC0;\n"
+"    border: 0;\n"
+"    font-size: 14px;\n"
+"    font-weight: 500;\n"
+"    border-radius: 4px;\n"
+"color: #ffffff;\n"
+"border: 0;\n"
+"}\n"
+"\n"
+"QPushButton:hover\n"
+"{\n"
+"background-color: #089598;\n"
+"}\n"
+"\n"
+"")
+        self.loginButton.setObjectName("pushButton_2") 
+        self.label = QtWidgets.QLabel(LoginForm)
+        self.label.setEnabled(True)
+        self.label.setGeometry(QtCore.QRect(370, 90, 81, 35))
+        self.label.setMinimumSize(QtCore.QSize(5, 5))
+        self.label.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        self.label.setSizeIncrement(QtCore.QSize(3, 3))
+        font = QtGui.QFont()
+        font.setPointSize(15)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label.setFont(font)
+        self.label.setAutoFillBackground(False)
+        self.label.setStyleSheet("color: #181C32;")
+        self.label.setObjectName("label")
+       
+        
+        self.retranslateUi(LoginForm)
+        QtCore.QMetaObject.connectSlotsByName(LoginForm)
+    
+    def retranslateUi(self, LoginForm):
+        _translate = QtCore.QCoreApplication.translate
+        LoginForm.setWindowTitle(_translate("LoginForm", "Login"))
+        # self.label.setText(_translate("LoginForm", "Login"))
+        self.loginButton.setText(_translate("LoginForm", "Login"))
+
+class LoginForm(QtWidgets.QMainWindow):
+    def __init__(self):
+        super().__init__()
+        
+        self.ui = Ui_LoginForm()
+        self.ui.setupUi(self)
+        
+        self.ui.loginButton.clicked.connect(self.check_login)
+        
+    def check_login(self):
+        # Check username and password here
+        # For this example, let's assume valid credentials are "username" and "password"
+        if self.ui.usernameLineEdit.text() == "username" and self.ui.passwordLineEdit.text() == "password":
+            self.main_window = MainWindow()
+            self.close()
+            self.main_window.show()
+        else:
+            QtWidgets.QMessageBox.warning(self, "Login Failed", "Invalid username or password.")
+
+
+
+
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -189,9 +354,12 @@ class MainWindow(QtWidgets.QMainWindow):
     
     def show_reportformat_frame(self):
         self.stacked_widget.setCurrentWidget(self.reportformat_frame)     
+        
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
-    MainWindow = MainWindow()  # Create an instance of your MainWindow
-    MainWindow.show()
+    login_form = LoginForm()  # Create an instance of the login form
+    login_form.show()
     sys.exit(app.exec_())
+    
+    

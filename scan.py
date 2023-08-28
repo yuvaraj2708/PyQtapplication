@@ -4,7 +4,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_scanForm(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(811, 588)
+        Form.resize(900, 588)
         Form.setMaximumSize(QtCore.QSize(811, 16777215))
         font = QtGui.QFont()
         font.setPointSize(10)
@@ -95,7 +95,7 @@ class Ui_scanForm(object):
         self.line_2.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line_2.setObjectName("line_2")
         self.patient_details_label = QtWidgets.QLabel(Form)
-        self.patient_details_label.setGeometry(QtCore.QRect(180, 120, 300, 19))
+        self.patient_details_label.setGeometry(QtCore.QRect(110, 120, 300, 19))
         font = QtGui.QFont()
         font.setFamily("Poppins")
         font.setPointSize(8)
@@ -104,7 +104,7 @@ class Ui_scanForm(object):
         self.patient_details_label.setObjectName("patient_details_label")
 
         self.ref_by_label = QtWidgets.QLabel(Form)
-        self.ref_by_label.setGeometry(QtCore.QRect(380, 120, 200, 19))
+        self.ref_by_label.setGeometry(QtCore.QRect(360, 120, 200, 19))
         font = QtGui.QFont()
         font.setFamily("Poppins")
         font.setPointSize(8)
@@ -128,7 +128,7 @@ class Ui_scanForm(object):
         visitid, patient_id, patient_category, ref_dr, selected_test, visitid, date = visit_data
 
         # Set the text of the labels with the scanned data
-        self.patient_details_label.setText(f"Patient ID: {patient_id}, Category: {patient_category}")
+        self.patient_details_label.setText(f"Patient ID: {patient_id}")
         self.ref_by_label.setText(f"Ref By: {ref_dr}")
         self.test_asked_label.setText(f"Test’s Asked: {selected_test}")
     
@@ -137,10 +137,10 @@ class Ui_scanForm(object):
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
-        self.label_2.setText(_translate("Form", "Patient Details"))
-        self.label_3.setText(_translate("Form", "Ref By"))
+        # self.label_2.setText(_translate("Form", "Patient Details"))
+        # self.label_3.setText(_translate("Form", "Ref By"))
         self.pushButton.setText(_translate("Form", "Automatic Scan"))
-        self.label_4.setText(_translate("Form", "Test’s Asked"))
+        # self.label_4.setText(_translate("Form", "Test’s Asked"))
         self.pushButton_2.setText(_translate("Form", "Manual Scan"))
 
 
