@@ -190,3 +190,28 @@ connection.commit()
 connection.close()
 
 print("report_templates table created successfully.")
+
+
+import sqlite3
+
+# Connect to the database
+connection = sqlite3.connect("patient_data.db")
+cursor = connection.cursor()
+
+# Create the device table
+cursor.execute('''
+    CREATE TABLE IF NOT EXISTS device (
+        DeviceID TEXT NOT NULL,
+        ClientName TEXT NOT NULL,
+        Address TEXT NOT NULL,
+        PINCode TEXT NOT NULL,
+        MobileNo TEXT NOT NULL,
+        EmailID TEXT NOT NULL
+    )
+''')
+
+# Commit changes and close the connection
+connection.commit()
+connection.close()
+
+print("device table created successfully.")
