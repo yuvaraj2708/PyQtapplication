@@ -174,7 +174,7 @@ class LoginForm(QtWidgets.QMainWindow):
     def check_login(self):
         # Check username and password here
         # For this example, let's assume valid credentials are "username" and "password"
-        if self.ui.usernameLineEdit.text() == "username" and self.ui.passwordLineEdit.text() == "password":
+        if self.ui.usernameLineEdit.text() == "admin" and self.ui.passwordLineEdit.text() == "admin":
             self.main_window = MainWindow()
             self.close()
             self.main_window.show()
@@ -328,11 +328,15 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setCentralWidget(self.stacked_widget)
     
         self.show_patient_master_frame()
-    
+        self.patient_register_frame = QtWidgets.QFrame()
+        self.patient_register_ui = Ui_addpatientForm()  # patient register
+        self.patient_register_ui.setupUi(self.patient_register_frame)
+
+ 
     def refresh_main_window(self):
        # Update the content of the main window here
        # For example, you can reset the stacked widget to the central widget
-       self.stacked_widget.clear()  # Remove all existing widgets from the stacked widget
+    #    self.stacked_widget.clear()  # Remove all existing widgets from the stacked widget
        self.stacked_widget.addWidget(self.ui.centralwidget)
        self.stacked_widget.addWidget(self.patient_register_frame)
        self.stacked_widget.addWidget(self.patient_master_frame)

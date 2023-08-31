@@ -10,6 +10,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sqlite3
+from menu import LoginForm
 
 class Ui_deviceForm(object):
     def setupUi(self, Form):
@@ -325,32 +326,39 @@ class DeviceRegistrationForm(QtWidgets.QWidget):
         self.ui.pushButton.clicked.connect(self.register_device)
 
     def register_device(self):
-        device_id = self.ui.lineEdit_16.text()
-        client_name = self.ui.lineEdit_15.text()
-        address = self.ui.lineEdit_18.text()
-        pin_code = self.ui.lineEdit_6.text()
-        mobile_no = self.ui.lineEdit_12.text()
-        email_id = self.ui.lineEdit_10.text()
+      device_id = self.ui.lineEdit_16.text()
+      client_name = self.ui.lineEdit_15.text()
+      address = self.ui.lineEdit_18.text()
+      pin_code = self.ui.lineEdit_6.text()
+      mobile_no = self.ui.lineEdit_12.text()
+      email_id = self.ui.lineEdit_10.text()
 
-        # Verify if the Device ID is correct ('1003')
-        if device_id == '1003':
-            # Connect to the database
-            connection = sqlite3.connect("patient_data.db")
-            cursor = connection.cursor()
+      # Verify if the Device ID is correct ('1003')
+      if device_id == '1003':
+        # Connect to the database
+        connection = sqlite3.connect("patient_data.db")
+        cursor = connection.cursor()
 
-            # Insert the device information into the database
-            cursor.execute('''
-                INSERT INTO device (DeviceID, ClientName, Address, PINCode, MobileNo, EmailID)
-                VALUES (?, ?, ?, ?, ?, ?)
-            ''', (device_id, client_name, address, pin_code, mobile_no, email_id))
+        # Insert the device information into the database
+        cursor.execute('''
+            INSERT INTO device (DeviceID, ClientName, Address, PINCode, MobileNo, EmailID)
+            VALUES (?, ?, ?, ?, ?, ?)
+        ''', (device_id, client_name, address, pin_code, mobile_no, email_id))
 
-            # Commit changes and close the connection
-            connection.commit()
-            connection.close()
+        # Commit changes and close the connection
+        connection.commit()
+        connection.close()
 
-            print("Device registered successfully.")
-        else:
-            print("Invalid Device ID. Registration failed.")
+        print("Device registered successfully.")
+        
+        # Close the current registration form
+        self.close()
+        
+        # Show the login form
+        self.login_form = LoginForm()
+        self.login_form.show()
+      else:
+        print("Invalid Device ID. Registration failed.")
 
 if __name__ == "__main__":
     import sys

@@ -7,6 +7,10 @@ from patientregister import Ui_addpatientForm
 from PyQt5.QtGui import QImage, QPixmap
 from fpdf import FPDF
 import os
+import os
+import pydicom
+from PIL import Image
+import numpy as np
 
 class Ui_scansummaryForm(object):
     def setupUi(self, Form):
@@ -217,6 +221,89 @@ class Ui_scansummaryForm(object):
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
         
+        self.convert_button = QtWidgets.QPushButton(Form)
+        self.convert_button.setGeometry(QtCore.QRect(750, 20, 131, 31))
+        self.convert_button.setFont(font)
+        self.convert_button.setStyleSheet("QPushButton\n"
+            "{\n"
+            "    background-color:#0DBCC0;\n"
+            "    border: 0;\n"
+            "    font-size: 14px;\n"
+            "    font-weight: 500;\n"
+            "    border-radius: 4px;\n"
+            "color: #ffffff;\n"
+            "border: 0;\n"
+            "}\n"
+            "\n"
+            "QPushButton:hover\n"
+            "{\n"
+            "background-color: #089598;\n"
+            "}\n"
+            "\n"
+            "")
+        self.convert_button.setObjectName("convert_button")
+        self.convert_button.setText(self._translate("Form", "Convert to DICOM"))
+        self.convert_button.clicked.connect(self.convert_images_to_dicom)
+            
+    def _translate(self, context, text, disambiguation=None, n=-1):
+       return QtWidgets.QApplication.translate(context, text, disambiguation, n) 
+              
+    def convert_images_to_dicom(self, visit_data):
+    # Extract relevant patient information from visit_data
+       visitid = visit_data
+       jpg_folder_path = r'C:\Users\Admin\Pictures\Saved Pictures'
+
+# Get a list of all the JPG images in the folder
+       jpg_files = [f for f in os.listdir(jpg_folder_path) if f.endswith('.jpg')]
+       
+       # Create an empty list to store the pixel arrays of each image
+       image_arrays = []
+       
+       # Loop through each JPG image and convert them to numpy arrays
+       for jpg_file in jpg_files:
+           # Load the JPG image
+           image = Image.open(os.path.join(jpg_folder_path, jpg_file))
+       
+           # Convert the image to a numpy array
+           image_array = np.array(image)
+           image_arrays.append(image_array)
+       
+       # Create a new DICOM dataset
+       ds = pydicom.Dataset()
+       
+       ds.add_new(pydicom.tag.Tag(0x0008, 0x0005), 'CS', 'ISO_IR 100')  # Specific Character Set
+       ds.add_new(pydicom.tag.Tag(0x0008, 0x0020), 'DA', '20050927')    # Study Date
+       ds.add_new(pydicom.tag.Tag(0x0008, 0x0030), 'TM', '185646')      # Study Time
+       ds.add_new(pydicom.tag.Tag(0x0008, 0x0050), 'SH', 'A10011234814')  # Accession Number
+       ds.add_new(pydicom.tag.Tag(0x0008, 0x0090), 'PN', 'CHIR-PED^CHIR-PE')  # Referring Physician's Name
+       ds.add_new(pydicom.tag.Tag(0x0008, 0x0096), 'PN', 'Referring Physician Name Ideographic')  # Referring Physician's Name Ideographic
+       ds.add_new(pydicom.tag.Tag(0x0008, 0x0097), 'PN', 'Referring Physician Name Phonetic')  # Referring Physician's Name Phonetic
+       ds.add_new(pydicom.tag.Tag(0x0008, 0x1030), 'LO', 'CT2 tête, face, sinus')  # Study Description
+       ds.add_new(pydicom.tag.Tag(0x0008, 0x1032), 'SQ', [])  # Procedure Code Sequence
+       
+# Create Procedure Code Sequence
+       sequence_item = pydicom.Dataset()
+       ds.ProcedureCodeSequence = [sequence_item]
+
+       
+       # Set the transfer syntax attributes
+       ds.file_meta = pydicom.Dataset()
+       ds.file_meta.TransferSyntaxUID = pydicom.uid.ExplicitVRLittleEndian
+       
+       # Set the pixel data
+       # ...
+       
+       # Set the Endianess and VR
+       ds.is_little_endian = True
+       ds.is_implicit_VR = False
+       
+       # Save the DICOM file
+       output_path = os.path.join(jpg_folder_path, f'combined_image_{visitid}.dcm')
+       ds.save_as(output_path)
+       
+       print(f"DICOM file saved at: {output_path}")
+    
+               
     def fetch_and_display_visit_data(self):
         conn = sqlite3.connect('patient_data.db')
         cursor = conn.cursor()
@@ -238,16 +325,16 @@ class Ui_scansummaryForm(object):
                 button_layout = QtWidgets.QHBoxLayout()  
                
                 
-                template_combobox = QtWidgets.QComboBox()
-                template_combobox.addItems(self.fetch_templates_from_database())  # Fetch template names from the database
-                template_combobox.currentIndexChanged.connect(lambda index, row=row: self.view_template(template_combobox.itemText(index)))
+                # template_combobox = QtWidgets.QComboBox()
+                # template_combobox.addItems(self.fetch_templates_from_database())  # Fetch template names from the database
+                # template_combobox.currentIndexChanged.connect(lambda index, row=row: self.view_template(template_combobox.itemText(index)))
                 
-                custom_layout.addWidget(template_combobox)
+                # custom_layout.addWidget(template_combobox)
                 
-                edit_template_button = QtWidgets.QPushButton("Edit Template")
-                edit_template_button.clicked.connect(lambda: self.view_template(template_combobox.currentText()))
+                # edit_template_button = QtWidgets.QPushButton("Edit Template")
+                # edit_template_button.clicked.connect(lambda: self.convert_images_to_dicom(template_combobox.currentText()))
                 
-                custom_layout.addWidget(edit_template_button)  # Add the button to the layout
+                # custom_layout.addWidget(edit_template_button)  # Add the button to the layout
                 
                 
                 delete_button = QtWidgets.QPushButton()
@@ -255,6 +342,13 @@ class Ui_scansummaryForm(object):
                 delete_button.setFixedSize(20, 20)
                 delete_button.clicked.connect(lambda _, row=row: self.delete_visit(row[0])) 
                 button_layout.addWidget(delete_button)
+                
+                dicom_button = QtWidgets.QPushButton()
+                dicom_button.setIcon(QtGui.QIcon(os.path.join('images', 'image.png')))
+                dicom_button.setFixedSize(20, 20)
+                dicom_button.clicked.connect(lambda _, row=row: self.convert_images_to_dicom(row[0])) 
+                button_layout.addWidget(dicom_button)
+                
                 
                 QR_button = QtWidgets.QPushButton()
                 QR_button.setIcon(QtGui.QIcon(os.path.join('images', 'qr.png')))
