@@ -270,6 +270,7 @@ class Ui_visitsummaryForm(object):
  
     def delete_visit(self, visit_id):
      print("Deleting visit with visitid:", visit_id)
+     
      # Connect to the database
      conn = sqlite3.connect('patient_data.db')
      cursor = conn.cursor()
@@ -277,15 +278,21 @@ class Ui_visitsummaryForm(object):
      try:
          # Delete patient data from the database
          cursor.execute("DELETE FROM visit WHERE visitid = ?", (visit_id,))
+         
+         # Commit the transaction to save the changes
          conn.commit()
+         
          print("Visit deleted successfully")
      except sqlite3.Error as e:
          print("Error deleting visit:", e)
+         # Rollback the transaction in case of an error
+         conn.rollback()
      finally:
-         conn.close()
+        conn.close()
 
-     # Refresh the displayed patient data immediately after deletion
+    # Refresh the displayed patient data immediately after deletion
      self.fetch_and_display_visit_data()
+
      
     def open_add_scan_form(self, visit_data):
        self.add_scan_form = QtWidgets.QWidget()
@@ -299,70 +306,81 @@ class Ui_visitsummaryForm(object):
     
     
     def generate_qr_code_pdf(self, visit_data):
-     visitid, patient_id, patient_category, ref_dr, selected_test, visitid, date = visit_data
- 
-     # Retrieve patient information based on patient_id from the patients table
-     conn = sqlite3.connect('patient_data.db')
-     cursor = conn.cursor()
- 
-     cursor.execute("SELECT patientname, dob, age, gender, mobile, email FROM patients WHERE uhid = ?", (patient_id,))
-     patient_info = cursor.fetchone()
- 
-     conn.close()
- 
-     if patient_info:
-        patientname, dob, age, gender, mobile, email = patient_info
+        visitid, patient_id, patient_category, ref_dr, selected_test, visitid, date = visit_data
 
-        # Create a formatted string with all the details
-        details_string = (
-            f"Visit ID: {visitid}\n"
-            f"Patient ID: {patient_id}\n"
-            f"Patient Name: {patientname}\n"
-            f"DOB: {dob}\n"
-            f"Age: {age}\n"
-            f"Gender: {gender}\n"
-            f"Mobile: {mobile}\n"
-            f"Email: {email}\n"
-            f"Patient Category: {patient_category}\n"
-            f"Referring Doctor: {ref_dr}\n"
-            f"Selected Test: {selected_test}\n"
-            f"Date: {date}\n"
-        )
+        # Retrieve patient information based on patient_id from the patients table
+        conn = sqlite3.connect('patient_data.db')
+        cursor = conn.cursor()
 
-     # Generate the QR code using the formatted details string
-     qr = qrcode.QRCode(
-         version=1,
-         error_correction=qrcode.constants.ERROR_CORRECT_L,
-         box_size=10,
-         border=4,
-     )
-     qr.add_data(details_string)
-     qr.make(fit=True)
- 
-     qr_img = qr.make_image(fill_color="black", back_color="white")
-     qr_img.save(f'qr_code_{visitid}.png')
-     
-     pdf = FPDF()
-     pdf.add_page()
-     pdf.image(f'qr_code_{visitid}.png', x=10, y=10, w=190)
-     
-     # Add visit details to the PDF
-     pdf.set_font("Arial", size=12)
-     pdf.cell(200, 10, f"Visit ID: {visitid}", ln=True)
-     pdf.cell(200, 10, f"Patient ID: {patient_id}", ln=True)
-     pdf.cell(200, 10, f"Patient Name: {date}", ln=True)
-     pdf.cell(200, 10, f"Patient Category: {patient_category}", ln=True)
-     pdf.cell(200, 10, f"Referring Doctor: {ref_dr}", ln=True)
-     pdf.cell(200, 10, f"Selected Test: {selected_test}", ln=True)
-    
-     pdf_file_path = f'qr_code_{visitid}.pdf'
-     pdf.output(pdf_file_path)
-    
-     QtWidgets.QMessageBox.information(
-         None, 'QR Code PDF',
-         f'QR code PDF for Visit ID {visitid} has been generated as "{pdf_file_path}"'
-     )
+        cursor.execute("SELECT patientname, dob, age, gender, mobile, email FROM patients WHERE uhid = ?", (patient_id,))
+        patient_info = cursor.fetchone()
 
+        conn.close()
+
+        if patient_info:
+            patientname, dob, age, gender, mobile, email = patient_info
+
+            # Create a formatted string with all the details
+            details_string = (
+                f"Visit ID: {visitid}\n"
+                f"Patient ID: {patient_id}\n"
+                f"Patient Name: {patientname}\n"
+                f"DOB: {age}\n"
+                f"Age: {gender}\n"
+                f"Gender: {dob}\n"
+                f"Mobile: {mobile}\n"
+                f"Email: {email}\n"
+                f"Patient Category: {patient_category}\n"
+                f"Referring Doctor: {ref_dr}\n"
+                f"Selected Test: {selected_test}\n"
+                f"Date: {date}\n"
+            )
+
+            # Generate the QR code using the formatted details string
+            qr = qrcode.QRCode(
+                version=1,
+                error_correction=qrcode.constants.ERROR_CORRECT_L,
+                box_size=10,
+                border=4,
+            )
+            qr.add_data(details_string)
+            qr.make(fit=True)
+
+            # Generate the QR code image
+            qr_img = qr.make_image(fill_color="black", back_color="white")
+            qr_img.save(f'qr_code_{visitid}.png')
+
+            # Create a PDF with mm as the unit
+            pdf = FPDF()
+
+            # Calculate the position and size for the QR code within the page
+            x_position = (150 - 15) / 2  # Center the QR code horizontally
+            y_position = (150 - 15) / 2  # Center the QR code vertically
+            qr_size = 15
+
+            # Set the page size to 15mm x 15mm by modifying the _page_format attribute
+            pdf._page_format = [qr_size, qr_size]
+
+            # Add a page
+            pdf.add_page()
+
+            # Add the QR code to the PDF
+            pdf.image(f'qr_code_{visitid}.png', x=x_position, y=y_position, w=qr_size)
+
+            # Add visit details to the PDF
+            pdf.set_font("Arial", size=8)
+            pdf.multi_cell(150, 10, details_string, border=0, align="L")
+
+            # Set the PDF file path
+            pdf_file_path = f'qr_code_{visitid}.pdf'
+
+            # Output the PDF file
+            pdf.output(pdf_file_path)
+
+            QtWidgets.QMessageBox.information(
+                None, 'QR Code PDF',
+                f'QR code PDF for Visit ID {visitid} has been generated as "{pdf_file_path}"'
+            )
   
     
                

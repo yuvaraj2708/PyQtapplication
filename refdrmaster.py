@@ -420,7 +420,7 @@ class Ui_refdrmasterForm(object):
         self.ui_add_test = Ui_refdrForm()
         self.ui_add_test.setupUi(self.add_test_form)
         self.add_test_form.show()
-
+         
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)

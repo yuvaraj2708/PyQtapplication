@@ -224,6 +224,7 @@ class Ui_addpatientForm(object):
         self.lineEdit_16.setInputMethodHints(QtCore.Qt.ImhNone)
         self.lineEdit_16.setFrame(True)
         self.lineEdit_16.setObjectName("lineEdit_16")
+        self.lineEdit_16.setReadOnly(True)
         self.lineEdit_18 = QtWidgets.QLineEdit(self.groupBox)
         self.lineEdit_18.setGeometry(QtCore.QRect(360, 70, 201, 31))
         font = QtGui.QFont()
@@ -306,7 +307,7 @@ class Ui_addpatientForm(object):
         self.lineEdit_14.setFrame(True)
         self.lineEdit_14.setObjectName("lineEdit_14")
         self.lineEdit_13 = QtWidgets.QLineEdit(self.groupBox)
-        self.lineEdit_13.setGeometry(QtCore.QRect(360, 140, 201, 31))
+        self.lineEdit_13.setGeometry(QtCore.QRect(360, 140, 201, 31))#emailid
         font = QtGui.QFont()
         font.setPointSize(-1)
         font.setBold(False)
@@ -332,8 +333,9 @@ class Ui_addpatientForm(object):
         self.lineEdit_13.setInputMethodHints(QtCore.Qt.ImhNone)
         self.lineEdit_13.setFrame(True)
         self.lineEdit_13.setObjectName("lineEdit_13")
-        self.lineEdit_12 = QtWidgets.QLineEdit(self.groupBox)
-        self.lineEdit_12.setGeometry(QtCore.QRect(20, 140, 201, 31))
+        # self.lineEdit_12 = QtWidgets.QLineEdit(self.groupBox)
+        self.lineEdit_12 = QtWidgets.QDateEdit(self.groupBox)
+        self.lineEdit_12.setGeometry(QtCore.QRect(20, 140, 201, 31)) #dob
         font = QtGui.QFont()
         font.setPointSize(-1)
         font.setBold(False)

@@ -6,6 +6,8 @@ from addvisit import Ui_addvisitForm
 import os
 from editpatientregister import Ui_editpatientForm
 from PyQt5.QtWidgets import QDateEdit, QCalendarWidget
+from PyQt5.QtCore import QTime,QTimer
+
 
 class Ui_patientForm(object):
     def setupUi(self, Form):
@@ -262,7 +264,21 @@ class Ui_patientForm(object):
         QtCore.QMetaObject.connectSlotsByName(Form)
         # delete_patient_signal = QtCore.pyqtSignal(int)
         # self.lineEdit_16.textChanged.connect(self.fetch_and_display_patient_data)
+
+
+           # Create a QTimer instance
+        self.timer = QTimer(Form)
+        # Set the interval to 1000 milliseconds (1 second)
+        self.timer.setInterval(1000)
+        # Connect the timeout signal to the function you want to call
+        self.timer.timeout.connect(self.fetch_and_display_patient_data)
+        # Start the timer
+        self.timer.start()
+
+
+
     def filter_patient_data(self):
+      self.timer.stop()
       patient_name = self.lineEdit_18.text()
       mobile = self.lineEdit_6.text()
       from_date = self.lineEdit_16.date().toPyDate().strftime("%d%m%Y")
@@ -273,19 +289,19 @@ class Ui_patientForm(object):
       cursor = conn.cursor()
   
       # Build the SQL query based on the filter criteria
-      query = "SELECT * FROM patients WHERE 1"
+      query = "SELECT * FROM patients WHERE "
       parameters = []
   
       if patient_name:
-          query += " AND patientname LIKE ?"
+          query += "patientname LIKE ?"
           parameters.append('%' + patient_name + '%')
   
-      if mobile:
-          query += " AND mobile = ?"
+      elif mobile:
+          query += " or mobile = ?"
           parameters.append(mobile)
   
-      if from_date and to_date:
-          query += " AND date BETWEEN ? AND ?"
+      elif from_date and to_date:
+          query += " or date BETWEEN ? AND ?"
           parameters.extend([from_date, to_date])
   
       # Fetch patient data with filters applied
@@ -328,59 +344,68 @@ class Ui_patientForm(object):
     
     
     def fetch_and_display_patient_data(self):
-     # Connect to the database
-     conn = sqlite3.connect('patient_data.db')
-     cursor = conn.cursor()
+        # Connect to the database
+        conn = sqlite3.connect('patient_data.db')
+        cursor = conn.cursor()
 
-     # Fetch patient data
-     cursor.execute("SELECT * FROM patients")
-     patient_data = cursor.fetchall()
+        # Fetch patient data
+        cursor.execute("SELECT * FROM patients")
+        patient_data = cursor.fetchall()
 
-     if patient_data:
-       for row in patient_data:
-         item = QtWidgets.QListWidgetItem()
-         self.listWidget.addItem(item)
-     
-         custom_widget = QtWidgets.QWidget()
-         custom_layout = QtWidgets.QHBoxLayout(custom_widget)
-     
-         # Add an empty spacer for spacing above the patient data
-         spacer = QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
-         custom_layout.addItem(spacer)
+        # Get the existing patient IDs already displayed
+        existing_patient_ids = [item.patient_data[0] for item in self.listWidget.findItems("", QtCore.Qt.MatchContains)]
 
-         label_text = f"{row[8]:>15} {row[0]:>10} {row[1]:>15} {row[2]:>20} {row[3]:>10} {row[4]:>10} {row[5]:>10} {row[6]:>15} {row[7]:>30}"
-         label = QtWidgets.QLabel(label_text)
-         font = QtGui.QFont("Poppins", 8)  # Replace "8" with the desired font size
-         label.setFont(font)
-         custom_layout.addWidget(label)
-         
-         button_layout = QtWidgets.QHBoxLayout()  # Create a layout for the buttons
-     
-         delete_button = QtWidgets.QPushButton()
-         delete_button.setIcon(QtGui.QIcon(os.path.join('images', 'delete.png')))
-         delete_button.setFixedSize(20, 20)
-         delete_button.clicked.connect(lambda _, row=row: self.delete_patient(row[0])) 
-         button_layout.addWidget(delete_button)
-     
-         edit_button = QtWidgets.QPushButton()
-         edit_button.setIcon(QtGui.QIcon(os.path.join('images', 'edit.png')))  # Change to the correct icon
-         edit_button.setFixedSize(20, 20)
-         edit_button.clicked.connect(lambda _, row=row: self.edit_patient(row[0]))
-         button_layout.addWidget(edit_button)
-     
-         add_visit_button = QtWidgets.QPushButton()
-         add_visit_button.setIcon(QtGui.QIcon(os.path.join('images', 'addvisit.png')))
-         add_visit_button.setFixedSize(20, 20)
-         add_visit_button.clicked.connect(lambda _, row=row: self.open_add_visit_form(row))
-         button_layout.addWidget(add_visit_button)
-     
-         # Add spacing between the label and buttons
-         button_layout.addSpacing(90)
-     
-         custom_layout.addLayout(button_layout)  # Add the button layout to the custom layout
-         item.setSizeHint(custom_widget.sizeHint())
-         self.listWidget.setItemWidget(item, custom_widget)
-         item.patient_data = row
+        if patient_data:
+            for row in patient_data:
+                patient_id = row[0]
+                
+                # Check if the patient ID is already displayed, if not, add it
+                if patient_id not in existing_patient_ids:
+                    item = QtWidgets.QListWidgetItem()
+                    self.listWidget.addItem(item)
+                
+                    custom_widget = QtWidgets.QWidget()
+                    custom_layout = QtWidgets.QHBoxLayout(custom_widget)
+                
+                    # Add an empty spacer for spacing above the patient data
+                    spacer = QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+                    custom_layout.addItem(spacer)
+
+                    label_text = f"{row[8]:>15} {row[0]:>10} {row[1]:>15} {row[2]:>20} {row[3]:>10} {row[4]:>10} {row[5]:>10} {row[6]:>15} {row[7]:>30}"
+                    label = QtWidgets.QLabel(label_text)
+                    font = QtGui.QFont("Poppins", 8)  # Replace "8" with the desired font size
+                    label.setFont(font)
+                    custom_layout.addWidget(label)
+                    
+                    button_layout = QtWidgets.QHBoxLayout()  # Create a layout for the buttons
+                
+                    delete_button = QtWidgets.QPushButton()
+                    delete_button.setIcon(QtGui.QIcon(os.path.join('images', 'delete.png')))
+                    delete_button.setFixedSize(20, 20)
+                    delete_button.clicked.connect(lambda _, row=row: self.delete_patient(row[0])) 
+                    button_layout.addWidget(delete_button)
+                
+                    edit_button = QtWidgets.QPushButton()
+                    edit_button.setIcon(QtGui.QIcon(os.path.join('images', 'edit.png')))  # Change to the correct icon
+                    edit_button.setFixedSize(20, 20)
+                    edit_button.clicked.connect(lambda _, row=row: self.edit_patient(row[0]))
+                    button_layout.addWidget(edit_button)
+                
+                    add_visit_button = QtWidgets.QPushButton()
+                    add_visit_button.setIcon(QtGui.QIcon(os.path.join('images', 'addvisit.png')))
+                    add_visit_button.setFixedSize(20, 20)
+                    add_visit_button.clicked.connect(lambda _, row=row: self.open_add_visit_form(row))
+                    button_layout.addWidget(add_visit_button)
+                
+                    # Add spacing between the label and buttons
+                    button_layout.addSpacing(90)
+                
+                    custom_layout.addLayout(button_layout)  # Add the button layout to the custom layout
+                    item.setSizeHint(custom_widget.sizeHint())
+                    self.listWidget.setItemWidget(item, custom_widget)
+                    item.patient_data = row
+
+
 
 
 
@@ -431,6 +456,7 @@ class Ui_patientForm(object):
         self.ui_add_visit.set_patient_data(patient_data)
 
         self.add_visit_form.show()
+        
 
 
 
@@ -456,10 +482,13 @@ class Ui_patientForm(object):
         self.pushButton_2.clicked.connect(self.open_add_patient_form) 
     
     def open_add_patient_form(self):
+        self.listWidget.clear()
+        self.timer.start()
         self.add_test_form = QtWidgets.QWidget()
         self.ui_add_test = Ui_addpatientForm()
         self.ui_add_test.setupUi(self.add_test_form)
         self.add_test_form.show()
+        #self.fetch_and_display_patient_data()
 
 if __name__ == "__main__":
     import sys

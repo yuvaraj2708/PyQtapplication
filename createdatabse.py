@@ -215,3 +215,5 @@ connection.commit()
 connection.close()
 
 print("device table created successfully.")
+
+
