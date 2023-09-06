@@ -8,6 +8,11 @@ from PyQt5.QtGui import QImage, QPixmap
 from fpdf import FPDF
 import os
 from scan import Ui_scanForm
+import barcode
+from barcode import generate
+from barcode.writer import ImageWriter
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
 
 class Ui_visitsummaryForm(object):
     def setupUi(self, Form):
@@ -257,8 +262,14 @@ class Ui_visitsummaryForm(object):
                 QR_button.setIcon(QtGui.QIcon(os.path.join('images', 'qr.png')))
                 QR_button.setFixedSize(20, 20)
                 QR_button.clicked.connect(lambda _, row=row: self.generate_qr_code_pdf(row))
-                
                 button_layout.addWidget(QR_button)
+                
+                barcode_button = QtWidgets.QPushButton()
+                barcode_button.setIcon(QtGui.QIcon(os.path.join('images', 'barcode.png')))
+                barcode_button.setFixedSize(20, 20)
+                barcode_button.clicked.connect(lambda _, row=row: self.generate_bar_code_pdf(row))
+                button_layout.addWidget(barcode_button)
+                
                 button_layout.addSpacing(90)
                 custom_layout.addLayout(button_layout)  # Add the button layout to the custom layout
                 item.setSizeHint(custom_widget.sizeHint())
@@ -267,7 +278,7 @@ class Ui_visitsummaryForm(object):
  
         conn.close()
 
- 
+    
     def delete_visit(self, visit_id):
      print("Deleting visit with visitid:", visit_id)
      
@@ -304,6 +315,26 @@ class Ui_visitsummaryForm(object):
    
        self.add_scan_form.show()
     
+    
+    def generate_bar_code_pdf(self, accession):
+        # Extract the accession number from the row, assuming it's in a specific column (adjust as needed).
+        accession_str = str(accession)
+
+        # Generate the barcode image using the string representation of the accession number and save it to a file.
+        barcode.generate('Code128', accession_str, writer=ImageWriter(), output=os.path.join('images', 'barcode.png'))
+        x = 100  # Adjust the x-coordinate as needed
+        y = 500  # Adjust the y-coordinate as needed
+        width = 200  # Adjust the width as needed
+        height = 50  
+        # Create a PDF with the barcode image.
+        pdf_filename = f'barcode_{accession[1]}.pdf'
+        c = canvas.Canvas(pdf_filename, pagesize=letter)
+        c.drawImage(os.path.join('images', 'barcode.png'), x, y, width, height)  # Adjust x, y, width, height as needed
+        c.showPage()
+        c.save()
+
+        # Optionally, you can open the generated PDF.
+        os.system(pdf_filename)
     
     def generate_qr_code_pdf(self, visit_data):
         visitid, patient_id, patient_category, ref_dr, selected_test, visitid, date = visit_data

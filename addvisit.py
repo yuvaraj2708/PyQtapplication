@@ -467,7 +467,7 @@ class Ui_addvisitForm(object):
         
         
     def set_patient_data(self, patient_data):
-      uhid, title, patient_name, gender, dob, age, email, mobile, date = patient_data
+      uhid, title, patient_name, gender, dob, age, email, mobile, date ,accession = patient_data
 
       # Update line edit fields to display patient information
       self.lineEdit_16.setText(uhid)

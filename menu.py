@@ -573,6 +573,13 @@ class Ui_MainWindow(object):
         self.menuLogout.setObjectName("menuLogout")
         self.menuSettings = QtWidgets.QMenu(self.menubar)
         self.menuSettings.setObjectName("menuSettings")
+        self.menuSettings.addAction(self.actionLogout)  # Add the action to the Settings menu
+
+        # Connect the action to the logout method
+        self.actionLogout.triggered.connect(MainWindow.logout)  # Connect to MainWindow's logout method
+
+    # Define the actionLogout attribute
+    
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
@@ -609,7 +616,10 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
-
+        
+    actionLogout = QtWidgets.QAction()
+    actionLogout.setObjectName("actionLogout")
+    actionLogout.setText("Logout")  # Set the text for the logout action
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
@@ -620,8 +630,8 @@ class Ui_MainWindow(object):
         self.menuscan_Summary.setTitle(_translate("MainWindow", "Scan"))
         self.actionscansummary.setText(_translate("MainWindow", "Scan Summary"))
         self.menuMaster.setTitle(_translate("MainWindow", "Master"))
-        # self.menuLogout.setTitle(_translate("MainWindow", "Settings"))
-        # self.menuSettings.setTitle(_translate("MainWindow", "Logout"))
+        self.menuLogout.setTitle(_translate("MainWindow", "Settings"))
+        self.menuSettings.setTitle(_translate("MainWindow", "Logout"))
         self.actionPatientregister.setText(_translate("MainWindow", "Add Patient"))
         self.actionAdd_Patient.setText(_translate("MainWindow", "Patient Master"))
         self.actionRefDr_Master.setText(_translate("MainWindow", "RefDr Master"))
@@ -635,7 +645,10 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
-
+        self.ui.actionLogout = QtWidgets.QAction(self)
+        self.ui.actionLogout.setObjectName("actionLogout")
+        self.ui.actionLogout.setText("Logout") 
+        
         device_id_to_check = '1003'
         if self.is_device_registered(device_id_to_check):
             # The device is registered, show the login page
@@ -644,7 +657,13 @@ class MainWindow(QtWidgets.QMainWindow):
             # The device is not registered, show the device registration page
             self.show_device_registration_page()
 
-      
+    def logout(self):
+        # Perform any necessary logout actions here
+        # For example, you can close the current window and show the login form
+        self.close()
+        login_form = LoginForm()
+        login_form.show()
+        
     def is_device_registered(self, device_id):
     # Replace with your actual device ID check logic
        device_id = '1003'

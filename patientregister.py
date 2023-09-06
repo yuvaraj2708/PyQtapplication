@@ -391,6 +391,11 @@ class Ui_addpatientForm(object):
         next_patient_number = self.generate_next_patient_number(latest_patient_number)
         self.lineEdit_16.setText(next_patient_number)  # Set the generated test code
         
+        self.fetch_latest_accession_number()
+        latest_accession_number = self.fetch_latest_accession_number()
+        next_accession_number = self.generate_next_accession_number(latest_accession_number)
+        
+        
     def fetch_latest_patient_number(self):
         try:
             self.cursor.execute("SELECT MAX(uhid) FROM patients")
@@ -409,7 +414,35 @@ class Ui_addpatientForm(object):
         next_numeric_part = numeric_part + 1
         next_patient_number = f"{prefix}{next_numeric_part:05}"  # Format as "T00001"
         return next_patient_number
+    
+    def fetch_latest_accession_number(self):
+        try:
+            self.cursor.execute("SELECT MAX(accession) FROM patients")
+            latest_test_number = self.cursor.fetchone()[0]
+            return latest_test_number
+        except Exception as e:
+            print("Error fetching latest patient number:", str(e))
+            return None
+    
+    
+    def generate_next_accession_number(self, latest_accession_number):
+        if latest_accession_number is None:
+            return "100001"
+    
+        numeric_part = int(latest_accession_number)
+        next_numeric_part = numeric_part + 1
+        next_accession_number = str(next_numeric_part).zfill(6)
+        return next_accession_number
+    
+    def save_accession_data(self):
+        try:
+            DoctorCode = self.generate_next_accession_number()
+            # ... rest of your save_test_data function ...
 
+        except Exception as e:
+            print("Error:", str(e))
+    
+    
     def save_patient_data(self):
         try:
             DoctorCode = self.generate_next_patient_number()
@@ -446,26 +479,32 @@ class Ui_addpatientForm(object):
         
         
     def save_patient_data(self):
-      uhid = self.lineEdit_16.text()
-      title = self.lineEdit_15.text()
-      patientname = self.lineEdit_18.text()
-      dob = self.lineEdit_6.text()
-      age = self.lineEdit_12.text()
-      gender = self.lineEdit_10.text()
-      mobile = self.lineEdit_14.text()
-      email = self.lineEdit_13.text()
-  
-      # Insert patient data into the database
-      current_datetime = datetime.datetime.now()
-      current_date = current_datetime.strftime("%d%m%Y")
+     try:
+        uhid = self.lineEdit_16.text()
+        title = self.lineEdit_15.text()
+        patientname = self.lineEdit_18.text()
+        dob = self.lineEdit_6.text()
+        age = self.lineEdit_12.text()
+        gender = self.lineEdit_10.text()
+        mobile = self.lineEdit_14.text()
+        email = self.lineEdit_13.text()
+
+        # Uncomment the code to fetch the latest accession number
+        latest_accession_number = self.fetch_latest_accession_number()
+        accession = self.generate_next_accession_number(latest_accession_number)
 
         # Insert patient data into the database
-      self.cursor.execute("INSERT INTO patients (uhid, title, patientname, dob, age, gender, mobile, email, date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                          (uhid, title, patientname, dob, age, gender, mobile, email, current_date))
-      self.conn.commit()
-  
-      # Clear the input fields after saving
-      self.clear_input_fields()
+        current_datetime = datetime.datetime.now()
+        current_date = current_datetime.strftime("%d%m%Y")
+
+        self.cursor.execute("INSERT INTO patients (uhid, title, patientname, dob, age, gender, mobile, email, date, accession) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                            (uhid, title, patientname, dob, age, gender, mobile, email, current_date, accession))
+        self.conn.commit()
+
+        # Clear the input fields after saving
+        self.clear_input_fields()
+     except sqlite3.Error as e:
+        print("Error:", str(e))
       
         
 if __name__ == "__main__":

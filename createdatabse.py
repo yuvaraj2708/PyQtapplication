@@ -49,7 +49,8 @@ create_patients_table_query = '''
         gender TEXT NOT NULL,
         mobile TEXT NOT NULL,
         email TEXT NOT NULL,
-        date DATE NOT NULL
+        date DATE NOT NULL,
+        accession TEXT NOT NULL
     );
 '''
 
