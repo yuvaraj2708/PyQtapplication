@@ -320,8 +320,8 @@ class Ui_scansummaryForm(object):
 
                 custom_widget = QtWidgets.QWidget()
                 custom_layout = QtWidgets.QHBoxLayout(custom_widget)
-                label = QtWidgets.QLabel(f"{row[0]:<10} {row[1]:<10} {row[2]:<10} {row[3]:<10} {row[4]:<10} {row[5]:<10}  ")
-                custom_layout.addWidget(label)
+                # label = QtWidgets.QLabel(f"{row[0]:<10} {row[1]:<10} {row[2]:<10} {row[3]:<10} {row[4]:<10} {row[5]:<10} {row[6]:<10} ")
+                # custom_layout.addWidget(label)
                 button_layout = QtWidgets.QHBoxLayout()  
                
                 

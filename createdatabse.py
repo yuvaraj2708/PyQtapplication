@@ -139,6 +139,7 @@ create_visit_table_query = '''
         visitid TEXT,
         date DATE,
         FOREIGN KEY (patient_id) REFERENCES patient(id)  -- Use the correct model name and field name
+        FOREIGN KEY (selected_test) REFERENCES visit_tests(id)  -- Use the correct model name and field name
     );
 '''
 
@@ -218,3 +219,24 @@ connection.close()
 print("device table created successfully.")
 
 
+import sqlite3
+
+# Connect to the database
+connection = sqlite3.connect("patient_data.db")
+cursor = connection.cursor()
+
+# Create the visit_tests table
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS visit_tests (
+    visit_id INTEGER,
+    test_code TEXT,
+    FOREIGN KEY (visit_id) REFERENCES visit(id)
+   
+);
+''')
+
+# Commit changes and close the connection
+connection.commit()
+connection.close()
+
+print("visit_tests table created successfully.")

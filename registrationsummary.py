@@ -224,59 +224,97 @@ class Ui_visitsummaryForm(object):
         QtCore.QMetaObject.connectSlotsByName(Form)
         
     def fetch_and_display_visit_data(self):
-        conn = sqlite3.connect('patient_data.db')
-        cursor = conn.cursor()
+      conn = sqlite3.connect('patient_data.db')
+      cursor = conn.cursor()
 
-        cursor.execute("SELECT * FROM visit")
-        visit_data = cursor.fetchall()
+      cursor.execute("""
+          SELECT visit.id, visit.ref_dr, visit.patient_category,
+                 patients.patientname, patients.dob, patients.age, patients.gender, 
+                 patients.mobile, patients.email, visit.date, visit.selected_test
+          FROM visit
+          INNER JOIN patients ON visit.patient_id = patients.uhid
+          
+      """)
+      visit_data = cursor.fetchall()
 
-        if visit_data:
-            self.listWidget.clear()
+      conn.close()
 
-            for row in visit_data:
-                item = QtWidgets.QListWidgetItem()
-                self.listWidget.addItem(item)
+      if visit_data:
+          self.listWidget.clear()
 
-                custom_widget = QtWidgets.QWidget()
-                custom_layout = QtWidgets.QHBoxLayout(custom_widget)
-                label = QtWidgets.QLabel(f"{row[0]:<10} {row[1]:<10} {row[2]:<10} {row[3]:<10} {row[4]:<10} {row[5]:<10}  ")
-                custom_layout.addWidget(label)
-                font = QtGui.QFont("Poppins", 8)  # Replace "8" with the desired font size
-                label.setFont(font)
-                custom_layout.addWidget(label)
-                button_layout = QtWidgets.QHBoxLayout()  
-               
-                scan_button = QtWidgets.QPushButton()
-                scan_button.setIcon(QtGui.QIcon(os.path.join('images', 'cam.png')))
-                scan_button.setFixedSize(20, 20)
-                scan_button.clicked.connect(lambda _, row=row: self.open_add_scan_form(row)) 
-                button_layout.addWidget(scan_button)
-               
-                delete_button = QtWidgets.QPushButton()
-                delete_button.setIcon(QtGui.QIcon(os.path.join('images', 'delete.png')))
-                delete_button.setFixedSize(20, 20)
-                delete_button.clicked.connect(lambda _, row=row: self.delete_visit(row[0])) 
-                button_layout.addWidget(delete_button)
+          for row in visit_data:
+            item = QtWidgets.QListWidgetItem()
+            self.listWidget.addItem(item)
+
+            custom_widget = QtWidgets.QWidget()
+            custom_layout = QtWidgets.QVBoxLayout(custom_widget)
+
+            # Unpack the values from the query result
+            visit_id, ref_dr, patient_category, patient_name, dob, age, gender, mobile, email, date, selected_test = row
+
+            # Initialize an empty list to store selected tests
+            
                 
-                QR_button = QtWidgets.QPushButton()
-                QR_button.setIcon(QtGui.QIcon(os.path.join('images', 'qr.png')))
-                QR_button.setFixedSize(20, 20)
-                QR_button.clicked.connect(lambda _, row=row: self.generate_qr_code_pdf(row))
-                button_layout.addWidget(QR_button)
+                # Add the custom widget to the QListWidgetItem
+            item.setSizeHint(custom_widget.sizeHint())
+            self.listWidget.addItem(item)
+            self.listWidget.setItemWidget(item, custom_widget)
                 
-                barcode_button = QtWidgets.QPushButton()
-                barcode_button.setIcon(QtGui.QIcon(os.path.join('images', 'barcode.png')))
-                barcode_button.setFixedSize(20, 20)
-                barcode_button.clicked.connect(lambda _, row=row: self.generate_bar_code_pdf(row))
-                button_layout.addWidget(barcode_button)
-                
-                button_layout.addSpacing(90)
-                custom_layout.addLayout(button_layout)  # Add the button layout to the custom layout
-                item.setSizeHint(custom_widget.sizeHint())
-                self.listWidget.setItemWidget(item, custom_widget)
-                item.visit_data = row
- 
-        conn.close()
+            details_string = (
+                f"{visit_id} "
+                f" {', '.join(selected_test)} "
+                f"{ref_dr} "
+                f"{patient_category} "
+                f"{patient_name} "
+                f"{dob} "
+                f"{age} "
+                f"{gender} "
+                f"{mobile} "
+                f"{email} "
+                f"{date} "
+            )
+
+            print(details_string)
+
+
+            label = QtWidgets.QLabel(details_string)
+            font = QtGui.QFont("Poppins", 8)  # Replace "8" with the desired font size
+            label.setFont(font)
+            custom_layout.addWidget(label)
+
+            button_layout = QtWidgets.QHBoxLayout()
+
+            scan_button = QtWidgets.QPushButton()
+            scan_button.setIcon(QtGui.QIcon(os.path.join('images', 'cam.png')))
+            scan_button.setFixedSize(20, 20)
+            scan_button.clicked.connect(lambda _, row=row: self.open_add_scan_form(row))
+            button_layout.addWidget(scan_button)
+
+            delete_button = QtWidgets.QPushButton()
+            delete_button.setIcon(QtGui.QIcon(os.path.join('images', 'delete.png')))
+            delete_button.setFixedSize(20, 20)
+            delete_button.clicked.connect(lambda _, row=row: self.delete_visit(row[0]))
+            button_layout.addWidget(delete_button)
+
+            QR_button = QtWidgets.QPushButton()
+            QR_button.setIcon(QtGui.QIcon(os.path.join('images', 'qr.png')))
+            QR_button.setFixedSize(20, 20)
+            QR_button.clicked.connect(lambda _, row=row: self.generate_qr_code_pdf(row))
+            button_layout.addWidget(QR_button)
+
+            barcode_button = QtWidgets.QPushButton()
+            barcode_button.setIcon(QtGui.QIcon(os.path.join('images', 'barcode.png')))
+            barcode_button.setFixedSize(20, 20)
+            barcode_button.clicked.connect(lambda _, row=row: self.generate_bar_code_pdf(row))
+            button_layout.addWidget(barcode_button)
+
+            custom_layout.addLayout(button_layout)  # Add the button layout to the custom layout
+            item.setSizeHint(custom_widget.sizeHint())
+            self.listWidget.setItemWidget(item, custom_widget)
+            item.visit_data = row
+      
+      
+
 
     
     def delete_visit(self, visit_id):
@@ -312,7 +350,7 @@ class Ui_visitsummaryForm(object):
    
        # Pass visit data to Ui_scanForm and update labels
        self.ui_add_scan.set_scan_data(visit_data)
-   
+       
        self.add_scan_form.show()
     
     

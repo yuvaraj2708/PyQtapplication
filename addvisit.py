@@ -461,11 +461,24 @@ class Ui_addvisitForm(object):
         self.comboBox_25 = QComboBox(self.groupBox)
         self.comboBox_25.setGeometry(QtCore.QRect(240, 210, 201, 31)) 
         self.comboBox_26 = QComboBox(self.groupBox)
-        self.comboBox_26.setGeometry(QtCore.QRect(460, 210, 201, 31)) 
+        self.comboBox_26.setGeometry(QtCore.QRect(460, 210, 201, 31))
+        
+        self.listWidgetTestSelected = QtWidgets.QListWidget(self.groupBox)
+        self.listWidgetTestSelected.setGeometry(QtCore.QRect(460, 250, 201, 111))
+        self.listWidgetTestSelected.setObjectName("listWidgetTestSelected") 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
         
+        self.pushButtonAddTest = QtWidgets.QPushButton(self.groupBox)
+        self.pushButtonAddTest.setGeometry(QtCore.QRect(680, 210, 51, 31))
+        self.pushButtonAddTest.setText("Add")
+        self.pushButtonAddTest.clicked.connect(self.add_selected_test_to_list)
         
+    def add_selected_test_to_list(self):
+     selected_test = self.comboBox_26.currentText()
+     if selected_test:
+        self.listWidgetTestSelected.addItem(selected_test)   
+         
     def set_patient_data(self, patient_data):
       uhid, title, patient_name, gender, dob, age, email, mobile, date ,accession = patient_data
 
@@ -507,26 +520,29 @@ class Ui_addvisitForm(object):
     
     
     def submit_form(self):
-     try:       
-    # Extract data from UI elements
-        patient_id = self.lineEdit_16.text()  # Assuming lineEdit_18 is the patient ID field
-        patient_category = self.comboBox_24.currentText()  # Assuming comboBox_24 is the patient category dropdown
-        ref_dr = self.comboBox_25.currentText()  # Assuming comboBox_25 is the referring doctor dropdown
-        selected_test = self.comboBox_26.currentText()  # Assuming comboBox_26 is the selected test dropdown
-        visitid = self.lineEdit_26.text()  # Assuming lineEdit_26 is the visit ID field
-        date = datetime.datetime.now().strftime("%Y-%m-%d")  # Get current date
-  
-      # Insert data into the "visit" table
-        connection = sqlite3.connect("patient_data.db")
-        cursor = connection.cursor()
-        cursor.execute("INSERT INTO visit (patient_id, patient_category, ref_dr, selected_test, visitid, date) VALUES (?, ?, ?, ?, ?, ?)",
-                       (patient_id, patient_category, ref_dr, selected_test, visitid, date))
-        connection.commit()
-        connection.close()
-
-        print("Visit data inserted successfully.")
+     try:
+         # Extract data from UI elements
+         patient_id = self.lineEdit_16.text()
+         patient_category = self.comboBox_24.currentText()
+         ref_dr = self.comboBox_25.currentText()
+         visitid = self.lineEdit_26.text()
+         date = datetime.datetime.now().strftime("%Y-%m-%d")
+ 
+         # Extract selected tests from the QListWidget
+         selected_test = [self.listWidgetTestSelected.item(i).text() for i in range(self.listWidgetTestSelected.count())]
+ 
+         # Insert data into the "visit" table
+         connection = sqlite3.connect("patient_data.db")
+         cursor = connection.cursor()
+         cursor.execute("INSERT INTO visit (patient_id, patient_category, ref_dr, selected_test, visitid, date) VALUES (?, ?, ?, ?, ?, ?)",
+                        (patient_id, patient_category, ref_dr, ', '.join(selected_test), visitid, date))
+         connection.commit()
+         connection.close()
+ 
+         print("Visit data inserted successfully.")
      except Exception as e:
-        print("An error occurred:", str(e))
+         print("An error occurred:", str(e))
+
       
       
     def fetch_categories_from_database(self):

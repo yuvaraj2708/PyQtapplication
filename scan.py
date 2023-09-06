@@ -125,12 +125,13 @@ class Ui_scanForm(object):
         QtCore.QMetaObject.connectSlotsByName(Form)
     
     def set_scan_data(self, visit_data):
-        visitid, patient_id, patient_category, ref_dr, selected_test, visitid, date = visit_data
-
-        # Set the text of the labels with the scanned data
-        self.patient_details_label.setText(f"Patient ID: {patient_id}")
-        self.ref_by_label.setText(f"Ref By: {ref_dr}")
-        self.test_asked_label.setText(f"Test’s Asked: {selected_test}")
+        
+       uhid, visit_id, selected_test, ref_dr, patient_category, patient_name, dob, age, gender, mobile, email = visit_data
+   
+       # Set the text of the labels with the scanned data
+       self.patient_details_label.setText(f"Patient ID: {uhid}")
+       self.ref_by_label.setText(f"Ref By: {selected_test}")
+       self.test_asked_label.setText(f"Test’s Asked: {ref_dr}")
     
     
     
