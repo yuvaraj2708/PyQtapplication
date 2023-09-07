@@ -129,7 +129,7 @@ class Ui_scanForm(object):
        uhid, visit_id, selected_test, ref_dr, patient_category, patient_name, dob, age, gender, mobile, email = visit_data
    
        # Set the text of the labels with the scanned data
-       self.patient_details_label.setText(f"Patient ID: {uhid}")
+       self.patient_details_label.setText(f"Patient ID: {dob}")
        self.ref_by_label.setText(f"Ref By: {selected_test}")
        self.test_asked_label.setText(f"Test’s Asked: {ref_dr}")
     

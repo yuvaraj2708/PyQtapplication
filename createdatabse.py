@@ -179,8 +179,7 @@ cursor = connection.cursor()
 
 # Create the report_templates table
 cursor.execute('''
-    CREATE TABLE IF NOT EXISTS report_templates (
-        id INTEGER PRIMARY KEY,
+    CREATE TABLE IF NOT EXISTS reporttemplates (
         code TEXT,
         name TEXT,
         template TEXT

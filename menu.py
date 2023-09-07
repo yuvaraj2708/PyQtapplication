@@ -7,7 +7,7 @@ from registrationsummary import Ui_visitsummaryForm
 from reportformat import Ui_reportForm
 from scansummary import Ui_scansummaryForm
 import sqlite3
-
+from resulttemplate import Ui_resulttemplateForm
 
 class Ui_deviceForm(object):
     def setupUi(self, Form):
@@ -716,7 +716,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.add_scansummary_ui.setupUi(self.add_scansummary_frame)
         
         self.reportformat_frame = QtWidgets.QFrame()
-        self.reportformat_ui = Ui_reportForm()# report format
+        self.reportformat_ui = Ui_resulttemplateForm()# report format
         self.reportformat_ui.setupUi(self.reportformat_frame)
         
         

@@ -11,6 +11,11 @@ import os
 import pydicom
 from PIL import Image
 import numpy as np
+import pydicom
+from PyQt5.QtWidgets import QMainWindow, QApplication, QLabel, QVBoxLayout, QWidget, QPushButton, QFileDialog
+from PyQt5.QtGui import QPixmap
+import matplotlib.pyplot as plt
+
 
 class Ui_scansummaryForm(object):
     def setupUi(self, Form):
@@ -315,25 +320,38 @@ class Ui_scansummaryForm(object):
                 # custom_layout.addWidget(edit_template_button)  # Add the button to the layout
                 
                 
-                delete_button = QtWidgets.QPushButton()
-                delete_button.setIcon(QtGui.QIcon(os.path.join('images', 'delete.png')))
-                delete_button.setFixedSize(20, 20)
-                delete_button.clicked.connect(lambda _, row=row: self.delete_visit(row[0])) 
-                button_layout.addWidget(delete_button)
+                dcmconvert_button = QtWidgets.QPushButton()
+                dcmconvert_button.setIcon(QtGui.QIcon(os.path.join('images', 'delete.png')))
+                dcmconvert_button.setFixedSize(20, 20)
+                dcmconvert_button.clicked.connect(lambda _, row=row: self.delete_visit(row[0])) 
+                button_layout.addWidget(dcmconvert_button)
                 
-                dicom_button = QtWidgets.QPushButton()
-                dicom_button.setIcon(QtGui.QIcon(os.path.join('images', 'image.png')))
-                dicom_button.setFixedSize(20, 20)
-                dicom_button.clicked.connect(lambda _, row=row: self.convert_images_to_dicom(row[0])) 
-                button_layout.addWidget(dicom_button)
+                viewdicom_button = QPushButton()
+                viewdicom_button.setIcon(QtGui.QIcon(os.path.join('images', 'image.png')))
+                viewdicom_button.setFixedSize(20, 20)
+                viewdicom_button.clicked.connect(self.open_dicom_file)
+                button_layout.addWidget(viewdicom_button)
+
                 
                 
-                QR_button = QtWidgets.QPushButton()
-                QR_button.setIcon(QtGui.QIcon(os.path.join('images', 'qr.png')))
-                QR_button.setFixedSize(20, 20)
-                QR_button.clicked.connect(lambda _, row=row: self.generate_qr_code_pdf(row[0])) 
+                report_button = QtWidgets.QPushButton()
+                report_button.setIcon(QtGui.QIcon(os.path.join('images', 'qr.png')))
+                report_button.setFixedSize(20, 20)
+                report_button.clicked.connect(lambda _, row=row: self.generate_qr_code_pdf(row[0])) 
+                button_layout.addWidget(report_button)
                 
-                button_layout.addWidget(QR_button)
+                print_button = QtWidgets.QPushButton()
+                print_button.setIcon(QtGui.QIcon(os.path.join('images', 'qr.png')))
+                print_button.setFixedSize(20, 20)
+                print_button.clicked.connect(lambda _, row=row: self.generate_qr_code_pdf(row[0])) 
+                button_layout.addWidget(print_button)
+                
+                telepath_button = QtWidgets.QPushButton()
+                telepath_button.setIcon(QtGui.QIcon(os.path.join('images', 'qr.png')))
+                telepath_button.setFixedSize(20, 20)
+                telepath_button.clicked.connect(lambda _, row=row: self.generate_qr_code_pdf(row[0])) 
+                button_layout.addWidget(telepath_button)
+                
                 button_layout.addSpacing(90)
                 custom_layout.addLayout(button_layout)  # Add the button layout to the custom layout
                 item.setSizeHint(custom_widget.sizeHint())
@@ -341,6 +359,25 @@ class Ui_scansummaryForm(object):
                 item.visit_data = row
  
         conn.close()
+    def open_dicom_file(self):
+        options = QFileDialog.Options()
+        options |= QFileDialog.ReadOnly
+
+        file_path, _ = QFileDialog.getOpenFileName(None, "Open DICOM File", "", "DICOM Files (*.dcm);;All Files (*)", options=options)
+
+        if file_path:
+            self.view_dicom(file_path)
+    
+    def view_dicom(self, dicom_path):
+        dicom = pydicom.dcmread(dicom_path)
+        pixel_data = dicom.pixel_array
+
+        # Display the DICOM image using matplotlib
+        plt.figure()
+        plt.imshow(pixel_data, cmap=plt.cm.bone)
+        plt.axis('off')
+        plt.show()
+        
     def fetch_templates_from_database(self):
       connection = sqlite3.connect("patient_data.db")
       cursor = connection.cursor()
@@ -470,3 +507,58 @@ if __name__ == "__main__":
 
 
 # convert to dicom , view dicom , report template , print template , send telepathology
+
+import sys
+from PyQt5 import QtWidgets, QtGui
+import pydicom
+from pydicom.pixel_data_handlers import numpy_handler
+
+class DICOMViewer(QtWidgets.QWidget):
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+
+    def initUI(self):
+        self.setWindowTitle('DICOM Image Viewer')
+
+        # Create a QLabel to display the DICOM image
+        self.image_label = QtWidgets.QLabel(self)
+        self.image_label.setAlignment(QtCore.Qt.AlignCenter)
+        
+        # Create a QPushButton to open a DICOM file
+        open_button = QtWidgets.QPushButton('Open DICOM', self)
+        open_button.clicked.connect(self.openDICOM)
+
+        # Create a layout
+        layout = QtWidgets.QVBoxLayout()
+        layout.addWidget(self.image_label)
+        layout.addWidget(open_button)
+        self.setLayout(layout)
+
+    def openDICOM(self):
+        # Open a DICOM file using a file dialog
+        options = QtWidgets.QFileDialog.Options()
+        file_name, _ = QtWidgets.QFileDialog.getOpenFileName(self, "Open DICOM File", "", "DICOM Files (*.dcm);;All Files (*)", options=options)
+
+        if file_name:
+            # Read the DICOM file
+            dcm = pydicom.dcmread(file_name)
+            
+            # Convert the DICOM pixel data to a NumPy array
+            pixel_array = dcm.pixel_array
+
+            # Create a QPixmap from the NumPy array (assuming it's 8-bit or 16-bit grayscale)
+            q_image = QtGui.QImage(pixel_array, pixel_array.shape[1], pixel_array.shape[0], pixel_array.shape[1], QtGui.QImage.Format_Grayscale8)
+            pixmap = QtGui.QPixmap.fromImage(q_image)
+
+            # Display the QPixmap in the QLabel
+            self.image_label.setPixmap(pixmap)
+
+def main():
+    app = QtWidgets.QApplication(sys.argv)
+    window = DICOMViewer()
+    window.show()
+    sys.exit(app.exec_())
+
+if __name__ == '__main__':
+    main()
