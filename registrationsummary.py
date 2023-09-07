@@ -243,118 +243,86 @@ class Ui_visitsummaryForm(object):
       conn.close()
 
       if visit_data:
-          self.listWidget.clear()
-          
-          for row in visit_data:
-              item = QtWidgets.QListWidgetItem()
-              self.listWidget.addItem(item)
-          
-              custom_widget = QtWidgets.QWidget()
-              custom_layout = QtWidgets.QHBoxLayout(custom_widget)  # Use QHBoxLayout for horizontal layout
-          
-              # Unpack the values from the query result
-              visit_id, ref_dr, patient_category, patient_name, dob, age, gender, mobile, email, date, selected_test = row
-          
-              details_string = (
-                  f"{visit_id} "
-                  f"{''.join(selected_test)} "
-                  f"{ref_dr} "
-                  f"{patient_category} "
-                  f"{patient_name} "
-                  f"{dob} "
-                  f"{age} "
-                  f"{gender} "
-                  f"{mobile} "
-                  f"{email} "
-                  f"{date}"
-              )
-          
-              label = QtWidgets.QLabel(details_string)
-              font = QtGui.QFont("Poppins", 8)  # Replace "8" with the desired font size
-              label.setFont(font)
-              custom_layout.addWidget(label)
-              
-              button_layout = QtWidgets.QHBoxLayout()  # Create a horizontal layout for buttons
-          
-              button_icons = [
-                  os.path.join('images', 'cam.png'),
-                  os.path.join('images', 'delete.png'),
-                  os.path.join('images', 'qr.png'),
-                  os.path.join('images', 'barcode.png')
-              ]
-          
-              button_actions = [
-                  lambda _, row=row: self.open_add_scan_form(row),
-                  lambda _, row=row: self.delete_visit(row[0]),
-                  lambda _, row=row: self.generate_qr_code_pdf(row),
-                  lambda _, row=row: self.generate_bar_code_pdf(row)
-              ]
-          
-              button_tooltips = ["Scan", "Delete", "Generate QR Code", "Generate Barcode"]
-          
-              for icon, action, tooltip in zip(button_icons, button_actions, button_tooltips):
-                  button = QtWidgets.QPushButton()
-                  button.setIcon(QtGui.QIcon(icon))
-                  
-                  # Adjust the button size as needed
-                  button.setFixedSize(20, 20)  # You can change the dimensions here
-                  
-                  button.clicked.connect(action)
-                  button.setToolTip(tooltip)
-                  
-                  # Add buttons to the button_layout
-                  button_layout.addWidget(button)
-              
-              # Add the button_layout to the custom_layout
-              custom_layout.addLayout(button_layout)
-              
-              item.setSizeHint(custom_widget.sizeHint())
-              self.listWidget.addItem(item)
-              self.listWidget.setItemWidget(item, custom_widget)
-              item.visit_data = row
-      
-                   
-          
-    
-
-    
-    def delete_visit(self, visit_id):
-     print("Deleting visit with visitid:", visit_id)
-     
-     # Connect to the database
-     conn = sqlite3.connect('patient_data.db')
-     cursor = conn.cursor()
-
-     try:
-         # Delete patient data from the database
-         cursor.execute("DELETE FROM visit WHERE visitid = ?", (visit_id,))
-         
-         # Commit the transaction to save the changes
-         conn.commit()
-         
-         print("Visit deleted successfully")
-     except sqlite3.Error as e:
-         print("Error deleting visit:", e)
-         # Rollback the transaction in case of an error
-         conn.rollback()
-     finally:
-        conn.close()
-
-    # Refresh the displayed patient data immediately after deletion
-     self.fetch_and_display_visit_data()
-
-     
-    def open_add_scan_form(self, visit_data):
-       self.add_scan_form = QtWidgets.QWidget()
-       self.ui_add_scan = Ui_scanForm()
-       self.ui_add_scan.setupUi(self.add_scan_form)
-   
-       # Pass visit data to Ui_scanForm and update labels
-       self.ui_add_scan.set_scan_data(visit_data)
+       self.listWidget.clear()
        
-       self.add_scan_form.show()
-    
-    
+       for row in visit_data:
+           custom_widget = QtWidgets.QFrame()
+           custom_widget.setFrameShape(QtWidgets.QFrame.Box)  # Add a box frame to the widget
+           custom_layout = QtWidgets.QHBoxLayout(custom_widget)  # Use QHBoxLayout for horizontal layout
+           custom_layout.setAlignment(QtCore.Qt.AlignCenter)  # Center-align the custom layout
+           
+           # Unpack the values from the query result
+           visit_id, ref_dr, patient_category, patient_name, dob, age, gender, mobile, email, date, selected_test = row
+           
+           data_labels = [
+               "ID", "Test", "Ref Dr.", "Category", "Name", "DOB", "Age", "Gender", "Mobile", "Email", "Date"
+           ]
+           
+           data_values = [
+               visit_id, ''.join(selected_test), ref_dr, patient_category, patient_name, dob, age, gender, mobile, email, date
+           ]
+           
+           for label, value in zip(data_labels, data_values):
+               # Create a vertical line (a QLabel with a border)
+               line_label = QtWidgets.QLabel()
+               line_label.setFrameShape(QtWidgets.QFrame.VLine)
+               line_label.setFrameShadow(QtWidgets.QFrame.Sunken)
+               
+               # Add the line label to the layout
+               custom_layout.addWidget(line_label)
+               
+               data_string = f"{value} "
+               
+               label_label = QtWidgets.QLabel(data_string)
+               font = QtGui.QFont("Poppins", 8)  # Reduce the font size to "6" (adjust as needed)
+               label_label.setFont(font)
+               
+               # Add the label label to the layout
+               custom_layout.addWidget(label_label)
+           
+           button_layout = QtWidgets.QHBoxLayout()  # Create a horizontal layout for buttons
+           button_layout.setAlignment(QtCore.Qt.AlignCenter)  # Center-align the button layout
+           
+           button_icons = [
+               os.path.join('images', 'cam.png'),
+               os.path.join('images', 'delete.png'),
+               os.path.join('images', 'qr.png'),
+               os.path.join('images', 'barcode.png')
+           ]
+           
+           button_actions = [
+               lambda _, row=row: self.open_add_scan_form(row),
+               lambda _, row=row: self.delete_visit(row[0]),
+               lambda _, row=row: self.generate_qr_code_pdf(row),
+               lambda _, row=row: self.generate_bar_code_pdf(row)
+           ]
+           
+           button_tooltips = ["Scan", "Delete", "Generate QR Code", "Generate Barcode"]
+           
+           for icon, action, tooltip in zip(button_icons, button_actions, button_tooltips):
+               button = QtWidgets.QPushButton()
+               button.setIcon(QtGui.QIcon(icon))
+               
+               # Adjust the button size as needed
+               button.setFixedSize(20, 20)  # Reduce the dimensions to make buttons smaller
+               
+               button.clicked.connect(action)
+               button.setToolTip(tooltip)
+               
+               # Add buttons to the button_layout
+               button_layout.addWidget(button)
+           
+           # Add the button_layout to the custom_layout
+           custom_layout.addLayout(button_layout)
+           
+           item = QtWidgets.QListWidgetItem()
+           item.setSizeHint(custom_widget.sizeHint())
+           self.listWidget.addItem(item)
+           self.listWidget.setItemWidget(item, custom_widget)
+           item.visit_data = row
+   
+       
+       
     def generate_bar_code_pdf(self, accession):
         # Extract the accession number from the row, assuming it's in a specific column (adjust as needed).
         accession_str = str(accession)
