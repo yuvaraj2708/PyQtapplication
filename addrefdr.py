@@ -211,7 +211,6 @@ class Ui_refdrForm(object):
         self.lineEdit_16.setInputMethodHints(QtCore.Qt.ImhNone)
         self.lineEdit_16.setFrame(True)
         self.lineEdit_16.setObjectName("lineEdit_16")
-        self.lineEdit_16.setReadOnly(True)
         self.lineEdit_18 = QtWidgets.QLineEdit(self.groupBox)
         self.lineEdit_18.setGeometry(QtCore.QRect(360, 70, 201, 31))
         font = QtGui.QFont()
@@ -391,13 +390,7 @@ class Ui_refdrForm(object):
         next_refdr_number = f"{prefix}{next_numeric_part:05}"  # Format as "T00001"
         return next_refdr_number
 
-    def save_refdr_data(self):
-        try:
-            DoctorCode = self.generate_next_refdr_number()
-            # ... rest of your save_test_data function ...
 
-        except Exception as e:
-            print("Error:", str(e))
             
             
     def retranslateUi(self, Form):

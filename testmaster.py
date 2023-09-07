@@ -213,7 +213,7 @@ class Ui_testForm(object):
      # Fetch reference data
      cursor.execute("SELECT * FROM tests")
      test_data = cursor.fetchall()
- 
+     self.listWidget.clear()
      if test_data:
          for row in test_data:
              item = QtWidgets.QListWidgetItem()
@@ -265,8 +265,9 @@ class Ui_testForm(object):
         if test_data:
             self.edit_test_form.test_data = test_data  
         
-        self.edit_test_form.show()
-        self.fetch_and_display_test_data()
+        self.listWidget.clear()
+        
+        self.ui_edit_test.pushButton.clicked.connect(self.fetch_and_display_test_data)
    
     def fetch_test_data_by_id(self, Testcode):
         # Connect to the database
@@ -315,6 +316,7 @@ class Ui_testForm(object):
         self.add_test_form = QtWidgets.QWidget()
         self.ui_add_test = Ui_addtestForm()
         self.ui_add_test.setupUi(self.add_test_form)
+        self.ui_add_test.pushButton.clicked.connect(self.fetch_and_display_test_data)
         self.add_test_form.show()
    
 if __name__ == "__main__":

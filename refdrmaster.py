@@ -314,13 +314,14 @@ class Ui_refdrmasterForm(object):
     
     
     def fetch_and_display_refdr_data(self):
+     
      conn = sqlite3.connect('patient_data.db')
      cursor = conn.cursor()
  
      # Fetch reference data
      cursor.execute("SELECT * FROM refdr")
      refdr_data = cursor.fetchall()
- 
+     self.listWidget.clear()
      if refdr_data:
          for row in refdr_data:
              item = QtWidgets.QListWidgetItem()
@@ -367,7 +368,11 @@ class Ui_refdrmasterForm(object):
             self.edit_refdr_form.refdr_data = refdr_data  
         
         self.edit_refdr_form.show()
-        self.fetch_and_display_refdr_data()
+
+        self.listWidget.clear()
+        
+        self.ui_edit_refdr.pushButton.clicked.connect(self.fetch_and_display_refdr_data)
+
    
     def fetch_refdr_data_by_id(self, DoctorCode):
         # Connect to the database
@@ -420,7 +425,8 @@ class Ui_refdrmasterForm(object):
         self.ui_add_test = Ui_refdrForm()
         self.ui_add_test.setupUi(self.add_test_form)
         self.add_test_form.show()
-         
+        self.ui_add_test.pushButton.clicked.connect(self.fetch_and_display_refdr_data)
+
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)

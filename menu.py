@@ -543,7 +543,8 @@ class LoginForm(QtWidgets.QMainWindow):
             self.main_window.show()
         else:
             QtWidgets.QMessageBox.warning(self, "Login Failed", "Invalid username or password.")
-
+        
+        self.close() 
 
 
 
@@ -663,6 +664,7 @@ class MainWindow(QtWidgets.QMainWindow):
         login_form = LoginForm()
         login_form.show()
         
+        
     def is_device_registered(self, device_id):
     # Replace with your actual device ID check logic
        device_id = '1003'
@@ -686,8 +688,8 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def show_login_page(self):
         self.login_form = LoginForm()
-        self.login_form.show()
-        
+        # self.login_form.show()
+        self.close()
         
         self.patient_register_frame = QtWidgets.QFrame()
         self.patient_register_ui = Ui_addpatientForm()#patient register

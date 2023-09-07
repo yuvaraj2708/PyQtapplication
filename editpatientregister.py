@@ -224,7 +224,6 @@ class Ui_editpatientForm(object):
         self.lineEdit_16.setInputMethodHints(QtCore.Qt.ImhNone)
         self.lineEdit_16.setFrame(True)
         self.lineEdit_16.setObjectName("lineEdit_16")
-        self.lineEdit_16.setReadOnly(True)
         self.lineEdit_18 = QtWidgets.QLineEdit(self.groupBox)
         self.lineEdit_18.setGeometry(QtCore.QRect(360, 70, 201, 31))
         font = QtGui.QFont()
@@ -437,6 +436,8 @@ class Ui_editpatientForm(object):
         
         
     def save_patient_data(self):
+        self.conn = sqlite3.connect("patient_data.db")
+        self.cursor = self.conn.cursor()
         uhid = self.lineEdit_16.text()
         title = self.lineEdit_15.text()
         patientname = self.lineEdit_18.text()
@@ -448,7 +449,7 @@ class Ui_editpatientForm(object):
         
         current_datetime = datetime.datetime.now()
         current_date = current_datetime.strftime("%d%m%Y")
-        
+        print(uhid)
         # Insert patient data into the database
         
         self.cursor.execute("UPDATE patients SET title=?, patientname=?, dob=?, age=?, gender=?, mobile=?, email=?, date=? WHERE uhid=?",
@@ -458,6 +459,7 @@ class Ui_editpatientForm(object):
         
         # Clear the input fields after saving
         self.clear_input_fields()
+        self.conn.close()
         
 if __name__ == "__main__":
     import sys

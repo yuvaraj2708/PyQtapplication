@@ -6,8 +6,8 @@ from addvisit import Ui_addvisitForm
 import os
 from editpatientregister import Ui_editpatientForm
 from PyQt5.QtWidgets import QDateEdit, QCalendarWidget
-from PyQt5.QtCore import QTime,QTimer
-
+from PyQt5.QtCore import QTime, QTimer
+from registrationsummary import Ui_visitsummaryForm
 
 class Ui_patientForm(object):
     def setupUi(self, Form):
@@ -89,7 +89,7 @@ class Ui_patientForm(object):
         self.lineEdit_16 = QtWidgets.QDateEdit(Form)
         self.lineEdit_16.setGeometry(QtCore.QRect(20, 120, 121, 31))
         self.lineEdit_16.setCalendarPopup(True)  # Enable the calendar popup
-      
+
         font = QtGui.QFont()
         font.setPointSize(-1)
         font.setBold(False)
@@ -115,10 +115,10 @@ class Ui_patientForm(object):
         self.lineEdit_16.setInputMethodHints(QtCore.Qt.ImhNone)
         self.lineEdit_16.setFrame(True)
         self.lineEdit_16.setObjectName("lineEdit_16")
-        
+
         self.lineEdit_15 = QtWidgets.QDateEdit(Form)
         self.lineEdit_15.setGeometry(QtCore.QRect(150, 120, 131, 31))
-        self.lineEdit_15.setCalendarPopup(True) 
+        self.lineEdit_15.setCalendarPopup(True)
         font = QtGui.QFont()
         font.setPointSize(-1)
         font.setBold(False)
@@ -144,7 +144,7 @@ class Ui_patientForm(object):
         self.lineEdit_15.setInputMethodHints(QtCore.Qt.ImhNone)
         self.lineEdit_15.setFrame(True)
         self.lineEdit_15.setObjectName("lineEdit_15")
-        
+
         self.label_14 = QtWidgets.QLabel(Form)
         self.label_14.setGeometry(QtCore.QRect(470, 260, 47, 13))
         self.label_14.setObjectName("label_14")
@@ -241,13 +241,13 @@ class Ui_patientForm(object):
 "background-color: #089598;\n"
 "}\n"
 "\n"
-"")      
-        
+"")
+
         self.pushButton_2.setObjectName("pushButton_2")
         self.textEdit = QtWidgets.QTextEdit(Form)
         self.textEdit.setGeometry(QtCore.QRect(-27, 280, 921, 421))
         self.textEdit.setObjectName("textEdit")
-        
+
         self.patient_data = {}
         self.listWidget = QtWidgets.QListWidget(Form)
         self.listWidget.setGeometry(QtCore.QRect(-27, 280, 921, 421))
@@ -256,15 +256,11 @@ class Ui_patientForm(object):
         self.patient_data = {}
 
       
-        self.fetch_and_display_patient_data()
-       
-       
-        
+
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
         # delete_patient_signal = QtCore.pyqtSignal(int)
         # self.lineEdit_16.textChanged.connect(self.fetch_and_display_patient_data)
-
 
            # Create a QTimer instance
         self.timer = QTimer(Form)
@@ -274,8 +270,8 @@ class Ui_patientForm(object):
         self.timer.timeout.connect(self.fetch_and_display_patient_data)
         # Start the timer
         self.timer.start()
-
-
+       
+        self.fetch_and_display_patient_data()
 
     def filter_patient_data(self):
       self.timer.stop()
@@ -283,48 +279,76 @@ class Ui_patientForm(object):
       mobile = self.lineEdit_6.text()
       from_date = self.lineEdit_16.date().toPyDate().strftime("%d%m%Y")
       to_date = self.lineEdit_15.date().toPyDate().strftime("%d%m%Y")
-  
+
       # Connect to the database
       conn = sqlite3.connect('patient_data.db')
       cursor = conn.cursor()
-  
+
       # Build the SQL query based on the filter criteria
       query = "SELECT * FROM patients WHERE "
       parameters = []
-  
-      if patient_name:
+
+      if patient_name and mobile=='':
           query += "patientname LIKE ?"
           parameters.append('%' + patient_name + '%')
   
-      elif mobile:
-          query += " or mobile = ?"
-          parameters.append(mobile)
+      elif mobile and patient_name=='':
+          query += "mobile LIKE ?"
+          parameters.append('%'+ mobile + '%')
+
+      elif patient_name and mobile:
+          query += "patientname LIKE ? AND mobile LIKE ?"
+          parameters.extend(['%'+patient_name+'%', '%'+mobile+'%'])
   
       elif from_date and to_date:
-          query += " or date BETWEEN ? AND ?"
-          parameters.extend([from_date, to_date])
-  
+            query += " AND date BETWEEN ? AND ?"
+            parameters.extend([from_date, to_date])
+
       # Fetch patient data with filters applied
       cursor.execute(query, parameters)
       filtered_patient_data = cursor.fetchall()
-  
+
       # Clear the existing items in the QListWidget
       self.listWidget.clear()
-  
+
       if filtered_patient_data:
           for row in filtered_patient_data:
               item = QtWidgets.QListWidgetItem()
               self.listWidget.addItem(item)
-  
+
               custom_widget = QtWidgets.QWidget()
               custom_layout = QtWidgets.QHBoxLayout(custom_widget)
-  
-              label = QtWidgets.QLabel(f"{row[0]:<10} {row[1]:<10} {row[2]:<10} {row[3]:<10} {row[4]:<10} {row[5]:<10} {row[6]:<10} {row[7]:<10} {row[8]:<40}")
+
+              label = QtWidgets.QLabel(
+                  f"{row[0]:<10} {row[1]:<10} {row[2]:<10} {row[3]:<10} {row[4]:<10} {row[5]:<10} {row[6]:<10} {row[7]:<10} {row[8]:<40}")
               custom_layout.addWidget(label)
-  
+
               button_layout = QtWidgets.QHBoxLayout()  # Create a layout for the buttons
               # Add buttons and layout as needed
               # ...
+
+              delete_button = QtWidgets.QPushButton()
+              delete_button.setIcon(QtGui.QIcon(os.path.join('images', 'delete.png')))
+              delete_button.setFixedSize(20, 20)
+              delete_button.clicked.connect(lambda _, row=row: self.delete_patient(row[0])) 
+              button_layout.addWidget(delete_button)
+                
+              edit_button = QtWidgets.QPushButton()
+              edit_button.setIcon(QtGui.QIcon(os.path.join('images', 'edit.png')))  # Change to the correct icon
+              edit_button.setFixedSize(20, 20)
+              edit_button.clicked.connect(lambda _, row=row: self.edit_patient(row[0]))
+              button_layout.addWidget(edit_button)
+                
+              add_visit_button = QtWidgets.QPushButton()
+              add_visit_button.setIcon(QtGui.QIcon(os.path.join('images', 'addvisit.png')))
+              add_visit_button.setFixedSize(20, 20)
+              add_visit_button.clicked.connect(lambda _, row=row: self.open_add_visit_form(row))
+              button_layout.addWidget(add_visit_button)
+                
+                    # Add spacing between the label and buttons
+              button_layout.addSpacing(90)
+                
+
   
               spacer = QtWidgets.QSpacerItem(10, 10, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
               button_layout.addItem(spacer)  # Add an expanding spacer between buttons
@@ -344,6 +368,7 @@ class Ui_patientForm(object):
     
     
     def fetch_and_display_patient_data(self):
+        
         # Connect to the database
         conn = sqlite3.connect('patient_data.db')
         cursor = conn.cursor()
@@ -351,7 +376,7 @@ class Ui_patientForm(object):
         # Fetch patient data
         cursor.execute("SELECT * FROM patients")
         patient_data = cursor.fetchall()
-
+        self.listWidget.clear()
         # Get the existing patient IDs already displayed
         existing_patient_ids = [item.patient_data[0] for item in self.listWidget.findItems("", QtCore.Qt.MatchContains)]
 
@@ -405,22 +430,27 @@ class Ui_patientForm(object):
                     self.listWidget.setItemWidget(item, custom_widget)
                     item.patient_data = row
 
-
+        
 
 
 
     def edit_patient(self, patient_uhid):
+        self.timer.stop()
         self.edit_patient_form = QtWidgets.QWidget()
         self.ui_edit_patient = Ui_editpatientForm()  # Replace with the correct class name
         self.ui_edit_patient.setupUi(self.edit_patient_form, patient_uhid)  # Pass the patient ID
-        self.edit_patient_form.show()
+        #self.edit_patient_form.show()
         # Fetch patient data for the specified patient_id
         patient_data = self.fetch_patient_data_by_id(patient_uhid)
         if patient_data:
             self.ui_edit_patient.patient_data = patient_data  # Set the patient data in the edit form
 
         self.edit_patient_form.show()
-        self.fetch_and_display_patient_data()
+        self.listWidget.clear()
+        
+        self.ui_edit_patient.pushButton.clicked.connect(self.fetch_and_display_patient_data)
+        
+       
 
     def fetch_patient_data_by_id(self, patient_uhid):
         # Connect to the database
@@ -435,6 +465,7 @@ class Ui_patientForm(object):
     
      
     def delete_patient(self, patient_uhid):
+       
        # Connect to the database
        conn = sqlite3.connect('patient_data.db')
        cursor = conn.cursor()
@@ -442,7 +473,7 @@ class Ui_patientForm(object):
        # Delete patient data from the database
        cursor.execute("DELETE FROM patients WHERE uhid = ?", (patient_uhid,))
        conn.commit()
-
+       self.listWidget.clear()
        # Refresh the displayed patient data immediately after deletion
        self.fetch_and_display_patient_data()
        
@@ -456,6 +487,7 @@ class Ui_patientForm(object):
         self.ui_add_visit.set_patient_data(patient_data)
 
         self.add_visit_form.show()
+
         
 
 
@@ -482,13 +514,13 @@ class Ui_patientForm(object):
         self.pushButton_2.clicked.connect(self.open_add_patient_form) 
     
     def open_add_patient_form(self):
-        self.listWidget.clear()
-        self.timer.start()
+        #self.timer.start()
         self.add_test_form = QtWidgets.QWidget()
         self.ui_add_test = Ui_addpatientForm()
         self.ui_add_test.setupUi(self.add_test_form)
         self.add_test_form.show()
-        #self.fetch_and_display_patient_data()
+        self.ui_add_test.pushButton.clicked.connect(self.fetch_and_display_patient_data)
+        # self.fetch_and_display_patient_data()
 
 if __name__ == "__main__":
     import sys

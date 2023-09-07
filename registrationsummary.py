@@ -223,6 +223,9 @@ class Ui_visitsummaryForm(object):
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
         
+        
+        
+        
     def fetch_and_display_visit_data(self):
       conn = sqlite3.connect('patient_data.db')
       cursor = conn.cursor()
@@ -241,80 +244,78 @@ class Ui_visitsummaryForm(object):
 
       if visit_data:
           self.listWidget.clear()
-
+          
           for row in visit_data:
-            item = QtWidgets.QListWidgetItem()
-            self.listWidget.addItem(item)
-
-            custom_widget = QtWidgets.QWidget()
-            custom_layout = QtWidgets.QVBoxLayout(custom_widget)
-
-            # Unpack the values from the query result
-            visit_id, ref_dr, patient_category, patient_name, dob, age, gender, mobile, email, date, selected_test = row
-
-            # Initialize an empty list to store selected tests
-            
-                
-                # Add the custom widget to the QListWidgetItem
-            item.setSizeHint(custom_widget.sizeHint())
-            self.listWidget.addItem(item)
-            self.listWidget.setItemWidget(item, custom_widget)
-                
-            details_string = (
-                f"{visit_id} "
-                f" {', '.join(selected_test)} "
-                f"{ref_dr} "
-                f"{patient_category} "
-                f"{patient_name} "
-                f"{dob} "
-                f"{age} "
-                f"{gender} "
-                f"{mobile} "
-                f"{email} "
-                f"{date} "
-            )
-
-            print(details_string)
-
-
-            label = QtWidgets.QLabel(details_string)
-            font = QtGui.QFont("Poppins", 8)  # Replace "8" with the desired font size
-            label.setFont(font)
-            custom_layout.addWidget(label)
-
-            button_layout = QtWidgets.QHBoxLayout()
-
-            scan_button = QtWidgets.QPushButton()
-            scan_button.setIcon(QtGui.QIcon(os.path.join('images', 'cam.png')))
-            scan_button.setFixedSize(20, 20)
-            scan_button.clicked.connect(lambda _, row=row: self.open_add_scan_form(row))
-            button_layout.addWidget(scan_button)
-
-            delete_button = QtWidgets.QPushButton()
-            delete_button.setIcon(QtGui.QIcon(os.path.join('images', 'delete.png')))
-            delete_button.setFixedSize(20, 20)
-            delete_button.clicked.connect(lambda _, row=row: self.delete_visit(row[0]))
-            button_layout.addWidget(delete_button)
-
-            QR_button = QtWidgets.QPushButton()
-            QR_button.setIcon(QtGui.QIcon(os.path.join('images', 'qr.png')))
-            QR_button.setFixedSize(20, 20)
-            QR_button.clicked.connect(lambda _, row=row: self.generate_qr_code_pdf(row))
-            button_layout.addWidget(QR_button)
-
-            barcode_button = QtWidgets.QPushButton()
-            barcode_button.setIcon(QtGui.QIcon(os.path.join('images', 'barcode.png')))
-            barcode_button.setFixedSize(20, 20)
-            barcode_button.clicked.connect(lambda _, row=row: self.generate_bar_code_pdf(row))
-            button_layout.addWidget(barcode_button)
-
-            custom_layout.addLayout(button_layout)  # Add the button layout to the custom layout
-            item.setSizeHint(custom_widget.sizeHint())
-            self.listWidget.setItemWidget(item, custom_widget)
-            item.visit_data = row
+              item = QtWidgets.QListWidgetItem()
+              self.listWidget.addItem(item)
+          
+              custom_widget = QtWidgets.QWidget()
+              custom_layout = QtWidgets.QHBoxLayout(custom_widget)  # Use QHBoxLayout for horizontal layout
+          
+              # Unpack the values from the query result
+              visit_id, ref_dr, patient_category, patient_name, dob, age, gender, mobile, email, date, selected_test = row
+          
+              details_string = (
+                  f"{visit_id} "
+                  f"{''.join(selected_test)} "
+                  f"{ref_dr} "
+                  f"{patient_category} "
+                  f"{patient_name} "
+                  f"{dob} "
+                  f"{age} "
+                  f"{gender} "
+                  f"{mobile} "
+                  f"{email} "
+                  f"{date}"
+              )
+          
+              label = QtWidgets.QLabel(details_string)
+              font = QtGui.QFont("Poppins", 8)  # Replace "8" with the desired font size
+              label.setFont(font)
+              custom_layout.addWidget(label)
+              
+              button_layout = QtWidgets.QHBoxLayout()  # Create a horizontal layout for buttons
+          
+              button_icons = [
+                  os.path.join('images', 'cam.png'),
+                  os.path.join('images', 'delete.png'),
+                  os.path.join('images', 'qr.png'),
+                  os.path.join('images', 'barcode.png')
+              ]
+          
+              button_actions = [
+                  lambda _, row=row: self.open_add_scan_form(row),
+                  lambda _, row=row: self.delete_visit(row[0]),
+                  lambda _, row=row: self.generate_qr_code_pdf(row),
+                  lambda _, row=row: self.generate_bar_code_pdf(row)
+              ]
+          
+              button_tooltips = ["Scan", "Delete", "Generate QR Code", "Generate Barcode"]
+          
+              for icon, action, tooltip in zip(button_icons, button_actions, button_tooltips):
+                  button = QtWidgets.QPushButton()
+                  button.setIcon(QtGui.QIcon(icon))
+                  
+                  # Adjust the button size as needed
+                  button.setFixedSize(20, 20)  # You can change the dimensions here
+                  
+                  button.clicked.connect(action)
+                  button.setToolTip(tooltip)
+                  
+                  # Add buttons to the button_layout
+                  button_layout.addWidget(button)
+              
+              # Add the button_layout to the custom_layout
+              custom_layout.addLayout(button_layout)
+              
+              item.setSizeHint(custom_widget.sizeHint())
+              self.listWidget.addItem(item)
+              self.listWidget.setItemWidget(item, custom_widget)
+              item.visit_data = row
       
-      
-
+                   
+          
+    
 
     
     def delete_visit(self, visit_id):
@@ -375,8 +376,7 @@ class Ui_visitsummaryForm(object):
         os.system(pdf_filename)
     
     def generate_qr_code_pdf(self, visit_data):
-        visitid, patient_id, patient_category, ref_dr, selected_test, visitid, date = visit_data
-
+        visitid, patient_id, patient_category, ref_dr, selected_test, date = visit_data
         # Retrieve patient information based on patient_id from the patients table
         conn = sqlite3.connect('patient_data.db')
         cursor = conn.cursor()

@@ -226,7 +226,6 @@ class Ui_addtestForm(object):
         self.lineEdit_16.setInputMethodHints(QtCore.Qt.ImhNone)
         self.lineEdit_16.setFrame(True)
         self.lineEdit_16.setObjectName("lineEdit_16")
-        self.lineEdit_16.setReadOnly(True)
         self.lineEdit_18 = QtWidgets.QLineEdit(self.groupBox)
         self.lineEdit_18.setGeometry(QtCore.QRect(360, 70, 201, 31))
         font = QtGui.QFont()
@@ -336,13 +335,7 @@ class Ui_addtestForm(object):
         next_test_number = f"{prefix}{next_numeric_part:05}"  # Format as "T00001"
         return next_test_number
 
-    def save_test_data(self):
-        try:
-            Testcode = self.generate_next_test_code()
-            # ... rest of your save_test_data function ...
 
-        except Exception as e:
-            print("Error:", str(e))
     
     
     def retranslateUi(self, Form):

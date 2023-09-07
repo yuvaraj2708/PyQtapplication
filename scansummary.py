@@ -221,29 +221,7 @@ class Ui_scansummaryForm(object):
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
         
-        self.convert_button = QtWidgets.QPushButton(Form)
-        self.convert_button.setGeometry(QtCore.QRect(750, 20, 131, 31))
-        self.convert_button.setFont(font)
-        self.convert_button.setStyleSheet("QPushButton\n"
-            "{\n"
-            "    background-color:#0DBCC0;\n"
-            "    border: 0;\n"
-            "    font-size: 14px;\n"
-            "    font-weight: 500;\n"
-            "    border-radius: 4px;\n"
-            "color: #ffffff;\n"
-            "border: 0;\n"
-            "}\n"
-            "\n"
-            "QPushButton:hover\n"
-            "{\n"
-            "background-color: #089598;\n"
-            "}\n"
-            "\n"
-            "")
-        self.convert_button.setObjectName("convert_button")
-        self.convert_button.setText(self._translate("Form", "Convert to DICOM"))
-        self.convert_button.clicked.connect(self.convert_images_to_dicom)
+        
             
     def _translate(self, context, text, disambiguation=None, n=-1):
        return QtWidgets.QApplication.translate(context, text, disambiguation, n) 
@@ -489,3 +467,6 @@ if __name__ == "__main__":
     ui.setupUi(Form)
     Form.show()
     sys.exit(app.exec_())
+
+
+# convert to dicom , view dicom , report template , print template , send telepathology
