@@ -14,7 +14,7 @@ class Ui_reportingForm(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
         Form.resize(900, 588)
-        Form.setMaximumSize(QtCore.QSize(811, 16777215))
+        Form.setMaximumSize(QtCore.QSize(851, 16777215))
         font = QtGui.QFont()
         font.setPointSize(10)
         Form.setFont(font)
@@ -39,6 +39,7 @@ class Ui_reportingForm(object):
         self.groupBox.setObjectName("groupBox")
         self.pushButton_2 = QtWidgets.QPushButton(self.groupBox)
         self.pushButton_2.setGeometry(QtCore.QRect(330, 470, 131, 31))
+        self.pushButton_2.clicked.connect(self.saveReport)
         font = QtGui.QFont()
         font.setPointSize(-1)
         font.setBold(True)
@@ -428,8 +429,33 @@ class Ui_reportingForm(object):
         report_names = [report[1] for report in reports]
         self.comboBox_26.addItems(report_names)
  
-    
+    def saveReport(self):
+        # Get the selected report template
+        selected_report = self.comboBox_26.currentText()
+        report_content = self.fetch_report_content(selected_report)
 
+        # Get patient information (you can modify this part to get patient data)
+        patient_name = self.lineEdit_18.text()
+        # Here, you can add more fields like patient ID, date, etc.
+
+        # Get the report content from the QTextEdit
+        edited_report = self.textEdit.toPlainText()
+
+        # Create a new record in the patient-specific reports table
+        connection = sqlite3.connect("patient_data.db")
+        cursor = connection.cursor()
+        cursor.execute(
+            "INSERT INTO patient_reports (patient_name, report_template, report_content) VALUES (?, ?, ?)",
+            (patient_name, selected_report, edited_report),
+        )
+        connection.commit()
+        connection.close()
+
+        # Optionally, you can show a message or update the UI to indicate that the report has been saved.
+
+        # Clear the QTextEdit if needed
+        self.textEdit.clear()
+    
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))

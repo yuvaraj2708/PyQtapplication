@@ -239,3 +239,27 @@ connection.commit()
 connection.close()
 
 print("visit_tests table created successfully.")
+
+
+import sqlite3
+
+# Connect to the database
+connection = sqlite3.connect("patient_data.db")
+cursor = connection.cursor()
+
+# Create the visit_tests table
+cursor.execute('''
+CREATE TABLE patient_reports (
+    report_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    patient_name TEXT NOT NULL,
+    report_template TEXT NOT NULL,
+    report_content TEXT NOT NULL,
+    report_date DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+''')
+
+# Commit changes and close the connection
+connection.commit()
+connection.close()
+
+print("patient_reports table created successfully.")
