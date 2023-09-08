@@ -100,29 +100,32 @@ class Ui_reportingForm(object):
         
         
         
-        self.comboBox_26 = QComboBox(self.groupBox)
-        self.comboBox_26.setGeometry(QtCore.QRect(190, 70, 161, 31))
-        
+        self.comboBox_26 = QtWidgets.QComboBox(Form)
+        self.comboBox_26.setGeometry(QtCore.QRect(190, 130, 161, 31))
+
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
 
-    def set_patient_data(self, patient_data):
-        patient_name = patient_data
-        self.lineEdit_18.setText(patient_name)
-        report = self.fetch_report_from_database()
-        self.populate_testdropdown(self.comboBox_26, report)
+        # Fetch and populate data from the database
+        self.populate_report_templates()
+        self.retranslateUi(Form)
+        QtCore.QMetaObject.connectSlotsByName(Form)
 
-    def fetch_report_from_database(self):
+    
+
+    def populate_report_templates(self):
+        # Fetch report templates from the database and add them to the combo box
         connection = sqlite3.connect("patient_data.db")
         cursor = connection.cursor()
         cursor.execute("SELECT * FROM reporttemplates")
         reports = cursor.fetchall()
         connection.close()
-        return [report[1] for report in reports]
 
-    def populate_testdropdown(self, combo_box, data):
-        combo_box.clear()
-        combo_box.addItems(data)
+        # Extract the report names and add them to the combo box
+        report_names = [report[1] for report in reports]
+        self.comboBox_26.addItems(report_names)
+ 
+    
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
