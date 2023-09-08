@@ -16,6 +16,7 @@ from PyQt5.QtWidgets import QMainWindow, QApplication, QLabel, QVBoxLayout, QWid
 from PyQt5.QtGui import QPixmap
 import matplotlib.pyplot as plt
 from report import Ui_reportingForm
+import subprocess 
 
 class Ui_scansummaryForm(object):
     def setupUi(self, Form):
@@ -303,31 +304,18 @@ class Ui_scansummaryForm(object):
 
                 custom_widget = QtWidgets.QWidget()
                 custom_layout = QtWidgets.QHBoxLayout(custom_widget)
-                # label = QtWidgets.QLabel(f"{row[0]:<10} {row[1]:<10} {row[2]:<10} {row[3]:<10} {row[4]:<10} {row[5]:<10} {row[6]:<10} ")
-                # custom_layout.addWidget(label)
+                label = QtWidgets.QLabel(f"{row[0]:<10} {row[1]:<10} {row[2]:<10} {row[3]:<10} {row[4]:<10} {row[5]:<10} {row[6]:<10} ")
+                custom_layout.addWidget(label)
                 button_layout = QtWidgets.QHBoxLayout()  
-               
-                
-                # template_combobox = QtWidgets.QComboBox()
-                # template_combobox.addItems(self.fetch_templates_from_database())  # Fetch template names from the database
-                # template_combobox.currentIndexChanged.connect(lambda index, row=row: self.view_template(template_combobox.itemText(index)))
-                
-                # custom_layout.addWidget(template_combobox)
-                
-                # edit_template_button = QtWidgets.QPushButton("Edit Template")
-                # edit_template_button.clicked.connect(lambda: self.convert_images_to_dicom(template_combobox.currentText()))
-                
-                # custom_layout.addWidget(edit_template_button)  # Add the button to the layout
-                
-                
+                               
                 dcmconvert_button = QtWidgets.QPushButton()
-                dcmconvert_button.setIcon(QtGui.QIcon(os.path.join('images', 'delete.png')))
+                dcmconvert_button.setIcon(QtGui.QIcon(os.path.join('images', 'dcm.png')))
                 dcmconvert_button.setFixedSize(20, 20)
                 dcmconvert_button.clicked.connect(lambda _, row=row: self.delete_visit(row[0])) 
                 button_layout.addWidget(dcmconvert_button)
                 
                 viewdicom_button = QPushButton()
-                viewdicom_button.setIcon(QtGui.QIcon(os.path.join('images', 'image.png')))
+                viewdicom_button.setIcon(QtGui.QIcon(os.path.join('images', 'view.png')))
                 viewdicom_button.setFixedSize(20, 20)
                 viewdicom_button.clicked.connect(self.open_dicom_file)
                 button_layout.addWidget(viewdicom_button)
@@ -335,21 +323,21 @@ class Ui_scansummaryForm(object):
                 
                 
                 report_button = QtWidgets.QPushButton()
-                report_button.setIcon(QtGui.QIcon(os.path.join('images', 'qr.png')))
+                report_button.setIcon(QtGui.QIcon(os.path.join('images', 'report.png')))
                 report_button.setFixedSize(20, 20)
-                report_button.clicked.connect(self.open_add_report_form) 
+                report_button.clicked.connect(lambda _, row=row: self.open_add_report_form(row)) 
                 button_layout.addWidget(report_button)
                 
                 print_button = QtWidgets.QPushButton()
-                print_button.setIcon(QtGui.QIcon(os.path.join('images', 'qr.png')))
+                print_button.setIcon(QtGui.QIcon(os.path.join('images', 'print.png')))
                 print_button.setFixedSize(20, 20)
-                print_button.clicked.connect(lambda _, row=row: self.generate_qr_code_pdf(row[0])) 
+                print_button.clicked.connect( self.preview_patient_report) 
                 button_layout.addWidget(print_button)
                 
                 telepath_button = QtWidgets.QPushButton()
                 telepath_button.setIcon(QtGui.QIcon(os.path.join('images', 'qr.png')))
                 telepath_button.setFixedSize(20, 20)
-                telepath_button.clicked.connect(lambda _, row=row: self.generate_qr_code_pdf(row[0])) 
+                telepath_button.clicked.connect(self.preview_patient_report) 
                 button_layout.addWidget(telepath_button)
                 
                 button_layout.addSpacing(90)
@@ -359,13 +347,72 @@ class Ui_scansummaryForm(object):
                 item.visit_data = row
  
         conn.close()
+    def preview_patient_report(self):
+        # Get the selected patient ID (replace 'selected_patient_id' with your actual logic)
+        selected_patient_id = self.get_selected_patient_id()
+
+        if selected_patient_id is not None:
+            # Generate the PDF report for the selected patient
+            pdf_report = self.generate_patient_report(selected_patient_id)
+
+            # Open the PDF report with the default PDF viewer
+            self.open_pdf_report(pdf_report)
+
+    def open_pdf_report(self, pdf_filename):
+        try:
+            # Use the system's default PDF viewer to open the PDF file
+            subprocess.Popen(["xdg-open", pdf_filename])  # Linux
+            subprocess.Popen(["open", pdf_filename])  # macOS
+            subprocess.Popen(["start", pdf_filename], shell=True)  # Windows
+        except Exception as e:
+            print(f"Error opening PDF: {e}")
+
+    def get_selected_patient_id(self):
+        # Implement your logic to get the selected patient ID (e.g., from a table or combo box)
+        # Return the selected patient's ID as an integer, or None if no patient is selected
+        selected_patient_id = None  # Replace with your logic
+        return selected_patient_id
+
+    def generate_patient_report(self, patient_id):
+        # Fetch the patient's report data from the database based on the patient_id
+        report_data = self.fetch_patient_report_data(patient_id)
+
+        # Generate the PDF report using the fetched data
+        pdf = FPDF()
+        pdf.add_page()
+        pdf.set_font("Arial", size=12)
         
-    def open_add_report_form(self):
+        # Add report content to the PDF (replace with your report generation logic)
+        pdf.cell(200, 10, txt=report_data, ln=True)
+        
+        # Save the PDF to a temporary file
+        temp_pdf_filename = "temp_report.pdf"
+        pdf.output(temp_pdf_filename)
+        
+        return temp_pdf_filename
+
+    def fetch_patient_report_data(self, patient_id):
+        # Implement your logic to fetch the patient's report data from the database
+        # based on the patient_id
+        # Return the report data as a string
+        report_data = "Patient Report for ID: {}".format(patient_id)
+        return report_data
+
+    def display_pdf_report(self, pdf_filename):
+        # Open and display the PDF file using the system's default PDF viewer
+        QtGui.QDesktopServices.openUrl(QtCore.QUrl.fromLocalFile(pdf_filename))
+    
+    def open_add_report_form(self ,visit_data):
         #self.timer.start()
         self.add_test_form = QtWidgets.QWidget()
         self.ui_add_test = Ui_reportingForm()
         self.ui_add_test.setupUi(self.add_test_form)
+        
+        self.ui_add_test.set_patient_data(visit_data)
+        
         self.add_test_form.show()   
+    
+    
           
     def open_dicom_file(self):
         options = QFileDialog.Options()
@@ -510,12 +557,7 @@ class Ui_scansummaryForm(object):
         self.pushButton_2.setObjectName("pushButton_2")
         self.pushButton_2.clicked.connect(self.open_add_patient_form) 
     
-    def open_add_report_form(self):
-        #self.timer.start()
-        self.add_test_form = QtWidgets.QWidget()
-        self.ui_add_test = Ui_reportingForm()
-        self.ui_add_test.setupUi(self.add_test_form)
-        self.add_test_form.show()
+    
         
         
     def open_add_patient_form(self):

@@ -489,11 +489,6 @@ class Ui_patientForm(object):
         self.add_visit_form.show()
 
         
-
-
-
-       
-
      
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate

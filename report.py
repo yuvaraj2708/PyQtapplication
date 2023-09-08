@@ -207,6 +207,13 @@ class Ui_reportingForm(object):
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
     
+    def set_patient_data(self, patient_id):
+      # Convert the patient ID to a string
+      patient_name_str = str(patient_id)
+  
+      # Update line edit fields to display patient information
+      self.lineEdit_18.setText(patient_name_str)
+    
     def changeFontSizeInTextEdit(self, index):
         font_size = int(self.comboBox.itemText(index))
         cursor = self.textEdit.textCursor()
