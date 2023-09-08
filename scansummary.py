@@ -362,21 +362,33 @@ class Ui_scansummaryForm(object):
     def open_dicom_file(self):
         options = QFileDialog.Options()
         options |= QFileDialog.ReadOnly
-
-        file_path, _ = QFileDialog.getOpenFileName(None, "Open DICOM File", "", "DICOM Files (*.dcm);;All Files (*)", options=options)
-
-        if file_path:
-            self.view_dicom(file_path)
+        dir_path = QFileDialog.getExistingDirectory(None, "Open DICOM Directory", options=options)
     
-    def view_dicom(self, dicom_path):
-        dicom = pydicom.dcmread(dicom_path)
-        pixel_data = dicom.pixel_array
+        if dir_path:
+            self.view_dicom_series(dir_path)
+    
+    def view_dicom_series(self, dir_path):
+        # Filter DICOM files using their extensions
+        dicom_files = [os.path.join(dir_path, file) for file in os.listdir(dir_path) if file.lower().endswith('.dcm')]
+     
+        if dicom_files:
+           dicom_files.sort()  # Sort DICOM files to ensure they are in the correct order
+           series_data = [pydicom.dcmread(file) for file in dicom_files]
 
-        # Display the DICOM image using matplotlib
-        plt.figure()
-        plt.imshow(pixel_data, cmap=plt.cm.bone)
-        plt.axis('off')
-        plt.show()
+           # Create a figure with subplots for each DICOM image
+           num_images = len(series_data)
+           rows, cols = 1, num_images
+           fig, axes = plt.subplots(rows, cols, figsize=(9 * cols, 5.88))
+          
+           for i, dicom_data in enumerate(series_data):
+              pixel_data = dicom_data.pixel_array
+              ax = axes[i] if num_images > 1 else axes
+              ax.imshow(pixel_data, cmap=plt.cm.bone)
+              ax.axis('off')
+          
+           plt.show()
+         
+       
         
     def fetch_templates_from_database(self):
       connection = sqlite3.connect("patient_data.db")
@@ -507,58 +519,3 @@ if __name__ == "__main__":
 
 
 # convert to dicom , view dicom , report template , print template , send telepathology
-
-import sys
-from PyQt5 import QtWidgets, QtGui
-import pydicom
-from pydicom.pixel_data_handlers import numpy_handler
-
-class DICOMViewer(QtWidgets.QWidget):
-    def __init__(self):
-        super().__init__()
-        self.initUI()
-
-    def initUI(self):
-        self.setWindowTitle('DICOM Image Viewer')
-
-        # Create a QLabel to display the DICOM image
-        self.image_label = QtWidgets.QLabel(self)
-        self.image_label.setAlignment(QtCore.Qt.AlignCenter)
-        
-        # Create a QPushButton to open a DICOM file
-        open_button = QtWidgets.QPushButton('Open DICOM', self)
-        open_button.clicked.connect(self.openDICOM)
-
-        # Create a layout
-        layout = QtWidgets.QVBoxLayout()
-        layout.addWidget(self.image_label)
-        layout.addWidget(open_button)
-        self.setLayout(layout)
-
-    def openDICOM(self):
-        # Open a DICOM file using a file dialog
-        options = QtWidgets.QFileDialog.Options()
-        file_name, _ = QtWidgets.QFileDialog.getOpenFileName(self, "Open DICOM File", "", "DICOM Files (*.dcm);;All Files (*)", options=options)
-
-        if file_name:
-            # Read the DICOM file
-            dcm = pydicom.dcmread(file_name)
-            
-            # Convert the DICOM pixel data to a NumPy array
-            pixel_array = dcm.pixel_array
-
-            # Create a QPixmap from the NumPy array (assuming it's 8-bit or 16-bit grayscale)
-            q_image = QtGui.QImage(pixel_array, pixel_array.shape[1], pixel_array.shape[0], pixel_array.shape[1], QtGui.QImage.Format_Grayscale8)
-            pixmap = QtGui.QPixmap.fromImage(q_image)
-
-            # Display the QPixmap in the QLabel
-            self.image_label.setPixmap(pixmap)
-
-def main():
-    app = QtWidgets.QApplication(sys.argv)
-    window = DICOMViewer()
-    window.show()
-    sys.exit(app.exec_())
-
-if __name__ == '__main__':
-    main()
