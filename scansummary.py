@@ -15,7 +15,7 @@ import pydicom
 from PyQt5.QtWidgets import QMainWindow, QApplication, QLabel, QVBoxLayout, QWidget, QPushButton, QFileDialog
 from PyQt5.QtGui import QPixmap
 import matplotlib.pyplot as plt
-
+from report import Ui_reportingForm
 
 class Ui_scansummaryForm(object):
     def setupUi(self, Form):
@@ -337,7 +337,7 @@ class Ui_scansummaryForm(object):
                 report_button = QtWidgets.QPushButton()
                 report_button.setIcon(QtGui.QIcon(os.path.join('images', 'qr.png')))
                 report_button.setFixedSize(20, 20)
-                report_button.clicked.connect(lambda _, row=row: self.generate_qr_code_pdf(row[0])) 
+                report_button.clicked.connect(self.open_add_report_form) 
                 button_layout.addWidget(report_button)
                 
                 print_button = QtWidgets.QPushButton()
@@ -359,6 +359,14 @@ class Ui_scansummaryForm(object):
                 item.visit_data = row
  
         conn.close()
+        
+    def open_add_report_form(self):
+        #self.timer.start()
+        self.add_test_form = QtWidgets.QWidget()
+        self.ui_add_test = Ui_reportingForm()
+        self.ui_add_test.setupUi(self.add_test_form)
+        self.add_test_form.show()   
+          
     def open_dicom_file(self):
         options = QFileDialog.Options()
         options |= QFileDialog.ReadOnly
@@ -502,6 +510,14 @@ class Ui_scansummaryForm(object):
         self.pushButton_2.setObjectName("pushButton_2")
         self.pushButton_2.clicked.connect(self.open_add_patient_form) 
     
+    def open_add_report_form(self):
+        #self.timer.start()
+        self.add_test_form = QtWidgets.QWidget()
+        self.ui_add_test = Ui_reportingForm()
+        self.ui_add_test.setupUi(self.add_test_form)
+        self.add_test_form.show()
+        
+        
     def open_add_patient_form(self):
         self.add_test_form = QtWidgets.QWidget()
         self.ui_add_test = Ui_addpatientForm()
