@@ -89,6 +89,9 @@ import PyQt5.QtCore
 import PyQt5.QtGui
 import PyQt5.QtWidgets
 
+import sys
+from PyQt5.QtWidgets import QApplication, QMainWindow
+
 
 
 # Your PyQt application script
@@ -146,3 +149,8 @@ setup(
     executables=executables,
     options=options
 )
+
+app = QApplication(sys.argv)
+window = QMainWindow()
+window.show()
+sys.exit(app.exec_())
