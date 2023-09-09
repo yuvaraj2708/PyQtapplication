@@ -329,25 +329,35 @@ class Ui_visitsummaryForm(object):
            item.visit_data = row
    
     def delete_visit(self, visit_id):
-     self.timer.stop()
-     print("Deleting visit with visitid:", visit_id)
-     # Connect to the database
-     conn = sqlite3.connect('patient_data.db')
-     cursor = conn.cursor()
-
-     try:
-         # Delete patient data from the database
-         cursor.execute("DELETE FROM visit WHERE visitid = ?", (visit_id,))
-         conn.commit()
-         self.fetch_and_display_visit_data()
-         print("Visit deleted successfully")
-     except sqlite3.Error as e:
-         print("Error deleting visit:", e)
-     finally:
-         conn.close()
-
-     # Refresh the displayed patient data immediately after deletion
-     
+      self.timer.stop()
+      print("Deleting visit with visitid:", visit_id)
+      
+      # Connect to the database
+      conn = sqlite3.connect('patient_data.db')
+      cursor = conn.cursor()
+      
+      try:
+          cursor.execute("DELETE FROM visit WHERE visitid = ?", (visit_id,))
+          conn.commit()
+          
+          if cursor.rowcount == 1:
+              print("Visit deleted successfully")
+              
+              # Find and remove the corresponding item from the QListWidget
+              for index in range(self.listWidget.count()):
+                  item = self.listWidget.item(index)
+                  if hasattr(item, 'visit_data') and item.visit_data[0] == visit_id:
+                      self.listWidget.takeItem(index)
+                      break
+          else:
+              print("Visit not found or not deleted.")
+      except sqlite3.Error as e:
+          print("Error deleting visit:", e)
+      finally:
+          conn.close()
+  
+       # Refresh the displayed patient data immediately after deletion
+       
      
     def open_add_scan_form(self, visit_data):
        self.add_scan_form = QtWidgets.QWidget()
@@ -497,3 +507,7 @@ if __name__ == "__main__":
     ui.setupUi(Form)
     Form.show()
     sys.exit(app.exec_())
+    
+    
+    
+    
