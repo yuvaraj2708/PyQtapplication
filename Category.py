@@ -5,7 +5,9 @@ import sqlite3
 class Ui_categoryForm(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(588, 588)
+        self.conn = sqlite3.connect("patient_data.db")
+        self.cursor = self.conn.cursor() 
+        Form.resize(900, 588)
         Form.setMaximumSize(QtCore.QSize(811, 16777215))
         font = QtGui.QFont()
         font.setPointSize(10)
@@ -96,40 +98,26 @@ class Ui_categoryForm(object):
         self.label_4.setText(_translate("Form", "Category Registration"))
         self.pushButton_2.setText(_translate("Form", "Submit"))
         self.label.setText(_translate("Form", "Please enter a category value"))
-        self.pushButton_2.clicked.connect(self.register_category_button_clicked)
+        self.pushButton_2.clicked.connect(self.save_test_data)
+    
+    def save_test_data(self):
+        try:
+            categoryvalue = self.lineEdit_18.text()
+    
+            # Insert patient data into the database
+            self.cursor.execute("INSERT INTO category (categoryvalue) VALUES (?)",
+                                (categoryvalue,))
+            self.conn.commit()
+    
+            # Clear the input fields after saving
+            self.clear_input_fields_test()
 
-    def register_category_button_clicked(self):
-        category_value = self.lineEdit_18.text()
-        if category_value:
-            try:
-                self.create_category_table()
-                self.register_category(category_value)
-                QtWidgets.QMessageBox.information(Form, "Success", "Category registered successfully.")
-                self.lineEdit_18.clear()
-            except Exception as e:
-                QtWidgets.QMessageBox.critical(Form, "Error", f"Error: {str(e)}")
-        else:
-            QtWidgets.QMessageBox.warning(Form, "Warning", "Please enter a category value.")
-
-    def create_category_table(self):
-        conn = sqlite3.connect('patient_data.db')
-        cursor = conn.cursor()
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS category (
-                categoryvalue TEXT
-            )
-        ''')
-        conn.commit()
-        conn.close()
-
-    def register_category(self, category_value):
-        conn = sqlite3.connect('patient_data.db')
-        cursor = conn.cursor()
-        cursor.execute('''
-            INSERT INTO category (categoryvalue) VALUES (?)
-        ''', (category_value,))
-        conn.commit()
-        conn.close()
+        except Exception as e:
+            print("Error:", str(e))
+    
+    def clear_input_fields_test(self):
+        self.lineEdit_18.clear()
+    
 
 if __name__ == "__main__":
     import sys

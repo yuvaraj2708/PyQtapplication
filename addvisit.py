@@ -461,10 +461,10 @@ class Ui_addvisitForm(object):
         self.comboBox_24 = QComboBox(self.groupBox)
         self.comboBox_24.setGeometry(QtCore.QRect(20, 210, 201, 31)) 
         
-        self.button_open_category = QtWidgets.QPushButton(self.groupBox)
-        self.button_open_category.setGeometry(QtCore.QRect(20, 250, 201, 31))
-        self.button_open_category.setText("Add")
-        self.button_open_category.clicked.connect(self.open_category)
+        # self.button_open_category = QtWidgets.QPushButton(self.groupBox)
+        # self.button_open_category.setGeometry(QtCore.QRect(20, 250, 201, 31))
+        # self.button_open_category.setText("Add")
+        # self.button_open_category.clicked.connect(self.open_category)
         
         
         
@@ -484,13 +484,13 @@ class Ui_addvisitForm(object):
         self.pushButtonAddTest.setText("Add")
         self.pushButtonAddTest.clicked.connect(self.add_selected_test_to_list)
     
-    def open_category(self ):
-        #self.timer.start()
-        self.add_test_form = QtWidgets.QWidget()
-        self.ui_add_test = Ui_categoryForm()
-        self.ui_add_test.setupUi(self.add_test_form)
+#     def open_category(self ):
+#         #self.timer.start()
+#         self.add_test_form = QtWidgets.QWidget()
+#         self.ui_add_test = Ui_categoryForm()
+#         self.ui_add_test.setupUi(self.add_test_form)
         
-        self.add_test_form.show()
+#         self.add_test_form.show()
         
     def add_selected_test_to_list(self):
      selected_test = self.comboBox_26.currentText()
