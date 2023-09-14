@@ -393,13 +393,13 @@ class Ui_editpatientForm(object):
             if patient_data:
                 # Populate the form fields with the patient data
                 self.lineEdit_16.setText(str(patient_data[0]))
-                self.lineEdit_15.setText(patient_data[1])  # Assuming the second item is the title
-                self.lineEdit_18.setText(patient_data[2])  # Assuming the third item is the patient name
-                self.lineEdit_6.setText(patient_data[3])
-                self.lineEdit_12.setText(patient_data[4])
-                self.lineEdit_10.setText(patient_data[5])
-                self.lineEdit_14.setText(patient_data[6])
-                self.lineEdit_13.setText(patient_data[7])
+                self.lineEdit_15.setText(patient_data[2])  # Assuming the second item is the title
+                self.lineEdit_18.setText(patient_data[3])  # Assuming the third item is the patient name
+                self.lineEdit_6.setText(patient_data[4])
+                self.lineEdit_12.setText(patient_data[5])
+                self.lineEdit_10.setText(patient_data[6])
+                self.lineEdit_14.setText(patient_data[7])
+                self.lineEdit_13.setText(patient_data[8])
             
     
     def fetch_patient_data_by_id(self, patient_uhid):

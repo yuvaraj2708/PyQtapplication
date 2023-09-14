@@ -74,7 +74,7 @@ class Ui_visitsummaryForm(object):
         self.label_2.setStyleSheet("color: #5E6278;")
         self.label_2.setObjectName("label_2")
         self.label_12 = QtWidgets.QLabel(Form)
-        self.label_12.setGeometry(QtCore.QRect(320, 260, 151, 16))
+        self.label_12.setGeometry(QtCore.QRect(615, 260, 151, 16))
         self.label_12.setObjectName("label_12")
         self.label_3 = QtWidgets.QLabel(Form)
         self.label_3.setGeometry(QtCore.QRect(150, 100, 61, 16))
@@ -84,8 +84,10 @@ class Ui_visitsummaryForm(object):
         self.label_3.setFont(font)
         self.label_3.setStyleSheet("color: #5E6278;")
         self.label_3.setObjectName("label_3")
-        self.lineEdit_16 = QtWidgets.QLineEdit(Form)
+        self.lineEdit_16 = QtWidgets.QDateEdit(Form)
         self.lineEdit_16.setGeometry(QtCore.QRect(20, 120, 121, 31))
+        self.lineEdit_16.setCalendarPopup(True)
+      #  self.lineEdit_16.setCalendarPopup(True)
         font = QtGui.QFont()
         font.setPointSize(-1)
         font.setBold(False)
@@ -111,8 +113,10 @@ class Ui_visitsummaryForm(object):
         self.lineEdit_16.setInputMethodHints(QtCore.Qt.ImhNone)
         self.lineEdit_16.setFrame(True)
         self.lineEdit_16.setObjectName("lineEdit_16")
-        self.lineEdit_15 = QtWidgets.QLineEdit(Form)
+        self.lineEdit_15 = QtWidgets.QDateEdit(Form)
         self.lineEdit_15.setGeometry(QtCore.QRect(150, 120, 131, 31))
+        self.lineEdit_15.setCalendarPopup(True)
+      #  self.lineEdit_15.setCalendarPopup(True) 
         font = QtGui.QFont()
         font.setPointSize(-1)
         font.setBold(False)
@@ -139,7 +143,7 @@ class Ui_visitsummaryForm(object):
         self.lineEdit_15.setFrame(True)
         self.lineEdit_15.setObjectName("lineEdit_15")
         self.label_13 = QtWidgets.QLabel(Form)
-        self.label_13.setGeometry(QtCore.QRect(670, 260, 47, 13))
+        self.label_13.setGeometry(QtCore.QRect(785, 260, 47, 13))
         self.label_13.setObjectName("label_13")
         self.pushButton = QtWidgets.QPushButton(Form)
         self.pushButton.setGeometry(QtCore.QRect(540, 120, 91, 31))
@@ -167,7 +171,7 @@ class Ui_visitsummaryForm(object):
 "")
         self.pushButton.setObjectName("pushButton")
         self.label_10 = QtWidgets.QLabel(Form)
-        self.label_10.setGeometry(QtCore.QRect(30, 260, 81, 16))
+        self.label_10.setGeometry(QtCore.QRect(20, 260, 81, 16))
         self.label_10.setObjectName("label_10")
         self.label_4 = QtWidgets.QLabel(Form)
         self.label_4.setGeometry(QtCore.QRect(310, 100, 131, 16))
@@ -178,7 +182,7 @@ class Ui_visitsummaryForm(object):
         self.label_4.setStyleSheet("color: #5E6278;")
         self.label_4.setObjectName("label_4")
         self.label_11 = QtWidgets.QLabel(Form)
-        self.label_11.setGeometry(QtCore.QRect(160, 260, 71, 16))
+        self.label_11.setGeometry(QtCore.QRect(200, 260, 71, 16))
         self.label_11.setObjectName("label_11")
         self.pushButton_2 = QtWidgets.QPushButton(Form)
         self.pushButton_2.setGeometry(QtCore.QRect(650, 20, 131, 31))
@@ -231,7 +235,171 @@ class Ui_visitsummaryForm(object):
         self.timer.timeout.connect(self.fetch_and_display_visit_data)
         # Start the timer
         self.timer.start()
-        
+
+    def fetch_and_display_filter_data(self):
+      self.timer.stop()
+    #   from_date=self.lineEdit_16.date().toPyDate().strftime("%d%m%Y")
+    #   to_date=self.lineEdit_15.date().toPyDate().strftime("%d%m%Y")
+      from_date=self.lineEdit_16.date().toPyDate().strftime("%d%m%Y")
+      to_date=self.lineEdit_15.date().toPyDate().strftime("%d%m%Y")
+      common=self.lineEdit_18.text()
+      conn = sqlite3.connect('patient_data.db')
+      cursor = conn.cursor()
+
+      query=("""
+          SELECT visit.id, visit.ref_dr, visit.patient_category,
+                 patients.patientname, patients.dob, patients.age, patients.gender, 
+                 patients.mobile, patients.email, visit.date, visit.selected_test
+          FROM visit
+          INNER JOIN patients ON visit.patient_id = patients.uhid where
+          
+      """)
+      parameters = []
+
+      if from_date and to_date=='' and common=='':
+          query+="visit.date like ?"
+          parameters.append('%'+from_date+'%')
+
+      elif from_date=='' and to_date and common=='':
+          query+="visit.date like ?"
+          parameters.append('%'+to_date+'%')
+      
+      elif common and from_date=='' and to_date=='':
+          query+='visit.patient_id == ? or patients.patientname like ? or visit.id==?'
+          parameters.extend([common,'%'+common+'%',common])
+     
+      elif from_date and to_date and common=='':
+            query += "visit.date BETWEEN ? AND ?"
+            parameters.extend([from_date, to_date])
+
+      elif from_date and common and to_date=='':
+          query +='visit.date like ? and (visit.patient_id == ? or patients.patientname like ? or visit.id==?)'
+          parameters.extend([from_date,'%'+common+'%','%'+common+'%','%'+common+'%'])
+      elif to_date and common and from_date=='':
+          query +='visit.date like ? and visit.patient_id == ? or patients.patientname like ? or visit.id==?'
+          parameters.extend([to_date,'%'+common+'%','%'+common+'%','%'+common+'%'])
+      elif common and from_date and to_date:
+            query += "(visit.patient_id == ? or patients.patientname like ? or visit.id==?) and visit.date BETWEEN ? AND ?"
+            parameters.extend([common,'%'+common+'%',common,from_date, to_date])
+
+      cursor.execute(query,parameters)
+      visit_data=cursor.fetchall()
+      
+      self.listWidget.clear()
+
+      #visit_data = cursor.fetchall()
+
+      #conn.close()
+      
+
+      if visit_data:
+       self.listWidget.clear()
+       
+       for row in visit_data:
+           custom_widget = QtWidgets.QFrame()
+           custom_widget.setFrameShape(QtWidgets.QFrame.Box)  # Add a box frame to the widget
+           custom_layout = QtWidgets.QHBoxLayout(custom_widget)  # Use QHBoxLayout for horizontal layout
+           custom_layout.setAlignment(QtCore.Qt.AlignLeft)  # Center-align the custom layout
+           
+           # Unpack the values from the query result
+           visit_id, ref_dr, patient_category, patient_name, dob, age, gender, mobile, email, date, selected_test = row
+           
+           data_labels = [
+               "ID", "Test", "Ref Dr.", "Category", "Name", "DOB", "Age", "Gender", "Mobile", "Email", "Date"
+           ]
+           
+           data_values = [
+               visit_id,date, patient_name, dob, age, gender, mobile, email, patient_category, ref_dr,''.join(selected_test)
+           ]
+           i=0
+           for label, value in zip(data_labels, data_values):
+               # Create a vertical line (a QLabel with a border)
+                line_label = QtWidgets.QLabel()
+                line_label.setFrameShape(QtWidgets.QFrame.VLine)
+                line_label.setFrameShadow(QtWidgets.QFrame.Sunken)
+               
+               # Add the line label to the layout
+                custom_layout.addWidget(line_label)
+                if(i==0):
+                  value=f"{value:>3}"
+                data_string = f"{value} "
+               
+                label_label = QtWidgets.QLabel(data_string)
+                font = QtGui.QFont("Poppins", 8)  # Reduce the font size to "6" (adjust as needed)
+                label_label.setFont(font)
+
+                if i==0:
+                    pass
+                elif i==1:
+                            
+                    label_label.setFixedSize(55, 15)
+                elif i==2:
+                            
+                    label_label.setFixedSize(72, 15)
+                elif i==3:
+                            
+                    label_label.setFixedSize(23, 15)
+                elif i==4:
+                    label_label.setFixedSize(45, 15)
+                elif i==5:
+                    label_label.setFixedSize(15, 15)
+                elif i==6:
+                    label_label.setFixedSize(60, 15)
+                elif i==7:
+                    label_label.setFixedSize(100, 15)
+                elif i==8:
+                    label_label.setFixedSize(40, 15) 
+                elif i==10:
+                    label_label.setFixedSize(60, 15)
+                elif i==9:
+                    label_label.setFixedSize(40, 15)
+                        
+               
+               
+               # Add the label label to the layout
+                custom_layout.addWidget(label_label)
+                i=i+1
+           button_layout = QtWidgets.QHBoxLayout()  # Create a horizontal layout for buttons
+           button_layout.setAlignment(QtCore.Qt.AlignLeft)  # Center-align the button layout
+           
+           button_icons = [
+               os.path.join('images', 'cam.png'),
+               os.path.join('images', 'delete.png'),
+               os.path.join('images', 'qr.png'),
+               os.path.join('images', 'barcode.png')
+           ]
+           
+           button_actions = [
+               lambda _, row=row: self.open_add_scan_form(row),
+               lambda _, row=row: self.delete_visit(row[0]),
+               lambda _, row=row: self.generate_qr_code_pdf(row),
+               lambda _, row=row: self.generate_bar_code_pdf(row)
+           ]
+           
+           button_tooltips = ["Scan", "Delete", "Generate QR Code", "Generate Barcode"]
+           
+           for icon, action, tooltip in zip(button_icons, button_actions, button_tooltips):
+               button = QtWidgets.QPushButton()
+               button.setIcon(QtGui.QIcon(icon))
+               
+               # Adjust the button size as needed
+               button.setFixedSize(20, 20)  # Reduce the dimensions to make buttons smaller
+               
+               button.clicked.connect(action)
+               button.setToolTip(tooltip)
+               
+               # Add buttons to the button_layout
+               button_layout.addWidget(button)
+           
+           # Add the button_layout to the custom_layout
+           custom_layout.addLayout(button_layout)
+           
+           item = QtWidgets.QListWidgetItem()
+           item.setSizeHint(custom_widget.sizeHint())
+           self.listWidget.addItem(item)
+           self.listWidget.setItemWidget(item, custom_widget)
+           item.visit_data = row
+    
         
     def fetch_and_display_visit_data(self):
       conn = sqlite3.connect('patient_data.db')
@@ -256,7 +424,7 @@ class Ui_visitsummaryForm(object):
            custom_widget = QtWidgets.QFrame()
            custom_widget.setFrameShape(QtWidgets.QFrame.Box)  # Add a box frame to the widget
            custom_layout = QtWidgets.QHBoxLayout(custom_widget)  # Use QHBoxLayout for horizontal layout
-           custom_layout.setAlignment(QtCore.Qt.AlignCenter)  # Center-align the custom layout
+           custom_layout.setAlignment(QtCore.Qt.AlignLeft)  # Center-align the custom layout
            
            # Unpack the values from the query result
            visit_id, ref_dr, patient_category, patient_name, dob, age, gender, mobile, email, date, selected_test = row
@@ -266,29 +434,58 @@ class Ui_visitsummaryForm(object):
            ]
            
            data_values = [
-               visit_id, ''.join(selected_test), ref_dr, patient_category, patient_name, dob, age, gender, mobile, email, date
+               visit_id,date, patient_name, dob, age, gender, mobile, email, patient_category, ref_dr,''.join(selected_test)
            ]
-           
+           i=0
            for label, value in zip(data_labels, data_values):
                # Create a vertical line (a QLabel with a border)
-               line_label = QtWidgets.QLabel()
-               line_label.setFrameShape(QtWidgets.QFrame.VLine)
-               line_label.setFrameShadow(QtWidgets.QFrame.Sunken)
+                line_label = QtWidgets.QLabel()
+                line_label.setFrameShape(QtWidgets.QFrame.VLine)
+                line_label.setFrameShadow(QtWidgets.QFrame.Sunken)
                
                # Add the line label to the layout
-               custom_layout.addWidget(line_label)
+                custom_layout.addWidget(line_label)
+                if(i==0):
+                  value=f"{value:>3}"
+                data_string = f"{value} "
                
-               data_string = f"{value} "
+                label_label = QtWidgets.QLabel(data_string)
+                font = QtGui.QFont("Poppins", 8)  # Reduce the font size to "6" (adjust as needed)
+                label_label.setFont(font)
+
+                if i==0:
+                    pass
+                elif i==1:
+                            
+                    label_label.setFixedSize(55, 15)
+                elif i==2:
+                            
+                    label_label.setFixedSize(72, 15)
+                elif i==3:
+                            
+                    label_label.setFixedSize(23, 15)
+                elif i==4:
+                    label_label.setFixedSize(45, 15)
+                elif i==5:
+                    label_label.setFixedSize(15, 15)
+                elif i==6:
+                    label_label.setFixedSize(60, 15)
+                elif i==7:
+                    label_label.setFixedSize(100, 15)
+                elif i==8:
+                    label_label.setFixedSize(40, 15) 
+                elif i==10:
+                    label_label.setFixedSize(60, 15)
+                elif i==9:
+                    label_label.setFixedSize(40, 15)
+                        
                
-               label_label = QtWidgets.QLabel(data_string)
-               font = QtGui.QFont("Poppins", 8)  # Reduce the font size to "6" (adjust as needed)
-               label_label.setFont(font)
                
                # Add the label label to the layout
-               custom_layout.addWidget(label_label)
-           
+                custom_layout.addWidget(label_label)
+                i=i+1
            button_layout = QtWidgets.QHBoxLayout()  # Create a horizontal layout for buttons
-           button_layout.setAlignment(QtCore.Qt.AlignCenter)  # Center-align the button layout
+           button_layout.setAlignment(QtCore.Qt.AlignLeft)  # Center-align the button layout
            
            button_icons = [
                os.path.join('images', 'cam.png'),
@@ -329,35 +526,26 @@ class Ui_visitsummaryForm(object):
            item.visit_data = row
    
     def delete_visit(self, visit_id):
-      self.timer.stop()
-      print("Deleting visit with visitid:", visit_id)
-      
-      # Connect to the database
-      conn = sqlite3.connect('patient_data.db')
-      cursor = conn.cursor()
-      
-      try:
-          cursor.execute("DELETE FROM visit WHERE visitid = ?", (visit_id,))
-          conn.commit()
-          
-          if cursor.rowcount == 1:
-              print("Visit deleted successfully")
-              
-              # Find and remove the corresponding item from the QListWidget
-              for index in range(self.listWidget.count()):
-                  item = self.listWidget.item(index)
-                  if hasattr(item, 'visit_data') and item.visit_data[0] == visit_id:
-                      self.listWidget.takeItem(index)
-                      break
-          else:
-              print("Visit not found or not deleted.")
-      except sqlite3.Error as e:
-          print("Error deleting visit:", e)
-      finally:
-          conn.close()
-  
-       # Refresh the displayed patient data immediately after deletion
-       
+    
+     print("Deleting visit with visitid:", visit_id)
+     # Connect to the database
+     conn = sqlite3.connect('patient_data.db')
+     cursor = conn.cursor()
+
+     try:
+         # Delete patient data from the database
+         cursor.execute("DELETE FROM visit WHERE id = ?", (visit_id,))
+         conn.commit()
+         self.listWidget.clear()
+         self.fetch_and_display_visit_data()
+         print("Visit deleted successfully")
+     except sqlite3.Error as e:
+         print("Error deleting visit:", e)
+     finally:
+         conn.close()
+
+     # Refresh the displayed patient data immediately after deletion
+     
      
     def open_add_scan_form(self, visit_data):
        self.add_scan_form = QtWidgets.QWidget()
@@ -492,6 +680,7 @@ class Ui_visitsummaryForm(object):
         self.pushButton_2.setText(_translate("Form", "Add Patient"))
         self.pushButton_2.setObjectName("pushButton_2")
         self.pushButton_2.clicked.connect(self.open_add_patient_form) 
+        self.pushButton.clicked.connect(self.fetch_and_display_filter_data)
     
     def open_add_patient_form(self):
         self.add_test_form = QtWidgets.QWidget()
@@ -507,7 +696,3 @@ if __name__ == "__main__":
     ui.setupUi(Form)
     Form.show()
     sys.exit(app.exec_())
-    
-    
-    
-    

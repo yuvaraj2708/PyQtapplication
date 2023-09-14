@@ -17,6 +17,7 @@ from PyQt5.QtGui import QPixmap
 import matplotlib.pyplot as plt
 from report import Ui_reportingForm
 import subprocess 
+from PyQt5.QtCore import QTime, QTimer
 
 class Ui_scansummaryForm(object):
     def setupUi(self, Form):
@@ -77,7 +78,7 @@ class Ui_scansummaryForm(object):
         self.label_2.setStyleSheet("color: #5E6278;")
         self.label_2.setObjectName("label_2")
         self.label_12 = QtWidgets.QLabel(Form)
-        self.label_12.setGeometry(QtCore.QRect(320, 260, 151, 16))
+        self.label_12.setGeometry(QtCore.QRect(300, 260, 151, 16))
         self.label_12.setObjectName("label_12")
         self.label_3 = QtWidgets.QLabel(Form)
         self.label_3.setGeometry(QtCore.QRect(150, 100, 61, 16))
@@ -87,14 +88,15 @@ class Ui_scansummaryForm(object):
         self.label_3.setFont(font)
         self.label_3.setStyleSheet("color: #5E6278;")
         self.label_3.setObjectName("label_3")
-        self.lineEdit_16 = QtWidgets.QLineEdit(Form)
+        self.lineEdit_16 = QtWidgets.QDateEdit(Form)
         self.lineEdit_16.setGeometry(QtCore.QRect(20, 120, 121, 31))
+        self.lineEdit_16.setCalendarPopup(True)
         font = QtGui.QFont()
         font.setPointSize(-1)
         font.setBold(False)
         font.setWeight(50)
         self.lineEdit_16.setFont(font)
-        self.lineEdit_16.setStyleSheet("QLineEdit\n"
+        self.lineEdit_16.setStyleSheet("QDateEdit\n"
 "{\n"
 "font-size: 15px;\n"
 "    font-weight: 400;\n"
@@ -105,7 +107,7 @@ class Ui_scansummaryForm(object):
 "    border-radius: 20px;\n"
 "    padding:0px 10px;\n"
 "}\n"
-"QLineEdit:focus\n"
+"QDateEdit:focus\n"
 "{\n"
 "border:1px solid #3F4254;\n"
 "}\n"
@@ -114,14 +116,15 @@ class Ui_scansummaryForm(object):
         self.lineEdit_16.setInputMethodHints(QtCore.Qt.ImhNone)
         self.lineEdit_16.setFrame(True)
         self.lineEdit_16.setObjectName("lineEdit_16")
-        self.lineEdit_15 = QtWidgets.QLineEdit(Form)
+        self.lineEdit_15 = QtWidgets.QDateEdit(Form)
         self.lineEdit_15.setGeometry(QtCore.QRect(150, 120, 131, 31))
+        self.lineEdit_15.setCalendarPopup(True)
         font = QtGui.QFont()
         font.setPointSize(-1)
         font.setBold(False)
         font.setWeight(50)
         self.lineEdit_15.setFont(font)
-        self.lineEdit_15.setStyleSheet("QLineEdit\n"
+        self.lineEdit_15.setStyleSheet("QDateEdit\n"
 "{\n"
 "font-size: 15px;\n"
 "    font-weight: 400;\n"
@@ -132,7 +135,7 @@ class Ui_scansummaryForm(object):
 "    border-radius: 20px;\n"
 "    padding:0px 10px;\n"
 "}\n"
-"QLineEdit:focus\n"
+"QDateEdit:focus\n"
 "{\n"
 "border:1px solid #3F4254;\n"
 "}\n"
@@ -170,7 +173,7 @@ class Ui_scansummaryForm(object):
 "")
         self.pushButton.setObjectName("pushButton")
         self.label_10 = QtWidgets.QLabel(Form)
-        self.label_10.setGeometry(QtCore.QRect(30, 260, 81, 16))
+        self.label_10.setGeometry(QtCore.QRect(30, 260, 85, 16))
         self.label_10.setObjectName("label_10")
         self.label_4 = QtWidgets.QLabel(Form)
         self.label_4.setGeometry(QtCore.QRect(310, 100, 131, 16))
@@ -226,6 +229,13 @@ class Ui_scansummaryForm(object):
         self.fetch_and_display_visit_data()
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
+        self.timer = QTimer(Form)
+        # Set the interval to 1000 milliseconds (1 second)
+        self.timer.setInterval(1000)
+        # Connect the timeout signal to the function you want to call
+        self.timer.timeout.connect(self.fetch_and_display_visit_data)
+        # Start the timer
+        self.timer.start()
         
         
             
@@ -286,28 +296,130 @@ class Ui_scansummaryForm(object):
        ds.save_as(output_path)
        
        print(f"DICOM file saved at: {output_path}")
-    
-               
-    def fetch_and_display_visit_data(self):
-        conn = sqlite3.connect('patient_data.db')
-        cursor = conn.cursor()
 
-        cursor.execute("SELECT * FROM visit")
-        visit_data = cursor.fetchall()
+    def fetch_and_filter_visit_data(self):
+      self.timer.stop()
+    #   from_date=self.lineEdit_16.date().toPyDate().strftime("%d%m%Y")
+    #   to_date=self.lineEdit_15.date().toPyDate().strftime("%d%m%Y")
+      from_date=self.lineEdit_16.date().toPyDate().strftime("%d%m%Y")
+      to_date=self.lineEdit_15.date().toPyDate().strftime("%d%m%Y")
+      common=self.lineEdit_18.text()
 
-        if visit_data:
+      conn = sqlite3.connect('patient_data.db')
+      cursor = conn.cursor()
+
+      query=("""
+          SELECT visit.id,visit.patient_id,visit.patient_category,visit.ref_dr,visit.selected_test,visit.visitid,visit.date
+          FROM visit
+          INNER JOIN patients ON visit.patient_id = patients.uhid where
+          
+      """)
+      parameters = []
+
+      if from_date and to_date=='' and common=='':
+          query+="visit.date like ?"
+          parameters.append('%'+from_date+'%')
+
+      elif from_date=='' and to_date and common=='':
+          query+="visit.date like ?"
+          parameters.append('%'+to_date+'%')
+      
+      elif common and from_date=='' and to_date=='':
+          query+='visit.patient_id == ? or patients.patientname like ? or visit.id==?'
+          parameters.extend([common,'%'+common+'%',common])
+     
+      elif from_date and to_date and common=='':
+            query += "visit.date BETWEEN ? AND ?"
+            parameters.extend([from_date, to_date])
+
+      elif from_date and common and to_date=='':
+          query +='visit.date like ? and (visit.patient_id == ? or patients.patientname like ? or visit.id==?)'
+          parameters.extend([from_date,'%'+common+'%','%'+common+'%','%'+common+'%'])
+      elif to_date and common and from_date=='':
+          query +='visit.date like ? and visit.patient_id == ? or patients.patientname like ? or visit.id==?'
+          parameters.extend([to_date,'%'+common+'%','%'+common+'%','%'+common+'%'])
+      elif common and from_date and to_date:
+            query += "(visit.patient_id == ? or patients.patientname like ? or visit.id==?) and visit.date BETWEEN ? AND ?"
+            parameters.extend([common,'%'+common+'%',common,from_date, to_date])
+
+      
+      
+      cursor.execute(query,parameters)
+      
+      visit_data=cursor.fetchall()
+      conn.commit()
+      self.listWidget.clear()
+      
+      if visit_data:
             self.listWidget.clear()
 
             for row in visit_data:
                 item = QtWidgets.QListWidgetItem()
                 self.listWidget.addItem(item)
 
-                custom_widget = QtWidgets.QWidget()
+                # custom_widget = QtWidgets.QWidget()
+                # custom_layout = QtWidgets.QHBoxLayout(custom_widget)
+                # label = QtWidgets.QLabel(f"{row[0]:<10} {row[1]:<10} {row[2]:<10} {row[3]:<10} {row[4]:<10} {row[5]:<10} {row[6]:<10} ")
+                # custom_layout.addWidget(label)
+                # button_layout = QtWidgets.QHBoxLayout()  
+                custom_widget = QtWidgets.QFrame()
+                custom_widget.setFrameShape(QtWidgets.QFrame.Box) 
                 custom_layout = QtWidgets.QHBoxLayout(custom_widget)
-                label = QtWidgets.QLabel(f"{row[0]:<10} {row[1]:<10} {row[2]:<10} {row[3]:<10} {row[4]:<10} {row[5]:<10} {row[6]:<10} ")
-                custom_layout.addWidget(label)
-                button_layout = QtWidgets.QHBoxLayout()  
-                               
+                custom_layout.setAlignment(QtCore.Qt.AlignLeft)
+                
+                # template_combobox = QtWidgets.QComboBox()
+                # template_combobox.addItems(self.fetch_templates_from_database())  # Fetch template names from the database
+                # template_combobox.currentIndexChanged.connect(lambda index, row=row: self.view_template(template_combobox.itemText(index)))
+                
+                # custom_layout.addWidget(template_combobox)
+                
+                # edit_template_button = QtWidgets.QPushButton("Edit Template")
+                # edit_template_button.clicked.connect(lambda: self.convert_images_to_dicom(template_combobox.currentText()))
+                
+                # custom_layout.addWidget(edit_template_button)  # Add the button to the layout
+                
+                i=0
+                for value in row:
+                               # Create a vertical line (a QLabel with a border)
+
+                    if i==0:
+                        value=f'{value:>10}'
+                    
+                   
+                        # label = QtWidgets.QLabel(f"{row[0]:<10} {row[1]:<10} {row[2]:<10} {row[3]:<10} {row[4]:<10} {row[5]:<10} {row[6]:<10} {row[7]:<10}  ")
+                    data_string = f'{value}'
+
+                    label = QtWidgets.QLabel(data_string)
+                    font = QtGui.QFont("Poppins", 8)  # Replace "8" with the desired font size
+                    label.setFont(font)
+
+                    if i==0:
+                            
+                            label.setFixedSize(35, 15)
+                    elif i==1:
+                            
+                            label.setFixedSize(100, 15)
+                    elif i==2:
+                            
+                            label.setFixedSize(60, 15)
+                    elif i==3:
+                            
+                            label.setFixedSize(60, 15)
+                    elif i==4:
+                            label.setFixedSize(130, 15)
+                    elif i==5:
+                            label.setFixedSize(65, 15)
+
+                    
+                    custom_layout.addWidget(label)
+
+                    line_label = QtWidgets.QLabel()
+                    line_label.setFrameShape(QtWidgets.QFrame.VLine)
+                    line_label.setFrameShadow(QtWidgets.QFrame.Sunken)
+                    custom_layout.addWidget(line_label)
+
+                    i=i+1
+                button_layout = QtWidgets.QHBoxLayout() 
                 dcmconvert_button = QtWidgets.QPushButton()
                 dcmconvert_button.setIcon(QtGui.QIcon(os.path.join('images', 'dcm.png')))
                 dcmconvert_button.setFixedSize(20, 20)
@@ -331,7 +443,125 @@ class Ui_scansummaryForm(object):
                 print_button = QtWidgets.QPushButton()
                 print_button.setIcon(QtGui.QIcon(os.path.join('images', 'print.png')))
                 print_button.setFixedSize(20, 20)
-                print_button.clicked.connect( self.preview_patient_report) 
+                print_button.clicked.connect(self.preview_patient_report) 
+                button_layout.addWidget(print_button)
+                
+                telepath_button = QtWidgets.QPushButton()
+                telepath_button.setIcon(QtGui.QIcon(os.path.join('images', 'qr.png')))
+                telepath_button.setFixedSize(20, 20)
+                telepath_button.clicked.connect(self.preview_patient_report) 
+                button_layout.addWidget(telepath_button)
+                
+                button_layout.addSpacing(90)
+                custom_layout.addLayout(button_layout)  # Add the button layout to the custom layout
+                item.setSizeHint(custom_widget.sizeHint())
+                self.listWidget.setItemWidget(item, custom_widget)
+                item.visit_data = row
+ 
+            conn.close()
+    
+               
+    def fetch_and_display_visit_data(self):
+        conn = sqlite3.connect('patient_data.db')
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT * FROM visit")
+        visit_data = cursor.fetchall()
+
+        if visit_data:
+            self.listWidget.clear()
+
+            for row in visit_data:
+                item = QtWidgets.QListWidgetItem()
+                self.listWidget.addItem(item)
+
+                # custom_widget = QtWidgets.QWidget()
+                # custom_layout = QtWidgets.QHBoxLayout(custom_widget)
+                # label = QtWidgets.QLabel(f"{row[0]:<10} {row[1]:<10} {row[2]:<10} {row[3]:<10} {row[4]:<10} {row[5]:<10} {row[6]:<10} ")
+                # custom_layout.addWidget(label)
+                # button_layout = QtWidgets.QHBoxLayout()  
+                custom_widget = QtWidgets.QFrame()
+                custom_widget.setFrameShape(QtWidgets.QFrame.Box) 
+                custom_layout = QtWidgets.QHBoxLayout(custom_widget)
+                custom_layout.setAlignment(QtCore.Qt.AlignLeft)
+                
+                # template_combobox = QtWidgets.QComboBox()
+                # template_combobox.addItems(self.fetch_templates_from_database())  # Fetch template names from the database
+                # template_combobox.currentIndexChanged.connect(lambda index, row=row: self.view_template(template_combobox.itemText(index)))
+                
+                # custom_layout.addWidget(template_combobox)
+                
+                # edit_template_button = QtWidgets.QPushButton("Edit Template")
+                # edit_template_button.clicked.connect(lambda: self.convert_images_to_dicom(template_combobox.currentText()))
+                
+                # custom_layout.addWidget(edit_template_button)  # Add the button to the layout
+                
+                i=0
+                for value in row:
+                               # Create a vertical line (a QLabel with a border)
+
+                    if i==0:
+                        value=f'{value:>10}'
+                    
+                   
+                        # label = QtWidgets.QLabel(f"{row[0]:<10} {row[1]:<10} {row[2]:<10} {row[3]:<10} {row[4]:<10} {row[5]:<10} {row[6]:<10} {row[7]:<10}  ")
+                    data_string = f'{value}'
+
+                    label = QtWidgets.QLabel(data_string)
+                    font = QtGui.QFont("Poppins", 8)  # Replace "8" with the desired font size
+                    label.setFont(font)
+
+                    if i==0:
+                            
+                            label.setFixedSize(35, 15)
+                    elif i==1:
+                            
+                            label.setFixedSize(100, 15)
+                    elif i==2:
+                            
+                            label.setFixedSize(60, 15)
+                    elif i==3:
+                            
+                            label.setFixedSize(60, 15)
+                    elif i==4:
+                            label.setFixedSize(130, 15)
+                    elif i==5:
+                            label.setFixedSize(65, 15)
+
+                    
+                    custom_layout.addWidget(label)
+
+                    line_label = QtWidgets.QLabel()
+                    line_label.setFrameShape(QtWidgets.QFrame.VLine)
+                    line_label.setFrameShadow(QtWidgets.QFrame.Sunken)
+                    custom_layout.addWidget(line_label)
+
+                    i=i+1
+                button_layout = QtWidgets.QHBoxLayout() 
+                dcmconvert_button = QtWidgets.QPushButton()
+                dcmconvert_button.setIcon(QtGui.QIcon(os.path.join('images', 'dcm.png')))
+                dcmconvert_button.setFixedSize(20, 20)
+                dcmconvert_button.clicked.connect(lambda _, row=row: self.delete_visit(row[0])) 
+                button_layout.addWidget(dcmconvert_button)
+                
+                viewdicom_button = QPushButton()
+                viewdicom_button.setIcon(QtGui.QIcon(os.path.join('images', 'view.png')))
+                viewdicom_button.setFixedSize(20, 20)
+                viewdicom_button.clicked.connect(self.open_dicom_file)
+                button_layout.addWidget(viewdicom_button)
+
+                
+                
+                report_button = QtWidgets.QPushButton()
+                report_button.setIcon(QtGui.QIcon(os.path.join('images', 'report.png')))
+                report_button.setFixedSize(20, 20)
+                report_button.clicked.connect(lambda _, row=row: self.open_add_report_form(row)) 
+                button_layout.addWidget(report_button)
+                
+                print_button = QtWidgets.QPushButton()
+                print_button.setIcon(QtGui.QIcon(os.path.join('images', 'print.png')))
+                print_button.setFixedSize(20, 20)
+                print_button.clicked.connect(self.preview_patient_report) 
                 button_layout.addWidget(print_button)
                 
                 telepath_button = QtWidgets.QPushButton()
@@ -550,12 +780,13 @@ class Ui_scansummaryForm(object):
         self.label_3.setText(_translate("Form", "To Date"))
         self.label_13.setText(_translate("Form", "Actions"))
         self.pushButton.setText(_translate("Form", "Search"))
-        self.label_10.setText(_translate("Form", "Date / Visit ID"))
+        self.label_10.setText(_translate("Form", "Visit ID/patient Id"))
         self.label_4.setText(_translate("Form", "Pt.Name / Visit ID / Pt.ID"))
-        self.label_11.setText(_translate("Form", "Patient Details"))
+        self.label_11.setText(_translate("Form", "Catetory"))
         self.pushButton_2.setText(_translate("Form", "Add Patient"))
         self.pushButton_2.setObjectName("pushButton_2")
         self.pushButton_2.clicked.connect(self.open_add_patient_form) 
+        self.pushButton.clicked.connect(self.fetch_and_filter_visit_data)
     
     
         
@@ -574,6 +805,3 @@ if __name__ == "__main__":
     ui.setupUi(Form)
     Form.show()
     sys.exit(app.exec_())
-
-
-# convert to dicom , view dicom , report template , print template , send telepathology

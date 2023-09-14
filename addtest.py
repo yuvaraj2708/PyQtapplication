@@ -20,6 +20,7 @@ class Ui_addtestForm(object):
 #         self.current_test_number = 0  # To store the latest test number    
         
     def setupUi(self, Form):
+        self.f=Form
         self.conn = sqlite3.connect("patient_data.db")
         self.cursor = self.conn.cursor()       
         Form.setObjectName("Form")
@@ -379,6 +380,7 @@ class Ui_addtestForm(object):
     
             # Clear the input fields after saving
             self.clear_input_fields_test()
+            self.f.close()
 
         except Exception as e:
             print("Error:", str(e))

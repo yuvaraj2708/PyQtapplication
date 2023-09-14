@@ -365,7 +365,7 @@ class DeviceRegistrationForm(QtWidgets.QWidget):
        self.close()
 
        # Show the login form
-       self.login_form = LoginForm()
+       self.login_form = LoginForm1()
        self.login_form.show()
 
 
@@ -541,12 +541,32 @@ class LoginForm(QtWidgets.QMainWindow):
         if self.ui.usernameLineEdit.text() == "" and self.ui.passwordLineEdit.text() == "":
             self.main_window = MainWindow()
             self.close()
-            self.main_window.show()
+            #self.main_window.show()
         else:
             QtWidgets.QMessageBox.warning(self, "Login Failed", "Invalid username or password.")
         
         self.close() 
 
+class LoginForm1(QtWidgets.QMainWindow):
+    def __init__(self):
+        super().__init__()
+        
+        self.ui = Ui_LoginForm()
+        self.ui.setupUi(self)
+        
+        self.ui.loginButton.clicked.connect(self.check_login)
+        
+    def check_login(self):
+        # Check username and password here
+        # For this example, let's assume valid credentials are "username" and "password"
+        if self.ui.usernameLineEdit.text() == "" and self.ui.passwordLineEdit.text() == "":
+            self.main_window = MainWindow()
+            self.close()
+            self.main_window.show()
+        else:
+            QtWidgets.QMessageBox.warning(self, "Login Failed", "Invalid username or password.")
+        
+        self.close() 
 
 
 class Ui_MainWindow(object):
@@ -787,28 +807,60 @@ class MainWindow(QtWidgets.QMainWindow):
         self.stacked_widget.setCurrentWidget(self.patient_register_frame)
 
     def show_patient_master_frame(self):
+
+        self.patient_master_ui.lineEdit_18.setText('')
+        self.patient_master_ui.lineEdit_6.setText('')
+        
+        self.patient_master_ui.timer.start()
         self.stacked_widget.setCurrentWidget(self.patient_master_frame)
         
     def show_refdr_frame(self):
+
+        self.add_refdr_ui.lineEdit_20.setText('')
+
+        self.add_refdr_ui.lineEdit_24.setText('')
+        self.add_refdr_ui.lineEdit_25.setText('')
+        self.add_refdr_ui.timer.start()
         self.stacked_widget.setCurrentWidget(self.add_refdr_frame)    
 
     def show_testmaster_frame(self):
+        self.add_testmaster_ui.lineEdit_19.setText('')
+        self.add_testmaster_ui.lineEdit_18.setText('')
+        self.add_testmaster_ui.timer.start()
         self.stacked_widget.setCurrentWidget(self.add_testmaster_frame) 
     
     def show_visitsummary_frame(self):
+        self.add_visitsummary_ui.lineEdit_18.setText('')
+
+        self.add_visitsummary_ui.timer.start()
         self.stacked_widget.setCurrentWidget(self.add_visitsummary_frame) 
     
     def show_scansummary_frame(self):
+
+        self.add_scansummary_ui.lineEdit_18.setText('')
+        self.add_scansummary_ui.timer.start()
         self.stacked_widget.setCurrentWidget(self.add_scansummary_frame) 
     
     def show_reportformat_frame(self):
-        self.stacked_widget.setCurrentWidget(self.reportformat_frame)     
+         self.reportformat_ui.lineEdit_18.setText('')
+         self.reportformat_ui.lineEdit_19.setText('')
+         self.reportformat_ui.timer.start()
+         self.stacked_widget.setCurrentWidget(self.reportformat_frame)     
         
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
-    login_form = LoginForm()  # Create an instance of the login form
+    conn=sqlite3.connect("patient_data.db")
+    cursor = conn.cursor()
+    cursor.execute('select * from device')
+    c=cursor.fetchall()
+    if len(c) != 0:
+        login_form = LoginForm1()  # Create an instance of the login form
+    else:
+        login_form = LoginForm()
     login_form.show()
     sys.exit(app.exec_())
+    
+    
     
     

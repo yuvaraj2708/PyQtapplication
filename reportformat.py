@@ -19,6 +19,7 @@ import sqlite3
 
 class Ui_reportForm(object):
     def setupUi(self, Form):
+        self.f=Form
         Form.setObjectName("Form")
         Form.resize(900, 588)
         Form.setMaximumSize(QtCore.QSize(851, 16777215))
@@ -434,7 +435,7 @@ class Ui_reportForm(object):
         # Commit changes and close the connection
         connection.commit()
         connection.close()
-
+        self.f.close()
         print("Template saved to database.")
 
 if __name__ == "__main__":

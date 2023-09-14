@@ -2,9 +2,11 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sqlite3
+import datetime
 
 class Ui_refdrForm(object):
     def setupUi(self, Form):
+        self.f=Form
         self.conn = sqlite3.connect("patient_data.db")
         self.cursor = self.conn.cursor()       
         Form.setObjectName("Form")
@@ -428,14 +430,17 @@ class Ui_refdrForm(object):
         PINCode = self.lineEdit_10.text()
         Mobile = self.lineEdit_14.text()
         Emailid = self.lineEdit_21.text()
+        current_datetime = datetime.datetime.now()
+        current_date = current_datetime.strftime("%d%m%Y")
 
         # Insert patient data into the database
-        self.cursor.execute("INSERT INTO refdr (DoctorCode, DoctorName, Qualification, Specialisation, Address, PINCode, Mobile,Emailid) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-                            (DoctorCode, DoctorName, Qualification, Specialisation, Address, PINCode, Mobile,Emailid))
+        self.cursor.execute("INSERT INTO refdr (DoctorCode, DoctorName, Qualification, Specialisation, Address, PINCode, Mobile,Emailid,date) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?)",
+                            (DoctorCode, DoctorName, Qualification, Specialisation, Address, PINCode, Mobile,Emailid,current_date))
         self.conn.commit()
 
         # Clear the input fields after saving
         self.clear_input_fields()
+        self.f.close()
 
 if __name__ == "__main__":
     import sys

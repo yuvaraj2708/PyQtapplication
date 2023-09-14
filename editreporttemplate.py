@@ -229,6 +229,9 @@ class Ui_editreportForm(object):
                 self.lineEdit_18.setText(reporttemplate_data[0])  # Assuming the third item is the patient name
                 self.lineEdit_6.setText(reporttemplate_data[1])
                 self.textEdit.setPlainText(reporttemplate_data[2])
+                print(reporttemplate_data[0])
+                print(reporttemplate_data[1])
+                print(reporttemplate_data[2])
                 
 
     def fetch_report_data_by_id(self, reporttemplate_code):

@@ -13,11 +13,11 @@ from PyQt5.QtWidgets import QComboBox
 import sqlite3
 import datetime
 from PyQt5.QtWidgets import QStackedWidget
-from Category import Ui_categoryForm
-from PyQt5.QtWidgets import QApplication, QPushButton, QVBoxLayout, QWidget
+from registrationsummary import Ui_visitsummaryForm
 
 class Ui_addvisitForm(object):
     def setupUi(self, Form):
+        self.f=Form
         Form.setObjectName("Form")
         Form.resize(900, 588)
         Form.setMaximumSize(QtCore.QSize(851, 16777215))
@@ -460,14 +460,6 @@ class Ui_addvisitForm(object):
         
         self.comboBox_24 = QComboBox(self.groupBox)
         self.comboBox_24.setGeometry(QtCore.QRect(20, 210, 201, 31)) 
-        
-        # self.button_open_category = QtWidgets.QPushButton(self.groupBox)
-        # self.button_open_category.setGeometry(QtCore.QRect(20, 250, 201, 31))
-        # self.button_open_category.setText("Add")
-        # self.button_open_category.clicked.connect(self.open_category)
-        
-        
-        
         self.comboBox_25 = QComboBox(self.groupBox)
         self.comboBox_25.setGeometry(QtCore.QRect(240, 210, 201, 31)) 
         self.comboBox_26 = QComboBox(self.groupBox)
@@ -483,14 +475,6 @@ class Ui_addvisitForm(object):
         self.pushButtonAddTest.setGeometry(QtCore.QRect(680, 210, 51, 31))
         self.pushButtonAddTest.setText("Add")
         self.pushButtonAddTest.clicked.connect(self.add_selected_test_to_list)
-    
-#     def open_category(self ):
-#         #self.timer.start()
-#         self.add_test_form = QtWidgets.QWidget()
-#         self.ui_add_test = Ui_categoryForm()
-#         self.ui_add_test.setupUi(self.add_test_form)
-        
-#         self.add_test_form.show()
         
     def add_selected_test_to_list(self):
      selected_test = self.comboBox_26.currentText()
@@ -498,8 +482,16 @@ class Ui_addvisitForm(object):
         self.listWidgetTestSelected.addItem(selected_test)   
          
     def set_patient_data(self, patient_data):
-      uhid, title, patient_name, gender, dob, age, email, mobile, date ,accession = patient_data
-
+      uhid, date, title, patient_name, gender, dob, age, email, mobile, accession= patient_data
+      conn = sqlite3.connect('patient_data.db')
+      cursor = conn.cursor()
+  
+        # Fetch patient data
+      cursor.execute("SELECT max(id) FROM visit")
+      p = cursor.fetchone()
+      id=p[0]
+      print(id)
+      conn.close()
       # Update line edit fields to display patient information
       self.lineEdit_16.setText(uhid)
       self.lineEdit_15.setText(title)
@@ -519,7 +511,10 @@ class Ui_addvisitForm(object):
       self.populate_testdropdown(self.comboBox_26, selecttest)
 
       # Generate and display the visit ID
-      visitid = self.generate_visit_id(uhid)
+      if id == None:
+        visitid = self.generate_visit_id(None)
+      else:
+         visitid=self.generate_visit_id(id)
       self.lineEdit_26.setText(visitid)  # Assuming lineEdit_26 is the visit ID field
 
     
@@ -530,8 +525,9 @@ class Ui_addvisitForm(object):
           return "V00001"
   
       prefix = "V"
-      numeric_part = int(latest_visit_number[1:])
-      next_numeric_part = numeric_part + 1
+    #  numeric_part = int(latest_visit_number[1:])
+     # next_numeric_part = numeric_part + id
+      next_numeric_part=latest_visit_number+1
       next_visit_number = f"{prefix}{next_numeric_part:05}"
       print("Generated visit number:", next_visit_number)
       return next_visit_number
@@ -544,7 +540,7 @@ class Ui_addvisitForm(object):
          patient_category = self.comboBox_24.currentText()
          ref_dr = self.comboBox_25.currentText()
          visitid = self.lineEdit_26.text()
-         date = datetime.datetime.now().strftime("%Y-%m-%d")
+         date = datetime.datetime.now().strftime("%d%m%Y")
  
          # Extract selected tests from the QListWidget
          selected_test = [self.listWidgetTestSelected.item(i).text() for i in range(self.listWidgetTestSelected.count())]
@@ -556,8 +552,13 @@ class Ui_addvisitForm(object):
                         (patient_id, patient_category, ref_dr, ', '.join(selected_test), visitid, date))
          connection.commit()
          connection.close()
- 
+         self.f.close()
+         self.obj_form=QtWidgets.QWidget()
+         self.obj=Ui_visitsummaryForm()
+         self.obj.setupUi(self.obj_form)
+         self.obj.fetch_and_display_visit_data()
          print("Visit data inserted successfully.")
+
      except Exception as e:
          print("An error occurred:", str(e))
 
@@ -571,9 +572,10 @@ class Ui_addvisitForm(object):
        # Fetch categories from the "category" table
        cursor.execute("SELECT * FROM category")
        categories = cursor.fetchall()
-   
+       
        # Close the connection
        connection.close()
+
    
        return [category[0] for category in categories]
 
@@ -586,7 +588,7 @@ class Ui_addvisitForm(object):
       # Fetch categories from the "category" table
       cursor.execute("SELECT * FROM refdr")
       refdr = cursor.fetchall()
-      
+     
       # Close the connection
       connection.close()
   

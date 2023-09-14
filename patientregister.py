@@ -5,6 +5,7 @@ import datetime
 
 class Ui_addpatientForm(object):
     def setupUi(self, Form):
+        self.f=Form
         self.conn = sqlite3.connect("patient_data.db")
         self.cursor = self.conn.cursor()    
         Form.setObjectName("Form")
@@ -500,9 +501,10 @@ class Ui_addpatientForm(object):
         self.cursor.execute("INSERT INTO patients (uhid, title, patientname, dob, age, gender, mobile, email, date, accession) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                             (uhid, title, patientname, dob, age, gender, mobile, email, current_date, accession))
         self.conn.commit()
-
+        self.f.close()
         # Clear the input fields after saving
         self.clear_input_fields()
+        
      except sqlite3.Error as e:
         print("Error:", str(e))
       

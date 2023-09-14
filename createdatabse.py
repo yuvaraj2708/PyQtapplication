@@ -42,6 +42,7 @@ cursor = connection.cursor()
 create_patients_table_query = '''
     CREATE TABLE IF NOT EXISTS patients (
         uhid TEXT NOT NULL UNIQUE,
+        date DATE NOT NULL,
         title TEXT NOT NULL,
         patientname TEXT NOT NULL,
         dob DATE NOT NULL,
@@ -49,7 +50,6 @@ create_patients_table_query = '''
         gender TEXT NOT NULL,
         mobile TEXT NOT NULL,
         email TEXT NOT NULL,
-        date DATE NOT NULL,
         accession TEXT NOT NULL
     );
 '''
@@ -109,8 +109,8 @@ create_refdr_table_query = '''
         Address DATE NOT NULL,
         PINCode TEXT NOT NULL,
         Mobile  TEXT NOT NULL,
-        Emailid TEXT NOT NULL
-        
+        Emailid TEXT NOT NULL,
+        date DATE NOT NULL
         
     );
 '''

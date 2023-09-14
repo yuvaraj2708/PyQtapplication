@@ -11,6 +11,7 @@ from registrationsummary import Ui_visitsummaryForm
 
 class Ui_patientForm(object):
     def setupUi(self, Form):
+
         Form.setObjectName("Form")
         Form.resize(811, 588)
         Form.setMaximumSize(QtCore.QSize(851, 16777215))
@@ -76,7 +77,7 @@ class Ui_patientForm(object):
         self.label_5.setStyleSheet("color: #5E6278;")
         self.label_5.setObjectName("label_5")
         self.label_12 = QtWidgets.QLabel(Form)
-        self.label_12.setGeometry(QtCore.QRect(320, 260, 47, 13))
+        self.label_12.setGeometry(QtCore.QRect(480, 260, 47, 13))
         self.label_12.setObjectName("label_12")
         self.label_3 = QtWidgets.QLabel(Form)
         self.label_3.setGeometry(QtCore.QRect(150, 100, 61, 16))
@@ -146,10 +147,10 @@ class Ui_patientForm(object):
         self.lineEdit_15.setObjectName("lineEdit_15")
 
         self.label_14 = QtWidgets.QLabel(Form)
-        self.label_14.setGeometry(QtCore.QRect(470, 260, 47, 13))
+        self.label_14.setGeometry(QtCore.QRect(570, 260, 47, 13))
         self.label_14.setObjectName("label_14")
         self.label_13 = QtWidgets.QLabel(Form)
-        self.label_13.setGeometry(QtCore.QRect(670, 260, 47, 13))
+        self.label_13.setGeometry(QtCore.QRect(780, 260, 47, 13))
         self.label_13.setObjectName("label_13")
         self.lineEdit_6 = QtWidgets.QLineEdit(Form)
         self.lineEdit_6.setGeometry(QtCore.QRect(540, 120, 201, 31))
@@ -216,7 +217,7 @@ class Ui_patientForm(object):
         self.label_4.setStyleSheet("color: #5E6278;")
         self.label_4.setObjectName("label_4")
         self.label_11 = QtWidgets.QLabel(Form)
-        self.label_11.setGeometry(QtCore.QRect(160, 260, 71, 16))
+        self.label_11.setGeometry(QtCore.QRect(260, 260, 71, 16))
         self.label_11.setObjectName("label_11")
         self.pushButton_2 = QtWidgets.QPushButton(Form)
         self.pushButton_2.setGeometry(QtCore.QRect(650, 20, 131, 31))
@@ -288,26 +289,38 @@ class Ui_patientForm(object):
       query = "SELECT * FROM patients WHERE "
       parameters = []
 
-      if patient_name and mobile=='':
+      if patient_name and mobile=='' and from_date=='' and to_date=='':
           query += "patientname LIKE ?"
           parameters.append('%' + patient_name + '%')
   
-      elif mobile and patient_name=='':
+      elif mobile and patient_name=='' and from_date=='' and to_date=='':
           query += "mobile LIKE ?"
           parameters.append('%'+ mobile + '%')
 
-      elif patient_name and mobile:
+      elif patient_name and mobile and from_date=='' and to_date=='':
           query += "patientname LIKE ? AND mobile LIKE ?"
           parameters.extend(['%'+patient_name+'%', '%'+mobile+'%'])
   
-      elif from_date and to_date:
-            query += " AND date BETWEEN ? AND ?"
+      elif from_date and to_date and mobile=='' and patient_name=='':
+            query += "date BETWEEN ? AND ?"
             parameters.extend([from_date, to_date])
+        
+      elif from_date and to_date and mobile and patient_name:
+            query+='date between ? and ? and mobile like ? and patientname like ?'
+            parameters.extend([from_date,to_date,'%'+mobile+'%','%'+patient_name+'%'])
+
+      elif from_date and to_date and mobile and patient_name=='':
+          query+='(date between ? and ?) and mobile like ?'
+          parameters.extend([from_date,to_date,'%'+mobile+'%'])
+
+      elif from_date and to_date and mobile == '' and patient_name:
+          query+='(date between ? and ?) and patientname like ?'
+          parameters.extend([from_date,to_date,'%'+patient_name+'%'])
 
       # Fetch patient data with filters applied
       cursor.execute(query, parameters)
       filtered_patient_data = cursor.fetchall()
-
+      
       # Clear the existing items in the QListWidget
       self.listWidget.clear()
 
@@ -316,12 +329,78 @@ class Ui_patientForm(object):
               item = QtWidgets.QListWidgetItem()
               self.listWidget.addItem(item)
 
-              custom_widget = QtWidgets.QWidget()
-              custom_layout = QtWidgets.QHBoxLayout(custom_widget)
+            #   custom_widget = QtWidgets.QWidget()
+            #   custom_layout = QtWidgets.QHBoxLayout(custom_widget)
 
-              label = QtWidgets.QLabel(
-                  f"{row[0]:<10} {row[1]:<10} {row[2]:<10} {row[3]:<10} {row[4]:<10} {row[5]:<10} {row[6]:<10} {row[7]:<10} {row[8]:<40}")
-              custom_layout.addWidget(label)
+            #   label = QtWidgets.QLabel(
+            #       f"{row[0]:<10} {row[1]:<10} {row[2]:<10} {row[3]:<10} {row[4]:<10} {row[5]:<10} {row[6]:<10} {row[7]:<10} {row[8]:<40}")
+            #   custom_layout.addWidget(label)
+
+
+              custom_widget = QtWidgets.QFrame()
+              custom_widget.setFrameShape(QtWidgets.QFrame.Box) 
+              custom_layout = QtWidgets.QHBoxLayout(custom_widget)
+              custom_layout.setAlignment(QtCore.Qt.AlignLeft)
+            
+                    # Add an empty spacer for spacing above the patient data
+                  
+
+                    
+                    
+
+              i=0
+              for value in row:
+                               # Create a vertical line (a QLabel with a border)
+                        
+                        if i==0:
+                            value=f'{value:>15}'
+                        if i==10:
+                            continue 
+
+                        data_string = f'{value}'
+                        label = QtWidgets.QLabel(data_string)
+                        font = QtGui.QFont("Poppins", 8)  # Replace "8" with the desired font size
+                        label.setFont(font)
+                        #label.setFixedSize(60, 10)
+
+                        if i==0:
+                            
+                            label.setFixedSize(70, 15)
+                        elif i==1:
+                            
+                            label.setFixedSize(70, 15)
+                        elif i==2:
+                            
+                            label.setFixedSize(20, 15)
+                        elif i==3:
+                            
+                            label.setFixedSize(80, 15)
+                        elif i==4:
+                            label.setFixedSize(30, 15)
+                        elif i==5:
+                            label.setFixedSize(50, 15)
+                        elif i==6:
+                            label.setFixedSize(50, 15)
+                        elif i==7:
+                            label.setFixedSize(70, 15)
+                        elif i==8:
+                            label.setFixedSize(120, 15) 
+                        elif i==9:
+                            label.setFixedSize(70, 15)
+                        
+                        custom_layout.addWidget(label)
+
+                        line_label = QtWidgets.QLabel()
+                        line_label.setFrameShape(QtWidgets.QFrame.VLine)
+                        line_label.setFrameShadow(QtWidgets.QFrame.Sunken)
+                        if i==1 or i==6 or i==8 or i==9:
+                            i=i+1
+                            continue
+                        
+                        custom_layout.addWidget(line_label)
+
+
+                        i=i+1
 
               button_layout = QtWidgets.QHBoxLayout()  # Create a layout for the buttons
               # Add buttons and layout as needed
@@ -389,21 +468,76 @@ class Ui_patientForm(object):
                     item = QtWidgets.QListWidgetItem()
                     self.listWidget.addItem(item)
                 
-                    custom_widget = QtWidgets.QWidget()
+                    #custom_widget = QtWidgets.QWidget()
+                    custom_widget = QtWidgets.QFrame()
+                    custom_widget.setFrameShape(QtWidgets.QFrame.Box) 
                     custom_layout = QtWidgets.QHBoxLayout(custom_widget)
-                
+                    custom_layout.setAlignment(QtCore.Qt.AlignLeft)
+            
                     # Add an empty spacer for spacing above the patient data
                     spacer = QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
                     custom_layout.addItem(spacer)
 
-                    label_text = f"{row[8]:>15} {row[0]:>10} {row[1]:>15} {row[2]:>20} {row[3]:>10} {row[4]:>10} {row[5]:>10} {row[6]:>15} {row[7]:>30}"
-                    label = QtWidgets.QLabel(label_text)
-                    font = QtGui.QFont("Poppins", 8)  # Replace "8" with the desired font size
-                    label.setFont(font)
-                    custom_layout.addWidget(label)
+                    
+                    
+
+                    i=0
+                    for value in row:
+                               # Create a vertical line (a QLabel with a border)
+                        
+                        if i==0:
+                            value=f'{value:>10}'
+                        if i==10:
+                            continue   
+
+                        data_string = f'{value}'
+                        label = QtWidgets.QLabel(data_string)
+                        font = QtGui.QFont("Poppins", 8)  # Replace "8" with the desired font size
+                        label.setFont(font)
+                        #label.setFixedSize(60, 10)
+
+                        if i==0:
+                            
+                            label.setFixedSize(50, 15)
+                        elif i==1:
+                            
+                            label.setFixedSize(70, 15)
+                        elif i==2:
+                            
+                            label.setFixedSize(20, 15)
+                        elif i==3:
+                            
+                            label.setFixedSize(80, 15)
+                        elif i==4:
+                            label.setFixedSize(30, 15)
+                        elif i==5:
+                            label.setFixedSize(50, 15)
+                        elif i==6:
+                            label.setFixedSize(50, 15)
+                        elif i==7:
+                            label.setFixedSize(70, 15)
+                        elif i==8:
+                            label.setFixedSize(120, 15) 
+                        elif i==9:
+                            label.setFixedSize(70, 15)
+                        
+                        custom_layout.addWidget(label)
+
+                        line_label = QtWidgets.QLabel()
+                        line_label.setFrameShape(QtWidgets.QFrame.VLine)
+                        line_label.setFrameShadow(QtWidgets.QFrame.Sunken)
+                        if i==1 or i==6 or i==8 or i==9:
+                            i=i+1
+                            continue
+                        
+                        custom_layout.addWidget(line_label)
+
+
+                        i=i+1
                     
                     button_layout = QtWidgets.QHBoxLayout()  # Create a layout for the buttons
-                
+                    button_layout.setAlignment(QtCore.Qt.AlignLeft)
+
                     delete_button = QtWidgets.QPushButton()
                     delete_button.setIcon(QtGui.QIcon(os.path.join('images', 'delete.png')))
                     delete_button.setFixedSize(20, 20)
@@ -414,6 +548,8 @@ class Ui_patientForm(object):
                     edit_button.setIcon(QtGui.QIcon(os.path.join('images', 'edit.png')))  # Change to the correct icon
                     edit_button.setFixedSize(20, 20)
                     edit_button.clicked.connect(lambda _, row=row: self.edit_patient(row[0]))
+                   
+                    
                     button_layout.addWidget(edit_button)
                 
                     add_visit_button = QtWidgets.QPushButton()
@@ -423,8 +559,8 @@ class Ui_patientForm(object):
                     button_layout.addWidget(add_visit_button)
                 
                     # Add spacing between the label and buttons
-                    button_layout.addSpacing(90)
-                
+                  #  button_layout.addSpacing(9000000)
+                    
                     custom_layout.addLayout(button_layout)  # Add the button layout to the custom layout
                     item.setSizeHint(custom_widget.sizeHint())
                     self.listWidget.setItemWidget(item, custom_widget)
@@ -435,7 +571,7 @@ class Ui_patientForm(object):
 
 
     def edit_patient(self, patient_uhid):
-        self.timer.stop()
+        
         self.edit_patient_form = QtWidgets.QWidget()
         self.ui_edit_patient = Ui_editpatientForm()  # Replace with the correct class name
         self.ui_edit_patient.setupUi(self.edit_patient_form, patient_uhid)  # Pass the patient ID
@@ -485,10 +621,20 @@ class Ui_patientForm(object):
 
         # Pass patient data to Ui_addvisitForm
         self.ui_add_visit.set_patient_data(patient_data)
+        self.listWidget.clear()
+        self.obj_form=QtWidgets.QWidget()
+        self.obj=Ui_visitsummaryForm()
+        self.obj.setupUi(self.obj_form)
+        self.obj.timer.start()
 
         self.add_visit_form.show()
 
         
+
+
+
+       
+
      
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
@@ -496,9 +642,9 @@ class Ui_patientForm(object):
         self.label.setText(_translate("Form", "Patient Master"))
         self.label_2.setText(_translate("Form", "From Date"))
         self.label_5.setText(_translate("Form", "Mobile"))
-        self.label_12.setText(_translate("Form", "Email ID"))
+        self.label_14.setText(_translate("Form", "Email ID"))
         self.label_3.setText(_translate("Form", "To Date"))
-        self.label_14.setText(_translate("Form", "Mobile"))
+        self.label_12.setText(_translate("Form", "Mobile"))
         self.label_13.setText(_translate("Form", "Actions"))
         self.pushButton.setText(_translate("Form", "Search"))
         self.label_10.setText(_translate("Form", "Date / UHID"))

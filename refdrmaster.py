@@ -13,6 +13,7 @@ from addrefdr import Ui_refdrForm
 import sqlite3
 import os
 from editrefdr import Ui_editrefdrForm
+from PyQt5.QtCore import QTime, QTimer
 
 class Ui_refdrmasterForm(object):
     def setupUi(self, Form):
@@ -54,7 +55,7 @@ class Ui_refdrmasterForm(object):
         self.label_3.setStyleSheet("color: #5E6278;")
         self.label_3.setObjectName("label_3")
         self.label_13 = QtWidgets.QLabel(Form)
-        self.label_13.setGeometry(QtCore.QRect(740, 260, 41, 16))
+        self.label_13.setGeometry(QtCore.QRect(790, 260, 41, 16))
         self.label_13.setObjectName("label_13")
         self.pushButton = QtWidgets.QPushButton(Form)
         self.pushButton.setGeometry(QtCore.QRect(200, 190, 91, 31))
@@ -82,13 +83,15 @@ class Ui_refdrmasterForm(object):
 "")
         self.pushButton.setObjectName("pushButton")
         self.label_10 = QtWidgets.QLabel(Form)
-        self.label_10.setGeometry(QtCore.QRect(20, 260, 70, 16))
+
+        self.label_10.setGeometry(QtCore.QRect(7, 260, 60, 16))
         self.label_10.setObjectName("label_10")
         self.label_11 = QtWidgets.QLabel(Form)
-        self.label_11.setGeometry(QtCore.QRect(120, 260, 74, 16))
+        self.label_11.setGeometry(QtCore.QRect(80, 260, 70, 16))
         self.label_11.setObjectName("label_11")
-        self.lineEdit_19 = QtWidgets.QLineEdit(Form)
+        self.lineEdit_19 = QtWidgets.QDateEdit(Form)
         self.lineEdit_19.setGeometry(QtCore.QRect(200, 120, 161, 31))
+        self.lineEdit_19.setCalendarPopup(True)
         font = QtGui.QFont()
         font.setPointSize(-1)
         font.setBold(False)
@@ -115,20 +118,23 @@ class Ui_refdrmasterForm(object):
         self.lineEdit_19.setFrame(True)
         self.lineEdit_19.setObjectName("lineEdit_19")
         self.label_14 = QtWidgets.QLabel(Form)
-        self.label_14.setGeometry(QtCore.QRect(220, 260, 70, 16))
+        self.label_14.setGeometry(QtCore.QRect(180, 260, 70, 16))
         self.label_14.setObjectName("label_14")
         self.label_15 = QtWidgets.QLabel(Form)
-        self.label_15.setGeometry(QtCore.QRect(520, 260, 48, 16))
+        self.label_15.setGeometry(QtCore.QRect(490, 260, 48, 16))
         self.label_15.setObjectName("label_15")
         self.label_16 = QtWidgets.QLabel(Form)
-        self.label_16.setGeometry(QtCore.QRect(430, 260, 46, 16))
+        self.label_16.setGeometry(QtCore.QRect(390, 260, 46, 16))
         self.label_16.setObjectName("label_16")
         self.label_17 = QtWidgets.QLabel(Form)
-        self.label_17.setGeometry(QtCore.QRect(320, 260, 78, 16))
+        self.label_17.setGeometry(QtCore.QRect(250, 260, 78, 16))
         self.label_17.setObjectName("label_17")
         self.label_18 = QtWidgets.QLabel(Form)
-        self.label_18.setGeometry(QtCore.QRect(610, 260, 37, 16))
+        self.label_18.setGeometry(QtCore.QRect(570, 260, 37, 16))
         self.label_18.setObjectName("label_18")
+        self.label_email = QtWidgets.QLabel(Form)
+        self.label_email.setGeometry(QtCore.QRect(690, 260, 41, 16))
+        self.label_email.setObjectName("label_email")
         self.label_4 = QtWidgets.QLabel(Form)
         self.label_4.setGeometry(QtCore.QRect(560, 100, 101, 16))
         font = QtGui.QFont()
@@ -153,8 +159,9 @@ class Ui_refdrmasterForm(object):
         self.label_6.setFont(font)
         self.label_6.setStyleSheet("color: #5E6278;")
         self.label_6.setObjectName("label_6")
-        self.lineEdit_23 = QtWidgets.QLineEdit(Form)
+        self.lineEdit_23 = QtWidgets.QDateEdit(Form)
         self.lineEdit_23.setGeometry(QtCore.QRect(20, 120, 161, 31))
+        self.lineEdit_23.setCalendarPopup(True)
         font = QtGui.QFont()
         font.setPointSize(-1)
         font.setBold(False)
@@ -306,10 +313,148 @@ class Ui_refdrmasterForm(object):
         
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
+
+
+        self.timer = QTimer(Form)
+        # Set the interval to 1000 milliseconds (1 second)
+        self.timer.setInterval(1000)
+        # Connect the timeout signal to the function you want to call
+        self.timer.timeout.connect(self.fetch_and_display_refdr_data)
+        # Start the timer
+        self.timer.start()
         self.fetch_and_display_refdr_data()
+
         
         
         # self.lineEdit_16.textChanged.connect(self.fetch_and_display_test_data)
+
+    def filter_refdr_data(self):
+     self.timer.stop()
+     docname=self.lineEdit_25.text()
+     code=self.lineEdit_24.text()
+     qual=self.lineEdit_20.text()
+     from_date = self.lineEdit_23.date().toPyDate().strftime("%d%m%Y")
+     to_date = self.lineEdit_19.date().toPyDate().strftime("%d%m%Y")
+     
+     conn = sqlite3.connect('patient_data.db')
+     cursor = conn.cursor()
+ 
+     # Fetch reference data
+     query="SELECT * FROM refdr where "
+     parameters=[]
+
+     if from_date and docname=='' and to_date=='' and code=='' and qual=='':
+           query+='date like ?'
+           parameters.append('%'+from_date+'%')
+
+     elif from_date =='' and docname=='' and to_date and code=='' and qual=='':
+           query+='date like ?'
+           parameters.append('%'+to_date+'%')
+     elif from_date and to_date and docname == '' and code=='' and qual=='':
+            query += "date BETWEEN ? AND ?"
+            parameters.extend([from_date, to_date])
+     elif from_date =='' and docname and to_date=='' and code=='' and qual=='':
+           query+='DoctorName like ?'
+           parameters.append('%'+docname+'%')
+     elif from_date=='' and docname=='' and to_date=='' and code and qual=='':
+           query+='DoctorCode like ?'
+           parameters.append('%'+code+'%')
+     elif from_date=='' and docname=='' and to_date=='' and code=='' and qual:
+           query+='Qualification like ?'
+           parameters.append('%'+qual+'%')
+     elif from_date and docname  and to_date  and code and qual:
+           query+='DoctorCode like ?'
+           parameters.append('%'+code+'%')
+     cursor.execute(query,parameters)
+     
+
+
+     refdr_data = cursor.fetchall()
+     self.listWidget.clear()
+     if refdr_data:
+         for row in refdr_data:
+             item = QtWidgets.QListWidgetItem()
+             self.listWidget.addItem(item)
+     
+             custom_widget = QtWidgets.QFrame()
+             custom_widget.setFrameShape(QtWidgets.QFrame.Box) 
+             custom_layout = QtWidgets.QHBoxLayout(custom_widget)
+             custom_layout.setAlignment(QtCore.Qt.AlignLeft)
+
+             # Add an empty spacer for spacing above the patient data
+            
+             spacer = QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+             custom_layout.addItem(spacer)
+
+      
+            
+             i=0
+             for value in row:
+                               # Create a vertical line (a QLabel with a border)
+                    if i==8:
+                         continue
+
+                    if i==0:
+                        value=f'{value:>10}'
+                    
+                   
+                        # label = QtWidgets.QLabel(f"{row[0]:<10} {row[1]:<10} {row[2]:<10} {row[3]:<10} {row[4]:<10} {row[5]:<10} {row[6]:<10} {row[7]:<10}  ")
+                    data_string = f'{value}'
+
+                    label = QtWidgets.QLabel(data_string)
+                    font = QtGui.QFont("Poppins", 8)  # Replace "8" with the desired font size
+                    label.setFont(font)
+
+                    if i==0:
+                            
+                            label.setFixedSize(60, 15)
+                    elif i==1:
+                            
+                            label.setFixedSize(100, 15)
+                    elif i==2:
+                            
+                            label.setFixedSize(40, 15)
+                    elif i==3:
+                            
+                            label.setFixedSize(60, 15)
+                    elif i==4:
+                            label.setFixedSize(130, 15)
+                    elif i==5:
+                            label.setFixedSize(35, 15)
+                    elif i==6:
+                            label.setFixedSize(70, 15)
+                    elif i==7:
+                            label.setFixedSize(120, 15)
+                    
+                    custom_layout.addWidget(label)
+
+                    line_label = QtWidgets.QLabel()
+                    line_label.setFrameShape(QtWidgets.QFrame.VLine)
+                    line_label.setFrameShadow(QtWidgets.QFrame.Sunken)
+                    custom_layout.addWidget(line_label)
+
+                    i=i+1
+             button_layout = QtWidgets.QHBoxLayout()  # Create a layout for the buttons 
+             
+             delete_button = QtWidgets.QPushButton()
+             delete_button.setIcon(QtGui.QIcon(os.path.join('images', 'delete.png')))
+             delete_button.setFixedSize(20, 20)
+             delete_button.clicked.connect(lambda _, row=row: self.delete_refdr(row[0])) 
+             button_layout.addWidget(delete_button)
+             
+             edit_button = QtWidgets.QPushButton()
+             edit_button.setIcon(QtGui.QIcon(os.path.join('images', 'edit.png')))  # Change to the correct icon
+             edit_button.setFixedSize(20, 20)
+             edit_button.clicked.connect(lambda _, row=row: self.edit_refdr(row[0]))
+             button_layout.addWidget(edit_button)
+             
+             
+             button_layout.addSpacing(90)
+     
+             custom_layout.addLayout(button_layout)  # Add the button layout to the custom layout
+             item.setSizeHint(custom_widget.sizeHint())
+             self.listWidget.setItemWidget(item, custom_widget)
+             item.refdr_data = row
     
     
     
@@ -327,13 +472,64 @@ class Ui_refdrmasterForm(object):
              item = QtWidgets.QListWidgetItem()
              self.listWidget.addItem(item)
      
-             custom_widget = QtWidgets.QWidget()
+             custom_widget = QtWidgets.QFrame()
+             custom_widget.setFrameShape(QtWidgets.QFrame.Box) 
              custom_layout = QtWidgets.QHBoxLayout(custom_widget)
-             label = QtWidgets.QLabel(f"{row[0]:<10} {row[1]:<10} {row[2]:<10} {row[3]:<10} {row[4]:<10} {row[5]:<10} {row[6]:<10} {row[7]:<10}  ")
-             custom_layout.addWidget(label)
-             font = QtGui.QFont("Poppins", 8)  # Replace "8" with the desired font size
-             label.setFont(font)
-             custom_layout.addWidget(label)
+             custom_layout.setAlignment(QtCore.Qt.AlignLeft)
+
+             # Add an empty spacer for spacing above the patient data
+            
+             spacer = QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+             custom_layout.addItem(spacer)
+
+      
+            
+             i=0
+             for value in row:
+                               # Create a vertical line (a QLabel with a border)
+                    if i==8:
+                         continue
+
+                    if i==0:
+                        value=f'{value:>10}'
+                    
+                   
+                        # label = QtWidgets.QLabel(f"{row[0]:<10} {row[1]:<10} {row[2]:<10} {row[3]:<10} {row[4]:<10} {row[5]:<10} {row[6]:<10} {row[7]:<10}  ")
+                    data_string = f'{value}'
+
+                    label = QtWidgets.QLabel(data_string)
+                    font = QtGui.QFont("Poppins", 8)  # Replace "8" with the desired font size
+                    label.setFont(font)
+
+                    if i==0:
+                            
+                            label.setFixedSize(60, 15)
+                    elif i==1:
+                            
+                            label.setFixedSize(100, 15)
+                    elif i==2:
+                            
+                            label.setFixedSize(40, 15)
+                    elif i==3:
+                            
+                            label.setFixedSize(60, 15)
+                    elif i==4:
+                            label.setFixedSize(130, 15)
+                    elif i==5:
+                            label.setFixedSize(35, 15)
+                    elif i==6:
+                            label.setFixedSize(70, 15)
+                    elif i==7:
+                            label.setFixedSize(120, 15)
+                    
+                    custom_layout.addWidget(label)
+
+                    line_label = QtWidgets.QLabel()
+                    line_label.setFrameShape(QtWidgets.QFrame.VLine)
+                    line_label.setFrameShadow(QtWidgets.QFrame.Sunken)
+                    custom_layout.addWidget(line_label)
+
+                    i=i+1
              button_layout = QtWidgets.QHBoxLayout()  # Create a layout for the buttons 
              
              delete_button = QtWidgets.QPushButton()
@@ -369,7 +565,7 @@ class Ui_refdrmasterForm(object):
         
         self.edit_refdr_form.show()
 
-        self.listWidget.clear()
+      #  self.listWidget.clear()
         
         self.ui_edit_refdr.pushButton.clicked.connect(self.fetch_and_display_refdr_data)
 
@@ -416,8 +612,10 @@ class Ui_refdrmasterForm(object):
         self.label_4.setText(_translate("Form", "Doctor Code"))
         self.label_5.setText(_translate("Form", "Doctor Name"))
         self.label_6.setText(_translate("Form", "Qualification"))
+        self.label_email.setText(_translate("Form", "Email"))
         self.pushButton_2.setText(_translate("Form", "Add RefDr"))
         self.pushButton_2.clicked.connect(self.open_addrefdr_form)
+        self.pushButton.clicked.connect(self.filter_refdr_data)
 
    
     def open_addrefdr_form(self):

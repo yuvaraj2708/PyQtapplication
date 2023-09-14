@@ -13,6 +13,7 @@ from addtest  import Ui_addtestForm
 import sqlite3
 import os
 from edittest import Ui_edittestForm
+from PyQt5.QtCore import QTime, QTimer
 
 
 
@@ -82,7 +83,7 @@ class Ui_testForm(object):
         self.label_3.setStyleSheet("color: #5E6278;")
         self.label_3.setObjectName("label_3")
         self.label_13 = QtWidgets.QLabel(Form)
-        self.label_13.setGeometry(QtCore.QRect(660, 260, 41, 16))
+        self.label_13.setGeometry(QtCore.QRect(750, 260, 41, 16))
         self.label_13.setObjectName("label_13")
         self.pushButton = QtWidgets.QPushButton(Form)
         self.pushButton.setGeometry(QtCore.QRect(460, 120, 91, 31))
@@ -113,7 +114,7 @@ class Ui_testForm(object):
         self.label_10.setGeometry(QtCore.QRect(20, 260, 26, 16))
         self.label_10.setObjectName("label_10")
         self.label_11 = QtWidgets.QLabel(Form)
-        self.label_11.setGeometry(QtCore.QRect(70, 260, 58, 16))
+        self.label_11.setGeometry(QtCore.QRect(30, 260, 58, 16))
         self.label_11.setObjectName("label_11")
         self.lineEdit_19 = QtWidgets.QLineEdit(Form)
         self.lineEdit_19.setGeometry(QtCore.QRect(240, 120, 201, 31))
@@ -171,19 +172,19 @@ class Ui_testForm(object):
 "")
         self.pushButton_2.setObjectName("pushButton_2")
         self.label_14 = QtWidgets.QLabel(Form)
-        self.label_14.setGeometry(QtCore.QRect(160, 260, 51, 13))
+        self.label_14.setGeometry(QtCore.QRect(120, 260, 51, 13))
         self.label_14.setObjectName("label_14")
         self.label_15 = QtWidgets.QLabel(Form)
-        self.label_15.setGeometry(QtCore.QRect(420, 260, 70, 13))
+        self.label_15.setGeometry(QtCore.QRect(520, 260, 70, 13))
         self.label_15.setObjectName("label_15")
         self.label_16 = QtWidgets.QLabel(Form)
-        self.label_16.setGeometry(QtCore.QRect(330, 260, 57, 13))
+        self.label_16.setGeometry(QtCore.QRect(380, 260, 57, 13))
         self.label_16.setObjectName("label_16")
         self.label_17 = QtWidgets.QLabel(Form)
-        self.label_17.setGeometry(QtCore.QRect(230, 260, 72, 13))
+        self.label_17.setGeometry(QtCore.QRect(240, 260, 72, 13))
         self.label_17.setObjectName("label_17")
         self.label_18 = QtWidgets.QLabel(Form)
-        self.label_18.setGeometry(QtCore.QRect(510, 260, 96, 13))
+        self.label_18.setGeometry(QtCore.QRect(630, 260, 96, 13))
         self.label_18.setObjectName("label_18")
  
         self.retranslateUi(Form)
@@ -201,7 +202,126 @@ class Ui_testForm(object):
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
+        self.timer = QTimer(Form)
+        # Set the interval to 1000 milliseconds (1 second)
+        self.timer.setInterval(1000)
+        # Connect the timeout signal to the function you want to call
+        self.timer.timeout.connect(self.fetch_and_display_test_data)
+        # Start the timer
+        self.timer.start()
         self.fetch_and_display_test_data()
+
+    def fetch_and_display_filtertest_data(self):
+     self.timer.stop()
+    # Connect to the database
+     common=self.lineEdit_18.text()
+     dept=self.lineEdit_19.text()
+
+
+     conn = sqlite3.connect('patient_data.db')
+     cursor = conn.cursor()
+ 
+     # Fetch reference data
+     query="SELECT * FROM tests where "
+     parameters = []
+
+     if common and dept=='':
+         query+='TestName like ? or Testcode like ?'
+         parameters.append('%'+common+'%')
+         parameters.append('%'+common+'%')
+     elif dept and common=='':
+         query+='reportingrate like ?'
+         parameters.append('%'+dept+'%')
+     elif common and dept:
+         query +='TestName like ? or Testcode like ? and reportingrate like ?'
+         parameters.extend(['%'+common+'%','%'+common+'%','%'+dept+'%'])
+     cursor.execute(query, parameters)
+     test_data = cursor.fetchall()
+     
+     self.listWidget.clear()
+     if test_data:
+         for row in test_data:
+             item = QtWidgets.QListWidgetItem()
+             self.listWidget.addItem(item)
+     
+             custom_widget = QtWidgets.QFrame()
+             custom_widget.setFrameShape(QtWidgets.QFrame.Box) 
+             custom_layout = QtWidgets.QHBoxLayout(custom_widget)
+             custom_layout.setAlignment(QtCore.Qt.AlignLeft)
+             
+             i=0
+            # label = QtWidgets.QLabel(f"{row[0]:<10} {row[1]:<10} {row[2]:<10} {row[3]:<10} {row[4]:<10} {row[5]:<10}  ")
+             for value in row:
+                               # Create a vertical line (a QLabel with a border)
+                if i==0:
+                    value=f'{value:>20}'
+                  
+                data_string = f'{value}'
+
+                label = QtWidgets.QLabel(data_string)
+                font = QtGui.QFont("Poppins", 8)  # Replace "8" with the desired font size
+                label.setFont(font)
+
+                if i==0:
+                            
+                    label.setFixedSize(100, 15)
+                elif i==1:
+                            
+                    label.setFixedSize(100, 15)
+                elif i==2:
+                            
+                    label.setFixedSize(110, 15)
+                elif i==3:
+                            
+                    label.setFixedSize(120, 15)
+                elif i==4:
+                    label.setFixedSize(100, 15)
+                elif i==5:
+                    label.setFixedSize(100, 15)
+                elif i==6:
+                    label.setFixedSize(100, 15)
+                elif i==7:
+                    label.setFixedSize(100, 15)
+
+
+
+                custom_layout.addWidget(label)
+
+                line_label = QtWidgets.QLabel()
+                line_label.setFrameShape(QtWidgets.QFrame.VLine)
+                line_label.setFrameShadow(QtWidgets.QFrame.Sunken)
+                custom_layout.addWidget(line_label)
+             
+             
+                i=i+1
+             
+             
+             button_layout = QtWidgets.QHBoxLayout()  # Create a layout for the buttons 
+             
+             
+             
+             
+             delete_button = QtWidgets.QPushButton()
+             delete_button.setIcon(QtGui.QIcon(os.path.join('images', 'delete.png')))
+             delete_button.setFixedSize(20, 20)
+             delete_button.clicked.connect(lambda _, row=row: self.delete_test(row[0])) 
+             button_layout.addWidget(delete_button)
+             
+             edit_button = QtWidgets.QPushButton()
+             edit_button.setIcon(QtGui.QIcon(os.path.join('images', 'edit.png')))  # Change to the correct icon
+             edit_button.setFixedSize(20, 20)
+             edit_button.clicked.connect(lambda _, row=row: self.edit_refdr(row[0]))
+             button_layout.addWidget(edit_button)
+             
+             
+             
+             button_layout.addSpacing(90)
+     
+             custom_layout.addLayout(button_layout)  # Add the button layout to the custom layout
+             item.setSizeHint(custom_widget.sizeHint())
+             self.listWidget.setItemWidget(item, custom_widget)
+             item.test_data = row
+
         
     
     def fetch_and_display_test_data(self):
@@ -219,13 +339,58 @@ class Ui_testForm(object):
              item = QtWidgets.QListWidgetItem()
              self.listWidget.addItem(item)
      
-             custom_widget = QtWidgets.QWidget()
+             custom_widget = QtWidgets.QFrame()
+             custom_widget.setFrameShape(QtWidgets.QFrame.Box) 
              custom_layout = QtWidgets.QHBoxLayout(custom_widget)
-             label = QtWidgets.QLabel(f"{row[0]:<10} {row[1]:<10} {row[2]:<10} {row[3]:<10} {row[4]:<10} {row[5]:<10}  ")
-             custom_layout.addWidget(label)
-             font = QtGui.QFont("Poppins", 8)  # Replace "8" with the desired font size
-             label.setFont(font)
-             custom_layout.addWidget(label)
+             custom_layout.setAlignment(QtCore.Qt.AlignLeft)
+             
+             i=0
+            # label = QtWidgets.QLabel(f"{row[0]:<10} {row[1]:<10} {row[2]:<10} {row[3]:<10} {row[4]:<10} {row[5]:<10}  ")
+             for value in row:
+                               # Create a vertical line (a QLabel with a border)
+                if i==0:
+                    value=f'{value:>20}'
+                  
+                data_string = f'{value}'
+
+                label = QtWidgets.QLabel(data_string)
+                font = QtGui.QFont("Poppins", 8)  # Replace "8" with the desired font size
+                label.setFont(font)
+
+                if i==0:
+                            
+                    label.setFixedSize(100, 15)
+                elif i==1:
+                            
+                    label.setFixedSize(100, 15)
+                elif i==2:
+                            
+                    label.setFixedSize(110, 15)
+                elif i==3:
+                            
+                    label.setFixedSize(120, 15)
+                elif i==4:
+                    label.setFixedSize(100, 15)
+                elif i==5:
+                    label.setFixedSize(100, 15)
+                elif i==6:
+                    label.setFixedSize(100, 15)
+                elif i==7:
+                    label.setFixedSize(100, 15)
+
+
+
+                custom_layout.addWidget(label)
+
+                line_label = QtWidgets.QLabel()
+                line_label.setFrameShape(QtWidgets.QFrame.VLine)
+                line_label.setFrameShadow(QtWidgets.QFrame.Sunken)
+                custom_layout.addWidget(line_label)
+             
+             
+                i=i+1
+             
+             
              button_layout = QtWidgets.QHBoxLayout()  # Create a layout for the buttons 
              
              
@@ -265,7 +430,7 @@ class Ui_testForm(object):
         if test_data:
             self.edit_test_form.test_data = test_data  
         
-        self.listWidget.clear()
+        #self.listWidget.clear()
         
         self.ui_edit_test.pushButton.clicked.connect(self.fetch_and_display_test_data)
    
@@ -303,7 +468,7 @@ class Ui_testForm(object):
         self.label_3.setText(_translate("Form", "Department"))
         self.label_13.setText(_translate("Form", "Actions"))
         self.pushButton.setText(_translate("Form", "Search"))
-        self.label_10.setText(_translate("Form", "Date"))
+       # self.label_10.setText(_translate("Form", "Date"))
         self.label_11.setText(_translate("Form", "Test Code"))
         self.pushButton_2.setText(_translate("Form", "Add Test"))
         self.label_14.setText(_translate("Form", "Test Name"))
@@ -311,6 +476,7 @@ class Ui_testForm(object):
         self.label_16.setText(_translate("Form", "Department"))
         self.label_17.setText(_translate("Form", "Specimen Type"))
         self.label_18.setText(_translate("Form", "Reporting Rate    "))
+        self.pushButton.clicked.connect(self.fetch_and_display_filtertest_data)
    
     def open_add_test_form(self):
         self.add_test_form = QtWidgets.QWidget()
