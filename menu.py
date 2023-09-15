@@ -9,6 +9,7 @@ from scansummary import Ui_scansummaryForm
 import sqlite3
 from resulttemplate import Ui_resulttemplateForm
 from Category import Ui_categoryForm
+from pathologistmaster import Ui_pathologistmasterForm
 
 class Ui_deviceForm(object):
     def setupUi(self, Form):
@@ -617,8 +618,8 @@ class Ui_MainWindow(object):
         self.actionTest_Master.setObjectName("actionTest_Master")
         self.actionReport_Format = QtWidgets.QAction(MainWindow)
         self.actionReport_Format.setObjectName("actionReport_Format")
-        self.actioncategory_Master = QtWidgets.QAction(MainWindow)
-        self.actioncategory_Master.setObjectName("actionReport_Format")
+        self.actionpathologist_Master = QtWidgets.QAction(MainWindow)
+        self.actionpathologist_Master.setObjectName("actionReport_Format")
         
         self.actionregistrationsummary = QtWidgets.QAction(MainWindow)
         self.actionregistrationsummary.setObjectName("actionregistrationsummary")
@@ -631,7 +632,7 @@ class Ui_MainWindow(object):
         self.menuMaster.addAction(self.actionRefDr_Master)
         self.menuMaster.addAction(self.actionTest_Master)
         self.menuMaster.addAction(self.actionReport_Format)
-        self.menuMaster.addAction(self.actioncategory_Master)
+        self.menuMaster.addAction(self.actionpathologist_Master)
         self.menubar.addAction(self.menusdsa.menuAction())
         self.menubar.addAction(self.menuPatientRegister.menuAction())
         # self.menubar.addAction(self.menuVisit_Summary.menuAction())
@@ -662,7 +663,7 @@ class Ui_MainWindow(object):
         self.actionRefDr_Master.setText(_translate("MainWindow", "RefDr Master"))
         self.actionTest_Master.setText(_translate("MainWindow", "Test Master"))
         self.actionReport_Format.setText(_translate("MainWindow", "Report Format"))
-        self.actioncategory_Master.setText(_translate("MainWindow", "Category Master"))
+        self.actionpathologist_Master.setText(_translate("MainWindow", "Pathologist Master"))
 
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
@@ -744,9 +745,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.reportformat_ui = Ui_resulttemplateForm()# report format
         self.reportformat_ui.setupUi(self.reportformat_frame)
         
-        self.category_frame = QtWidgets.QFrame()
-        self.category_ui = Ui_categoryForm()# category
-        self.category_ui.setupUi(self.category_frame)
+        self.pathologist_frame = QtWidgets.QFrame()
+        self.pathologist_ui = Ui_pathologistmasterForm()# category
+        self.pathologist_ui.setupUi(self.pathologist_frame)
         
         
         # self.ui.actionPatientregister.triggered.connect(self.show_patient_register_frame)
@@ -756,7 +757,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.actionregistrationsummary.triggered.connect(self.show_visitsummary_frame)
         self.ui.actionscansummary.triggered.connect(self.show_scansummary_frame)
         self.ui.actionReport_Format.triggered.connect(self.show_reportformat_frame)
-        self.ui.actioncategory_Master.triggered.connect(self.show_category_frame)
+        self.ui.actionpathologist_Master.triggered.connect(self.show_pathologist_frame)
         
         # Create a QStackedWidget to manage the frames
         self.stacked_widget = QtWidgets.QStackedWidget(self)
@@ -800,8 +801,8 @@ class MainWindow(QtWidgets.QMainWindow):
        
     
     
-    def show_category_frame(self):
-        self.stacked_widget.setCurrentWidget(self.category_frame)
+    def show_pathologist_frame(self):
+        self.stacked_widget.setCurrentWidget(self.pathologist_frame)
     
     def show_patient_register_frame(self):
         self.stacked_widget.setCurrentWidget(self.patient_register_frame)

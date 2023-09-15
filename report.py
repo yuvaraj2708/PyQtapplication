@@ -79,6 +79,15 @@ class Ui_reportingForm(object):
         self.label_3.setFont(font)
         self.label_3.setStyleSheet("color: #5E6278;")
         self.label_3.setObjectName("label_3")
+        self.label_4 = QtWidgets.QLabel(self.groupBox)
+        self.label_4.setGeometry(QtCore.QRect(360, 50, 91, 16))
+        font = QtGui.QFont()
+        font.setFamily("Poppins")
+        font.setPointSize(8)
+        self.label_4.setFont(font)
+        self.label_4.setStyleSheet("color: #5E6278;")
+        self.label_4.setObjectName("label_4")
+        
         self.lineEdit_18 = QtWidgets.QLineEdit(self.groupBox)
         self.lineEdit_18.setGeometry(QtCore.QRect(20, 70, 161, 31))
         font = QtGui.QFont()
@@ -118,6 +127,11 @@ class Ui_reportingForm(object):
         self.comboBox_26 = QtWidgets.QComboBox(Form)
         self.comboBox_26.setGeometry(QtCore.QRect(190, 130, 161, 31))
         self.comboBox_26.currentIndexChanged.connect(self.previewReport)
+        
+        self.comboBox_24 = QtWidgets.QComboBox(Form)
+        self.comboBox_24.setGeometry(QtCore.QRect(350, 130, 161, 31))
+        self.comboBox_24.currentIndexChanged.connect(self.previewpathologist)
+        
         
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -391,6 +405,7 @@ class Ui_reportingForm(object):
         self.toolButton_14.setText(_translate("Form", "ra"))
         self.toolButton_15.setText(_translate("Form", "rd"))
         self.toolButton_17.setText(_translate("Form", "ud"))
+    
     def previewReport(self, index):
       # Get the selected item from the combo box
       selected_report = self.comboBox_26.currentText()
@@ -406,6 +421,22 @@ class Ui_reportingForm(object):
       else:
           self.tableView.hide()
           self.textEdit.show()
+          
+    def previewpathologist(self, index):
+      # Get the selected item from the combo box
+      selected_report = self.comboBox_24.currentText()
+  
+      # Fetch and display the report content based on the selected report
+      report_content = self.fetch_report_content(selected_report)
+      self.textEdit.setPlainText(report_content)
+  
+      # Show or hide the table and rich text editor based on the report content
+      if "table" in report_content.lower():
+          self.tableView.show()
+          self.textEdit.hide()
+      else:
+          self.tableView.hide()
+          self.textEdit.show()      
 
     def fetch_report_content(self, name):
         # You need to fetch the report content from your database based on the report name.
@@ -423,6 +454,21 @@ class Ui_reportingForm(object):
             return result[0]  # Return the report content as a string
         else:
             return "Report not found."
+    
+    def fetch_pathologist_content(self, DoctorName):
+        
+
+        connection = sqlite3.connect("patient_data.db")
+        cursor = connection.cursor()
+        cursor.execute("SELECT DoctorName FROM pathologist WHERE DoctorName = ?", (DoctorName,))
+        result = cursor.fetchone()
+        connection.close()
+
+        if result:
+            return result[0]  # Return the report content as a string
+        else:
+            return "pathologist not found."    
+        
 
     def populate_report_templates(self):
         # Fetch report templates from the database and add them to the combo box
@@ -469,6 +515,7 @@ class Ui_reportingForm(object):
         self.label.setText(_translate("Form", "Report "))
         self.pushButton_2.setText(_translate("Form", "Report Study"))
         self.label_2.setText(_translate("Form", "Patient Name"))
+        self.label_4.setText(_translate("Form", "Pathologist "))
         self.label_3.setText(_translate("Form", "Report Template"))
 
 if __name__ == "__main__":

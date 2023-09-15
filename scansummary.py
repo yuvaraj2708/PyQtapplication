@@ -773,8 +773,8 @@ class Ui_scansummaryForm(object):
                
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
-        self.label.setText(_translate("Form", "Scan Summary"))
+        Form.setWindowTitle(_translate("Form", "Ekon"))
+        self.label.setText(_translate("Form", "Report"))
         self.label_2.setText(_translate("Form", "From Date"))
         self.label_12.setText(_translate("Form", "Ref By / Test’s Asked"))
         self.label_3.setText(_translate("Form", "To Date"))
@@ -782,7 +782,7 @@ class Ui_scansummaryForm(object):
         self.pushButton.setText(_translate("Form", "Search"))
         self.label_10.setText(_translate("Form", "Visit ID/patient Id"))
         self.label_4.setText(_translate("Form", "Pt.Name / Visit ID / Pt.ID"))
-        self.label_11.setText(_translate("Form", "Catetory"))
+        # self.label_11.setText(_translate("Form", "Catetory"))
         self.pushButton_2.setText(_translate("Form", "Add Patient"))
         self.pushButton_2.setObjectName("pushButton_2")
         self.pushButton_2.clicked.connect(self.open_add_patient_form) 

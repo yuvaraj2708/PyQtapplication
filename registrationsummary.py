@@ -249,7 +249,7 @@ class Ui_visitsummaryForm(object):
       query=("""
           SELECT visit.id, visit.ref_dr, visit.patient_category,
                  patients.patientname, patients.dob, patients.age, patients.gender, 
-                 patients.mobile, patients.email, visit.date, visit.selected_test
+                 patients.mobile, patients.email, visit.date, visit.selected_test,patients.accession
           FROM visit
           INNER JOIN patients ON visit.patient_id = patients.uhid where
           
@@ -302,7 +302,7 @@ class Ui_visitsummaryForm(object):
            custom_layout.setAlignment(QtCore.Qt.AlignLeft)  # Center-align the custom layout
            
            # Unpack the values from the query result
-           visit_id, ref_dr, patient_category, patient_name, dob, age, gender, mobile, email, date, selected_test = row
+           visit_id, ref_dr, patient_category, patient_name, dob, age, gender, mobile, email, date, selected_test,acc = row
            
            data_labels = [
                "ID", "Test", "Ref Dr.", "Category", "Name", "DOB", "Age", "Gender", "Mobile", "Email", "Date"
@@ -372,8 +372,8 @@ class Ui_visitsummaryForm(object):
            button_actions = [
                lambda _, row=row: self.open_add_scan_form(row),
                lambda _, row=row: self.delete_visit(row[0]),
-               lambda _, row=row: self.generate_qr_code_pdf(row),
-               lambda _, row=row: self.generate_bar_code_pdf(row)
+               lambda _, row=row: self.generate_qr_code_pdf(),
+               lambda _, row=row: self.generate_bar_code_pdf(acc)
            ]
            
            button_tooltips = ["Scan", "Delete", "Generate QR Code", "Generate Barcode"]
@@ -408,7 +408,7 @@ class Ui_visitsummaryForm(object):
       cursor.execute("""
           SELECT visit.id, visit.ref_dr, visit.patient_category,
                  patients.patientname, patients.dob, patients.age, patients.gender, 
-                 patients.mobile, patients.email, visit.date, visit.selected_test
+                 patients.mobile, patients.email, visit.date, visit.selected_test,patients.accession
           FROM visit
           INNER JOIN patients ON visit.patient_id = patients.uhid
           
@@ -427,7 +427,7 @@ class Ui_visitsummaryForm(object):
            custom_layout.setAlignment(QtCore.Qt.AlignLeft)  # Center-align the custom layout
            
            # Unpack the values from the query result
-           visit_id, ref_dr, patient_category, patient_name, dob, age, gender, mobile, email, date, selected_test = row
+           visit_id, ref_dr, patient_category, patient_name, dob, age, gender, mobile, email, date, selected_test,acc = row
            
            data_labels = [
                "ID", "Test", "Ref Dr.", "Category", "Name", "DOB", "Age", "Gender", "Mobile", "Email", "Date"
@@ -497,8 +497,8 @@ class Ui_visitsummaryForm(object):
            button_actions = [
                lambda _, row=row: self.open_add_scan_form(row),
                lambda _, row=row: self.delete_visit(row[0]),
-               lambda _, row=row: self.generate_qr_code_pdf(row),
-               lambda _, row=row: self.generate_bar_code_pdf(row)
+               lambda _, row=row: self.generate_qr_code_pdf(),
+               lambda _, row=row: self.generate_bar_code_pdf(acc)
            ]
            
            button_tooltips = ["Scan", "Delete", "Generate QR Code", "Generate Barcode"]
@@ -563,7 +563,7 @@ class Ui_visitsummaryForm(object):
         accession_str = str(accession)
 
         # Generate the barcode image using the string representation of the accession number and save it to a file.
-        barcode.generate('Code128', accession_str, writer=ImageWriter(), output=os.path.join('images', 'barcode.png'))
+        barcode.generate('Code128', accession_str, writer=ImageWriter(), output=os.path.join('images', 'barcode'))
         x = 100  # Adjust the x-coordinate as needed
         y = 500  # Adjust the y-coordinate as needed
         width = 200  # Adjust the width as needed
@@ -571,24 +571,24 @@ class Ui_visitsummaryForm(object):
         # Create a PDF with the barcode image.
         pdf_filename = f'barcode_{accession[1]}.pdf'
         c = canvas.Canvas(pdf_filename, pagesize=letter)
-        c.drawImage(os.path.join('images', 'barcode.png'), x, y, width, height)  # Adjust x, y, width, height as needed
+        c.drawImage(os.path.join('images', 'barcode.png'),x,y,height=100)  # Adjust x, y, width, height as needed
         c.showPage()
         c.save()
 
         # Optionally, you can open the generated PDF.
         os.system(pdf_filename)
     
-    def generate_qr_code_pdf(self, visit_data):
-     visit_id, ref_dr, patient_category, patient_name, dob, age, gender, mobile, email, date, selected_test = visit_data
+    def generate_qr_code_pdf(self):
+    # visit_id, ref_dr, patient_category, patient_name, dob, age, gender, mobile, email, date, selected_test,acc= visit_data
  
      # Retrieve patient information based on patient_id from the patients table
      conn = sqlite3.connect('patient_data.db')
      cursor = conn.cursor()
  
      cursor.execute("""
-             SELECT visit.id, visit.ref_dr, visit.patient_category,
+             SELECT visit.visitid, visit.ref_dr, visit.patient_category,
                     patients.patientname, patients.dob, patients.age, patients.gender, 
-                    patients.mobile, patients.email, visit.date, visit.selected_test
+                    patients.mobile, patients.email, visit.date, visit.selected_test,patients.uhid
              FROM visit
              INNER JOIN patients ON visit.patient_id = patients.uhid
          """)
@@ -597,7 +597,7 @@ class Ui_visitsummaryForm(object):
      conn.close()
  
      if patient_info:
-        patient_id, ref_dr, patient_category, patientname, dob, age, gender, mobile, email, date, selected_test = patient_info
+        visit_id, ref_dr, patient_category, patientname, gender, dob, age, mobile, email, date, selected_test,patient_id = patient_info
 
         # Create a formatted string with all the details
         details_string = (
