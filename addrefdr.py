@@ -384,9 +384,9 @@ class Ui_refdrForm(object):
 
     def generate_next_refdr_number(self, latest_refdr_number):
         if latest_refdr_number is None:
-            return "D00001"
+            return "R00001"
 
-        prefix = "D"
+        prefix = "R"
         numeric_part = int(latest_refdr_number[1:])  # Convert the numeric part to integer
         next_numeric_part = numeric_part + 1
         next_refdr_number = f"{prefix}{next_numeric_part:05}"  # Format as "T00001"
@@ -397,7 +397,7 @@ class Ui_refdrForm(object):
             
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
+        Form.setWindowTitle(_translate("Form", "Ekon"))
         self.label.setText(_translate("Form", "Pathalogist Master"))
         self.pushButton.setText(_translate("Form", "Save"))
         self.label_4.setText(_translate("Form", "Qualification "))

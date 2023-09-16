@@ -410,7 +410,7 @@ class Ui_editpatientForm(object):
     
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
+        Form.setWindowTitle(_translate("Form", "Ekon"))
         self.label.setText(_translate("Form", "Patient Registration"))
         self.label_7.setText(_translate("Form", "Email ID"))
         self.pushButton.setText(_translate("Form", "Save"))

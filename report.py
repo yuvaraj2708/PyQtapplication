@@ -137,6 +137,7 @@ class Ui_reportingForm(object):
         QtCore.QMetaObject.connectSlotsByName(Form)
 
         # Fetch and populate data from the database
+        self.populate_pathologist_templates()
         self.populate_report_templates()
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -220,7 +221,8 @@ class Ui_reportingForm(object):
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
-    
+        
+        
     def set_patient_data(self, patient_id):
       # Convert the patient ID to a string
       patient_name_str = str(patient_id)
@@ -410,34 +412,72 @@ class Ui_reportingForm(object):
       # Get the selected item from the combo box
       selected_report = self.comboBox_26.currentText()
   
-      # Fetch and display the report content based on the selected report
-      report_content = self.fetch_report_content(selected_report)
-      self.textEdit.setPlainText(report_content)
+      # Fetch and display the report template content based on the selected report
+      template_content = self.fetch_report_template(selected_report)
   
-      # Show or hide the table and rich text editor based on the report content
-      if "table" in report_content.lower():
+      # Show or hide the table and rich text editor based on the report template content
+      if "table" in template_content.lower():
           self.tableView.show()
           self.textEdit.hide()
+  
+          # If the template contains a table, you can parse it and display it in the tableView
+          self.display_table_in_tableView(template_content)
       else:
           self.tableView.hide()
           self.textEdit.show()
-          
+          # Display the template content in the QTextEdit
+          self.textEdit.setPlainText(template_content)
+            
     def previewpathologist(self, index):
-      # Get the selected item from the combo box
-      selected_report = self.comboBox_24.currentText()
+         # Get the selected item from the combo box
+         selected_pathologist = self.comboBox_24.currentText()
   
-      # Fetch and display the report content based on the selected report
-      report_content = self.fetch_report_content(selected_report)
-      self.textEdit.setPlainText(report_content)
+         # Fetch and display the pathology content based on the selected pathology
+         pathologist_content = self.fetch_pathologist_content(selected_pathologist)
+         self.textEdit.setPlainText(pathologist_content)
   
-      # Show or hide the table and rich text editor based on the report content
-      if "table" in report_content.lower():
-          self.tableView.show()
-          self.textEdit.hide()
-      else:
-          self.tableView.hide()
-          self.textEdit.show()      
+         # Show or hide the table and rich text editor based on the pathology content
+         if "table" in pathologist_content.lower():
+             self.tableView.show()
+             self.textEdit.hide()
+         else:
+             self.tableView.hide()
+             self.textEdit.show()
+    def fetch_report_template(self, report_name):
+      # Fetch the template content from the database based on the report name.
+      # Implement your database query to retrieve the template content.
+      # Replace this with your actual database retrieval logic.
 
+      connection = sqlite3.connect("patient_data.db")
+      cursor = connection.cursor()
+      cursor.execute("SELECT template FROM reporttemplates WHERE name = ?", (report_name,))
+      result = cursor.fetchone()
+      connection.close()
+
+      if result:
+          return result[0]  # Return the template content as a string
+      else:
+          return "Template not found."
+
+    def display_table_in_tableView(self, template_content):
+        # Implement the logic to parse the table content from the template and display it in the tableView.
+        # You'll need to split the content and populate the tableView accordingly.
+    
+        # Example:
+        # Assuming that your template_content contains tabular data separated by newline characters,
+        # you can split the content and populate the tableView as follows:
+    
+        table_data = [line.split('\t') for line in template_content.split('\n')]
+    
+        # Create a table model and populate it with the data
+        model = QtGui.QStandardItemModel(len(table_data), len(table_data[0]))
+        for row_idx, row in enumerate(table_data):
+            for col_idx, cell_value in enumerate(row):
+                item = QtGui.QStandardItem(cell_value)
+                model.setItem(row_idx, col_idx, item)
+    
+        self.tableView.setModel(model) 
+      
     def fetch_report_content(self, name):
         # You need to fetch the report content from your database based on the report name.
         # Implement the database retrieval logic here and return the report content as a string.
@@ -456,8 +496,6 @@ class Ui_reportingForm(object):
             return "Report not found."
     
     def fetch_pathologist_content(self, DoctorName):
-        
-
         connection = sqlite3.connect("patient_data.db")
         cursor = connection.cursor()
         cursor.execute("SELECT DoctorName FROM pathologist WHERE DoctorName = ?", (DoctorName,))
@@ -469,7 +507,7 @@ class Ui_reportingForm(object):
         else:
             return "pathologist not found."    
         
-
+    
     def populate_report_templates(self):
         # Fetch report templates from the database and add them to the combo box
         connection = sqlite3.connect("patient_data.db")
@@ -481,12 +519,29 @@ class Ui_reportingForm(object):
         # Extract the report names and add them to the combo box
         report_names = [report[1] for report in reports]
         self.comboBox_26.addItems(report_names)
- 
+    
+    def populate_pathologist_templates(self):
+        # Fetch report templates from the database and add them to the combo box
+        connection = sqlite3.connect("patient_data.db")
+        cursor = connection.cursor()
+        cursor.execute("SELECT * FROM pathologist")
+        pathologys = cursor.fetchall()
+        connection.close()
+
+        # Extract the report names and add them to the combo box
+        pathology_names = [pathology[1] for pathology in pathologys]
+        self.comboBox_24.addItems(pathology_names)
+    
+    
+    
+    
     def saveReport(self):
         # Get the selected report template
         selected_report = self.comboBox_26.currentText()
         report_content = self.fetch_report_content(selected_report)
-
+        selected_pathologist = self.comboBox_24.currentText()
+        pathologist_content = self.fetch_pathologist_content(selected_pathologist)
+                                
         # Get patient information (you can modify this part to get patient data)
         patient_name = self.lineEdit_18.text()
         # Here, you can add more fields like patient ID, date, etc.
@@ -498,8 +553,8 @@ class Ui_reportingForm(object):
         connection = sqlite3.connect("patient_data.db")
         cursor = connection.cursor()
         cursor.execute(
-            "INSERT INTO patient_reports (patient_name, report_template, report_content) VALUES (?, ?, ?)",
-            (patient_name, selected_report, edited_report),
+            "INSERT INTO patient_reports (patient_name, report_template,pathologist, report_content) VALUES (?, ?, ?, ?)",
+            (patient_name, selected_report,selected_pathologist, edited_report),
         )
         connection.commit()
         connection.close()
@@ -511,7 +566,7 @@ class Ui_reportingForm(object):
     
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
+        Form.setWindowTitle(_translate("Form", "Ekon"))
         self.label.setText(_translate("Form", "Report "))
         self.pushButton_2.setText(_translate("Form", "Report Study"))
         self.label_2.setText(_translate("Form", "Patient Name"))

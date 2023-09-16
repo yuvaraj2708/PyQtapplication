@@ -8,8 +8,12 @@ from reportformat import Ui_reportForm
 from scansummary import Ui_scansummaryForm
 import sqlite3
 from resulttemplate import Ui_resulttemplateForm
-from Category import Ui_categoryForm
 from pathologistmaster import Ui_pathologistmasterForm
+import requests
+from PyQt5 import QtWidgets, QtCore
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QMessageBox
+import os
 
 class Ui_deviceForm(object):
     def setupUi(self, Form):
@@ -309,10 +313,10 @@ class Ui_deviceForm(object):
         self.pushButton.setText(_translate("Form", "Save"))
         self.label_4.setText(_translate("Form", "Address"))
         self.label_2.setText(_translate("Form", "Device ID"))
-        self.label_3.setText(_translate("Form", "Client Name"))
+        self.label_3.setText(_translate("Form", "Client ID"))
         self.label_8.setText(_translate("Form", "Email ID"))
         self.pushButton_2.setText(_translate("Form", "Clear"))
-        self.label_5.setText(_translate("Form", "PIN Code"))
+        self.label_5.setText(_translate("Form", "Client Name"))
         self.label_6.setText(_translate("Form", "Mobile No"))
 
 class DeviceRegistrationForm(QtWidgets.QWidget):
@@ -323,44 +327,93 @@ class DeviceRegistrationForm(QtWidgets.QWidget):
         self.ui = Ui_deviceForm()
         self.ui.setupUi(self)
 
+        # Connect the Tab key press event to the check_availability method
+        self.ui.lineEdit_16.installEventFilter(self)
+        self.ui.lineEdit_15.installEventFilter(self)
+
+        # Connect the "Register" button click event to register_device method
         self.ui.pushButton.clicked.connect(self.register_device)
 
+    def eventFilter(self, obj, event):
+      if event.type() == QtCore.QEvent.KeyPress and event.key() == Qt.Key_Tab:
+          if obj == self.ui.lineEdit_16 or obj == self.ui.lineEdit_15:
+              # Get the deviceid and clientid from the UI
+              deviceid = self.ui.lineEdit_16.text()
+              clientid = self.ui.lineEdit_15.text()
+
+              # Make an API call to check if the deviceid and clientid are available
+              api_url = f'http://127.0.0.1:8000/register_client/?clientid={clientid}&deviceid={deviceid}'  # Replace with your API URL
+              try:
+                 response = requests.get(api_url)
+                 if response.status_code == 200:
+                     response_data = response.json()
+                     if 'clientid' in response_data and 'deviceid' in response_data:
+                         if response_data['clientid'] == clientid and response_data['deviceid'] == deviceid:
+                             self.show_message("Availability", "Device found")
+                         else:
+                             self.show_message("Availability", "Device not found")
+                     else:
+                         self.show_message("Error", "Response data does not contain 'clientid' and 'deviceid'.")
+                 else:
+                     self.show_message("API Request Failed", f"Status Code: {response.status_code}\n{response.text}")
+ 
+              except requests.exceptions.RequestException as e:
+                  self.show_message("Error", f'Error: {e}')
+              
+                  
+              # Return True to indicate that the event was handled
+              return True
+
+      # If the event was not handled, return False
+      return False
+
+                
+    def show_message(self, title, message):
+        msg_box = QMessageBox()
+        msg_box.setWindowTitle(title)
+        msg_box.setText(message)
+        msg_box.exec_()
+        
     def register_device(self):
        device_id = self.ui.lineEdit_16.text()
-       client_name = self.ui.lineEdit_15.text()
+       client_id = self.ui.lineEdit_15.text()
        address = self.ui.lineEdit_18.text()
-       pin_code = self.ui.lineEdit_6.text()
+       client_name = self.ui.lineEdit_6.text()
        mobile_no = self.ui.lineEdit_12.text()
        email_id = self.ui.lineEdit_10.text()
 
-       # Verify if the Device ID is correct ('1003')
-       if device_id != '1003':
-           print("Invalid Device ID. Registration failed.")
-           return  # Exit the method if Device ID is invalid
-
-       # Connect to the database
        connection = sqlite3.connect("patient_data.db")
        cursor = connection.cursor()
 
-       # Check if the device is already registered
-       cursor.execute("SELECT DeviceID FROM device WHERE DeviceID = ?", (device_id,))
+       # Check if both device_id and client_id are already registered
+       cursor.execute("SELECT DeviceID FROM device WHERE DeviceID = ? AND ClientID = ?", (device_id, client_id))
        existing_device = cursor.fetchone()
 
        if existing_device:
-           # Device is already registered, redirect to the login page
-           print("Device is already registered.")
-       else:
-           # Insert the device information into the database
-           cursor.execute('''
-               INSERT INTO device (DeviceID, ClientName, Address, PINCode, MobileNo, EmailID)
-               VALUES (?, ?, ?, ?, ?, ?)
-           ''', (device_id, client_name, address, pin_code, mobile_no, email_id))
-
-           # Commit changes and close the connection
-           connection.commit()
+           # Both device_id and client_id are already registered, show a message and redirect to the login page
+           print("Device and client are already registered.")
            connection.close()
+           
+           # Optionally, you can show a QMessageBox here to inform the user
+           
+           # Redirect to the login page
+           self.close()
+           self.login_form = LoginForm1()
+           self.login_form.show()
+           
+           return  # Return without further execution of the code
 
-           print("Device registered successfully.")
+       # Insert the device information into the database
+       cursor.execute('''
+           INSERT INTO device (DeviceID, ClientName, ClientID, Address, MobileNo, EmailID, clientidstatus, Deviceidstatus, Createdon)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+       ''', (device_id, client_name, client_id, address, mobile_no, email_id, 1, 'status_value', 'timestamp_value'))
+
+       # Commit changes and close the connection
+       connection.commit()
+       connection.close()
+
+       print("Device registered successfully.")
 
        # Close the current registration form
        self.close()
@@ -369,9 +422,9 @@ class DeviceRegistrationForm(QtWidgets.QWidget):
        self.login_form = LoginForm1()
        self.login_form.show()
 
-
-
-
+   
+   
+   
 
 
 class Ui_LoginForm(object):
@@ -523,7 +576,7 @@ class Ui_LoginForm(object):
     
     def retranslateUi(self, LoginForm):
         _translate = QtCore.QCoreApplication.translate
-        LoginForm.setWindowTitle(_translate("LoginForm", "Login"))
+        LoginForm.setWindowTitle(_translate("LoginForm", "Ekon"))
         # self.label.setText(_translate("LoginForm", "Login"))
         self.loginButton.setText(_translate("LoginForm", "Login"))
 
@@ -649,7 +702,7 @@ class Ui_MainWindow(object):
     actionLogout.setText("Logout")  # Set the text for the logout action
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Ekon"))
         # self.menusdsa.setTitle(_translate("MainWindow", "Dasboard"))
         self.menuPatientRegister.setTitle(_translate("MainWindow", "Front Desk"))
         self.actionregistrationsummary.setText(_translate("MainWindow", "Registration Summary"))
@@ -774,7 +827,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.stacked_widget.addWidget(self.add_visitsummary_frame)
         self.stacked_widget.addWidget(self.add_scansummary_frame)
         self.stacked_widget.addWidget(self.reportformat_frame)
-        self.stacked_widget.addWidget(self.category_frame)
+        self.stacked_widget.addWidget(self.pathologist_frame)
         self.setCentralWidget(self.stacked_widget)
     
         self.show_patient_master_frame()

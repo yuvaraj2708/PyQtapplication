@@ -397,7 +397,7 @@ class Ui_reportForm(object):
         
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
+        Form.setWindowTitle(_translate("Form", "Ekon"))
         self.label.setText(_translate("Form", "Report Format"))
         self.label_2.setText(_translate("Form", "Code"))
         self.label_10.setText(_translate("Form", "Template"))

@@ -133,7 +133,6 @@ create_visit_table_query = '''
     CREATE TABLE IF NOT EXISTS visit (
         id INTEGER PRIMARY KEY,
         patient_id INTEGER,  -- Change this to INTEGER as per the ForeignKey relation
-        patient_category TEXT,
         ref_dr TEXT,
         selected_test TEXT,
         visitid TEXT,
@@ -203,11 +202,14 @@ cursor = connection.cursor()
 cursor.execute('''
     CREATE TABLE IF NOT EXISTS device (
         DeviceID TEXT NOT NULL,
+        ClientID TEXT NOT NULL,
         ClientName TEXT NOT NULL,
         Address TEXT NOT NULL,
-        PINCode TEXT NOT NULL,
         MobileNo TEXT NOT NULL,
-        EmailID TEXT NOT NULL
+        EmailID TEXT NOT NULL,
+        clientidstatus INTEGER DEFAULT 0,
+        Deviceidstatus INTEGER DEFAULT 0,
+        Createdon timestamp  NOT NULL
     )
 ''')
 
@@ -253,6 +255,7 @@ CREATE TABLE patient_reports (
     report_id INTEGER PRIMARY KEY AUTOINCREMENT,
     patient_name TEXT NOT NULL,
     report_template TEXT NOT NULL,
+    pathologist TEXT NOT NULL,
     report_content TEXT NOT NULL,
     report_date DATETIME DEFAULT CURRENT_TIMESTAMP
 );

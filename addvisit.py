@@ -394,33 +394,33 @@ class Ui_addvisitForm(object):
         self.label_11.setFont(font)
         self.label_11.setStyleSheet("color: #5E6278;")
         self.label_11.setObjectName("label_11")
-        self.lineEdit_25 = QtWidgets.QLineEdit(self.groupBox)
-        self.lineEdit_25.setGeometry(QtCore.QRect(240, 210, 201, 31))
-        font = QtGui.QFont()
-        font.setPointSize(-1)
-        font.setBold(False)
-        font.setWeight(50)
-        self.lineEdit_25.setFont(font)
-        self.lineEdit_25.setStyleSheet("QLineEdit\n"
-"{\n"
-"font-size: 15px;\n"
-"    font-weight: 400;\n"
-"    color: #212529;\n"
-"    background-color: #ffffff;\n"
-"    background-clip: padding-box;\n"
-"    border: 1px solid #ced4da;\n"
-"    border-radius: 20px;\n"
-"    padding:0px 10px;\n"
-"}\n"
-"QLineEdit:focus\n"
-"{\n"
-"border:1px solid #3F4254;\n"
-"}\n"
-"\n"
-"")
-        self.lineEdit_25.setInputMethodHints(QtCore.Qt.ImhNone)
-        self.lineEdit_25.setFrame(True)
-        self.lineEdit_25.setObjectName("lineEdit_25")
+#         self.lineEdit_25 = QtWidgets.QLineEdit(self.groupBox)
+#         self.lineEdit_25.setGeometry(QtCore.QRect(240, 210, 201, 31))
+#         font = QtGui.QFont()
+#         font.setPointSize(-1)
+#         font.setBold(False)
+#         font.setWeight(50)
+#         self.lineEdit_25.setFont(font)
+#         self.lineEdit_25.setStyleSheet("QLineEdit\n"
+# "{\n"
+# "font-size: 15px;\n"
+# "    font-weight: 400;\n"
+# "    color: #212529;\n"
+# "    background-color: #ffffff;\n"
+# "    background-clip: padding-box;\n"
+# "    border: 1px solid #ced4da;\n"
+# "    border-radius: 20px;\n"
+# "    padding:0px 10px;\n"
+# "}\n"
+# "QLineEdit:focus\n"
+# "{\n"
+# "border:1px solid #3F4254;\n"
+# "}\n"
+# "\n"
+# "")
+#         self.lineEdit_25.setInputMethodHints(QtCore.Qt.ImhNone)
+#         self.lineEdit_25.setFrame(True)
+#         self.lineEdit_25.setObjectName("lineEdit_25")
         self.label_12 = QtWidgets.QLabel(self.groupBox)
         self.label_12.setGeometry(QtCore.QRect(460, 190, 71, 16))
         font = QtGui.QFont()
@@ -458,10 +458,10 @@ class Ui_addvisitForm(object):
         self.lineEdit_26.setObjectName("lineEdit_26")
         
         
-        self.comboBox_24 = QComboBox(self.groupBox)
-        self.comboBox_24.setGeometry(QtCore.QRect(20, 210, 201, 31)) 
+        # self.comboBox_24 = QComboBox(self.groupBox)
+        # self.comboBox_24.setGeometry(QtCore.QRect(20, 210, 201, 31)) 
         self.comboBox_25 = QComboBox(self.groupBox)
-        self.comboBox_25.setGeometry(QtCore.QRect(240, 210, 201, 31)) 
+        self.comboBox_25.setGeometry(QtCore.QRect(20, 210, 201, 31)) 
         self.comboBox_26 = QComboBox(self.groupBox)
         self.comboBox_26.setGeometry(QtCore.QRect(460, 210, 201, 31))
         
@@ -502,11 +502,11 @@ class Ui_addvisitForm(object):
       self.lineEdit_14.setText(email)
       self.lineEdit_13.setText(mobile)
        
-      categories = self.fetch_categories_from_database()
+#       categories = self.fetch_categories_from_database()
       refdr = self.fetch_refdr_from_database()
       selecttest = self.fetch_selecttest_from_database()
       
-      self.populate_categorydropdown(self.comboBox_24, categories)
+#       self.populate_categorydropdown(self.comboBox_24, categories)
       self.populate_refdrdropdown(self.comboBox_25, refdr)
       self.populate_testdropdown(self.comboBox_26, selecttest)
 
@@ -537,7 +537,7 @@ class Ui_addvisitForm(object):
      try:
          # Extract data from UI elements
          patient_id = self.lineEdit_16.text()
-         patient_category = self.comboBox_24.currentText()
+        #  patient_category = self.comboBox_24.currentText()
          ref_dr = self.comboBox_25.currentText()
          visitid = self.lineEdit_26.text()
          date = datetime.datetime.now().strftime("%d%m%Y")
@@ -548,8 +548,8 @@ class Ui_addvisitForm(object):
          # Insert data into the "visit" table
          connection = sqlite3.connect("patient_data.db")
          cursor = connection.cursor()
-         cursor.execute("INSERT INTO visit (patient_id, patient_category, ref_dr, selected_test, visitid, date) VALUES (?, ?, ?, ?, ?, ?)",
-                        (patient_id, patient_category, ref_dr, ', '.join(selected_test), visitid, date))
+         cursor.execute("INSERT INTO visit (patient_id, ref_dr, selected_test, visitid, date) VALUES (?, ?, ?, ?, ?)",
+                        (patient_id,  ref_dr, ', '.join(selected_test), visitid, date))
          connection.commit()
          connection.close()
          self.f.close()
@@ -624,7 +624,7 @@ class Ui_addvisitForm(object):
        
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
+        Form.setWindowTitle(_translate("Form", "Ekon"))
         self.label.setText(_translate("Form", "Add Visit"))
         self.label_7.setText(_translate("Form", "Email ID"))
         self.pushButton.setText(_translate("Form", "Submit"))
@@ -635,8 +635,8 @@ class Ui_addvisitForm(object):
         self.label_8.setText(_translate("Form", "Age"))
         self.label_5.setText(_translate("Form", "Gender"))
         self.label_6.setText(_translate("Form", "DOB"))
-        self.label_10.setText(_translate("Form", "Patient Category"))
-        self.label_11.setText(_translate("Form", "Ref Dr"))
+        self.label_10.setText(_translate("Form", "Ref Dr"))
+        # self.label_11.setText(_translate("Form", "Ref Dr"))
         self.label_12.setText(_translate("Form", "Select Test"))
 
 

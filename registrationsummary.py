@@ -406,7 +406,7 @@ class Ui_visitsummaryForm(object):
       cursor = conn.cursor()
 
       cursor.execute("""
-          SELECT visit.id, visit.ref_dr, visit.patient_category,
+          SELECT visit.id, visit.ref_dr, 
                  patients.patientname, patients.dob, patients.age, patients.gender, 
                  patients.mobile, patients.email, visit.date, visit.selected_test,patients.accession
           FROM visit
@@ -427,14 +427,14 @@ class Ui_visitsummaryForm(object):
            custom_layout.setAlignment(QtCore.Qt.AlignLeft)  # Center-align the custom layout
            
            # Unpack the values from the query result
-           visit_id, ref_dr, patient_category, patient_name, dob, age, gender, mobile, email, date, selected_test,acc = row
+           visit_id, ref_dr, patient_name, dob, age, gender, mobile, email, date, selected_test,acc = row
            
            data_labels = [
-               "ID", "Test", "Ref Dr.", "Category", "Name", "DOB", "Age", "Gender", "Mobile", "Email", "Date"
+               "ID", "Test", "Ref Dr.", "Name", "DOB", "Age", "Gender", "Mobile", "Email", "Date"
            ]
            
            data_values = [
-               visit_id,date, patient_name, dob, age, gender, mobile, email, patient_category, ref_dr,''.join(selected_test)
+               visit_id,date, patient_name, dob, age, gender, mobile, email,  ref_dr,''.join(selected_test)
            ]
            i=0
            for label, value in zip(data_labels, data_values):
@@ -586,7 +586,7 @@ class Ui_visitsummaryForm(object):
      cursor = conn.cursor()
  
      cursor.execute("""
-             SELECT visit.visitid, visit.ref_dr, visit.patient_category,
+             SELECT visit.visitid, visit.ref_dr, 
                     patients.patientname, patients.dob, patients.age, patients.gender, 
                     patients.mobile, patients.email, visit.date, visit.selected_test,patients.uhid
              FROM visit
@@ -597,7 +597,7 @@ class Ui_visitsummaryForm(object):
      conn.close()
  
      if patient_info:
-        visit_id, ref_dr, patient_category, patientname, gender, dob, age, mobile, email, date, selected_test,patient_id = patient_info
+        visit_id, ref_dr,patientname,dob, age, gender, mobile, email, date, selected_test,patient_id = patient_info
 
         # Create a formatted string with all the details
         details_string = (
@@ -609,7 +609,6 @@ class Ui_visitsummaryForm(object):
             f"Gender: {gender}\n"
             f"Mobile: {mobile}\n"
             f"Email: {email}\n"
-            f"Patient Category: {patient_category}\n"
             f"Referring Doctor: {ref_dr}\n"
             f"Selected Test: {selected_test}\n"
             f"Date: {date}\n"
@@ -667,7 +666,7 @@ class Ui_visitsummaryForm(object):
                
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
+        Form.setWindowTitle(_translate("Form", "Ekon"))
         self.label.setText(_translate("Form", "Visit Summary"))
         self.label_2.setText(_translate("Form", "From Date"))
         self.label_12.setText(_translate("Form", "Ref By / Test’s Asked"))

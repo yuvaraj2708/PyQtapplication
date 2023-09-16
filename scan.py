@@ -126,7 +126,7 @@ class Ui_scanForm(object):
     
     def set_scan_data(self, visit_data):
         
-       uhid, visit_id, selected_test, ref_dr, patient_category, patient_name, dob, age, gender, mobile, email = visit_data
+       uhid, visit_id, selected_test, ref_dr,  patient_name, dob, age, gender, mobile, email,acc = visit_data
    
        # Set the text of the labels with the scanned data
        self.patient_details_label.setText(f"Patient ID: {dob}")

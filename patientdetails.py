@@ -638,7 +638,7 @@ class Ui_patientForm(object):
      
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
+        Form.setWindowTitle(_translate("Form", "Ekon"))
         self.label.setText(_translate("Form", "Patient Master"))
         self.label_2.setText(_translate("Form", "From Date"))
         self.label_5.setText(_translate("Form", "Mobile"))

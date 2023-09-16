@@ -14,6 +14,7 @@ import sqlite3
 import os
 from editrefdr import Ui_editrefdrForm
 from PyQt5.QtCore import QTime, QTimer
+from addpathologist import Ui_pathologisterForm
 
 class Ui_pathologistmasterForm(object):
     def setupUi(self, Form):
@@ -26,7 +27,7 @@ class Ui_pathologistmasterForm(object):
         Form.setStyleSheet("background-color: #ffffff;")
         self.label = QtWidgets.QLabel(Form)
         self.label.setEnabled(True)
-        self.label.setGeometry(QtCore.QRect(20, 20, 211, 35))
+        self.label.setGeometry(QtCore.QRect(20, 20, 220, 35))
         self.label.setMinimumSize(QtCore.QSize(5, 5))
         self.label.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.label.setSizeIncrement(QtCore.QSize(3, 3))
@@ -269,7 +270,7 @@ class Ui_pathologistmasterForm(object):
         self.lineEdit_20.setFrame(True)
         self.lineEdit_20.setObjectName("lineEdit_20")
         self.pushButton_2 = QtWidgets.QPushButton(Form)
-        self.pushButton_2.setGeometry(QtCore.QRect(300, 190, 91, 31))
+        self.pushButton_2.setGeometry(QtCore.QRect(300, 190, 112, 31))
         font = QtGui.QFont()
         font.setPointSize(-1)
         font.setBold(True)
@@ -620,7 +621,7 @@ class Ui_pathologistmasterForm(object):
    
     def open_addrefdr_form(self):
         self.add_test_form = QtWidgets.QWidget()
-        self.ui_add_test = Ui_pathologistmasterForm()
+        self.ui_add_test = Ui_pathologisterForm()
         self.ui_add_test.setupUi(self.add_test_form)
         self.add_test_form.show()
         self.ui_add_test.pushButton.clicked.connect(self.fetch_and_display_refdr_data)

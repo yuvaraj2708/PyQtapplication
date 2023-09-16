@@ -398,7 +398,7 @@ class Ui_editrefdrForm(object):
                        
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
+        Form.setWindowTitle(_translate("Form", "Ekon"))
         self.label.setText(_translate("Form", "Pathalogist Master"))
         self.pushButton.setText(_translate("Form", "Save"))
         self.label_4.setText(_translate("Form", "Qualification "))

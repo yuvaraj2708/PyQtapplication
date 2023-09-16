@@ -341,7 +341,7 @@ class Ui_addtestForm(object):
     
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
+        Form.setWindowTitle(_translate("Form", "Ekon"))
         self.label.setText(_translate("Form", "Add Test"))
         self.pushButton.setText(_translate("Form", "Save"))
         self.label_4.setText(_translate("Form", "specimen type"))
