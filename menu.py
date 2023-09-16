@@ -340,7 +340,7 @@ class DeviceRegistrationForm(QtWidgets.QWidget):
               # Get the deviceid and clientid from the UI
               deviceid = self.ui.lineEdit_16.text()
               clientid = self.ui.lineEdit_15.text()
-
+                         
               # Make an API call to check if the deviceid and clientid are available
               api_url = f'http://127.0.0.1:8000/register_client/?clientid={clientid}&deviceid={deviceid}'  # Replace with your API URL
               try:
@@ -349,7 +349,9 @@ class DeviceRegistrationForm(QtWidgets.QWidget):
                      response_data = response.json()
                      if 'clientid' in response_data and 'deviceid' in response_data:
                          if response_data['clientid'] == clientid and response_data['deviceid'] == deviceid:
-                             self.show_message("Availability", "Device found")
+                            self.ui.lineEdit_6.setText(response_data['ClientName'])
+                            self.show_message("Availability", "Device found")
+                                                                                                                    
                          else:
                              self.show_message("Availability", "Device not found")
                      else:
@@ -616,7 +618,7 @@ class LoginForm1(QtWidgets.QMainWindow):
         if self.ui.usernameLineEdit.text() == "" and self.ui.passwordLineEdit.text() == "":
             self.main_window = MainWindow()
             self.close()
-            self.main_window.show()
+            # self.main_window.show()
         else:
             QtWidgets.QMessageBox.warning(self, "Login Failed", "Invalid username or password.")
         
