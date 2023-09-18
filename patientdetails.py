@@ -2,12 +2,18 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from patientregister import Ui_addpatientForm
 import sys
 import sqlite3
-from addvisit import Ui_addvisitForm
+# from addvisit import Ui_addvisitForm
 import os
 from editpatientregister import Ui_editpatientForm
 from PyQt5.QtWidgets import QDateEdit, QCalendarWidget
 from PyQt5.QtCore import QTime, QTimer
 from registrationsummary import Ui_visitsummaryForm
+import sys
+import threading
+import time
+
+from PyQt5.QtCore import * #QObject, pyqtSignal
+from PyQt5.QtWidgets import * #QApplication, QLabel, QMainWindow
 
 class Ui_patientForm(object):
     def setupUi(self, Form):
@@ -95,6 +101,8 @@ class Ui_patientForm(object):
         font.setPointSize(-1)
         font.setBold(False)
         font.setWeight(50)
+        self.lineEdit_16.setDate(QDate.currentDate())
+        self.lineEdit_16.setDisplayFormat("dd-MMM-yyyy")
         self.lineEdit_16.setFont(font)
         self.lineEdit_16.setStyleSheet("QLineEdit\n"
 "{\n"
@@ -124,6 +132,8 @@ class Ui_patientForm(object):
         font.setPointSize(-1)
         font.setBold(False)
         font.setWeight(50)
+        self.lineEdit_15.setDate(QDate.currentDate())
+        self.lineEdit_15.setDisplayFormat("dd-MMM-yyyy")
         self.lineEdit_15.setFont(font)
         self.lineEdit_15.setStyleSheet("QLineEdit\n"
 "{\n"
@@ -273,7 +283,7 @@ class Ui_patientForm(object):
         self.timer.start()
        
         self.fetch_and_display_patient_data()
-
+        
     def filter_patient_data(self):
       self.timer.stop()
       patient_name = self.lineEdit_18.text()
@@ -614,20 +624,20 @@ class Ui_patientForm(object):
        self.fetch_and_display_patient_data()
        
             
-    def open_add_visit_form(self, patient_data):
-        self.add_visit_form = QtWidgets.QWidget()
-        self.ui_add_visit = Ui_addvisitForm()
-        self.ui_add_visit.setupUi(self.add_visit_form)
+    # def open_add_visit_form(self, patient_data):
+    #     self.add_visit_form = QtWidgets.QWidget()
+    #     self.ui_add_visit = Ui_addvisitForm()
+    #     self.ui_add_visit.setupUi(self.add_visit_form)
 
-        # Pass patient data to Ui_addvisitForm
-        self.ui_add_visit.set_patient_data(patient_data)
-        self.listWidget.clear()
-        self.obj_form=QtWidgets.QWidget()
-        self.obj=Ui_visitsummaryForm()
-        self.obj.setupUi(self.obj_form)
-        self.obj.timer.start()
+    #     # Pass patient data to Ui_addvisitForm
+    #     self.ui_add_visit.set_patient_data(patient_data)
+    #     self.listWidget.clear()
+    #     self.obj_form=QtWidgets.QWidget()
+    #     self.obj=Ui_visitsummaryForm()
+    #     self.obj.setupUi(self.obj_form)
+    #     self.obj.timer.start()
 
-        self.add_visit_form.show()
+    #     self.add_visit_form.show()
 
         
 
@@ -639,7 +649,7 @@ class Ui_patientForm(object):
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Ekon"))
-        self.label.setText(_translate("Form", "Patient Master"))
+        self.label.setText(_translate("Form", "Registration Summary"))
         self.label_2.setText(_translate("Form", "From Date"))
         self.label_5.setText(_translate("Form", "Mobile"))
         self.label_14.setText(_translate("Form", "Email ID"))

@@ -15,614 +15,618 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QMessageBox
 import os
 
-class Ui_deviceForm(object):
-    def setupUi(self, Form):
-        Form.setObjectName("Form")
-        Form.resize(811, 588)
-        Form.setMaximumSize(QtCore.QSize(811, 16777215))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        Form.setFont(font)
-        Form.setStyleSheet("background-color: #ffffff;")
-        self.label = QtWidgets.QLabel(Form)
-        self.label.setEnabled(True)
-        self.label.setGeometry(QtCore.QRect(20, 30, 211, 35))
-        self.label.setMinimumSize(QtCore.QSize(5, 5))
-        self.label.setMaximumSize(QtCore.QSize(16777215, 16777215))
-        self.label.setSizeIncrement(QtCore.QSize(3, 3))
-        font = QtGui.QFont()
-        font.setPointSize(15)
-        font.setBold(True)
-        font.setWeight(75)
-        self.label.setFont(font)
-        self.label.setAutoFillBackground(False)
-        self.label.setStyleSheet("color: #181C32;")
-        self.label.setObjectName("label")
-        self.groupBox = QtWidgets.QGroupBox(Form)
-        self.groupBox.setGeometry(QtCore.QRect(0, 90, 971, 481))
-        self.groupBox.setTitle("")
-        self.groupBox.setObjectName("groupBox")
-        self.lineEdit_6 = QtWidgets.QLineEdit(self.groupBox)
-        self.lineEdit_6.setGeometry(QtCore.QRect(450, 80, 251, 31))
-        font = QtGui.QFont()
-        font.setPointSize(-1)
-        font.setBold(False)
-        font.setWeight(50)
-        self.lineEdit_6.setFont(font)
-        self.lineEdit_6.setStyleSheet("QLineEdit\n"
-"{\n"
-"font-size: 15px;\n"
-"    font-weight: 400;\n"
-"    color: #212529;\n"
-"    background-color: #ffffff;\n"
-"    background-clip: padding-box;\n"
-"    border: 1px solid #ced4da;\n"
-"    border-radius: 20px;\n"
-"    padding:0px 10px;\n"
-"}\n"
-"QLineEdit:focus\n"
-"{\n"
-"border:1px solid #3F4254;\n"
-"}\n"
-"\n"
-"")
-        self.lineEdit_6.setInputMethodHints(QtCore.Qt.ImhNone)
-        self.lineEdit_6.setFrame(True)
-        self.lineEdit_6.setObjectName("lineEdit_6")
-        self.pushButton = QtWidgets.QPushButton(self.groupBox)
-        self.pushButton.setGeometry(QtCore.QRect(290, 280, 91, 31))
-        font = QtGui.QFont()
-        font.setPointSize(-1)
-        font.setBold(True)
-        font.setWeight(62)
-        self.pushButton.setFont(font)
-        self.pushButton.setStyleSheet("QPushButton\n"
-"{\n"
-"    background-color: #0DBCC0;\n"
-"    border: 0;\n"
-"    font-size: 14px;\n"
-"    font-weight: 500;\n"
-"    border-radius: 4px;\n"
-"color: #ffffff;\n"
-"border: 0;\n"
-"}\n"
-"\n"
-"QPushButton:hover\n"
-"{\n"
-"background-color: #089598;\n"
-"}\n"
-"\n"
-"")
-        self.pushButton.setObjectName("pushButton")
-        self.label_4 = QtWidgets.QLabel(self.groupBox)
-        self.label_4.setGeometry(QtCore.QRect(50, 130, 81, 16))
-        font = QtGui.QFont()
-        font.setFamily("Poppins")
-        font.setPointSize(8)
-        self.label_4.setFont(font)
-        self.label_4.setStyleSheet("color: #5E6278;")
-        self.label_4.setObjectName("label_4")
-        self.label_2 = QtWidgets.QLabel(self.groupBox)
-        self.label_2.setGeometry(QtCore.QRect(50, 60, 71, 16))
-        font = QtGui.QFont()
-        font.setFamily("Poppins")
-        font.setPointSize(8)
-        self.label_2.setFont(font)
-        self.label_2.setStyleSheet("color: #5E6278;")
-        self.label_2.setObjectName("label_2")
-        self.label_3 = QtWidgets.QLabel(self.groupBox)
-        self.label_3.setGeometry(QtCore.QRect(190, 60, 91, 16))
-        font = QtGui.QFont()
-        font.setFamily("Poppins")
-        font.setPointSize(8)
-        self.label_3.setFont(font)
-        self.label_3.setStyleSheet("color: #5E6278;")
-        self.label_3.setObjectName("label_3")
-        self.lineEdit_10 = QtWidgets.QLineEdit(self.groupBox)
-        self.lineEdit_10.setGeometry(QtCore.QRect(350, 230, 351, 31))
-        font = QtGui.QFont()
-        font.setPointSize(-1)
-        font.setBold(False)
-        font.setWeight(50)
-        self.lineEdit_10.setFont(font)
-        self.lineEdit_10.setStyleSheet("QLineEdit\n"
-"{\n"
-"font-size: 15px;\n"
-"    font-weight: 400;\n"
-"    color: #212529;\n"
-"    background-color: #ffffff;\n"
-"    background-clip: padding-box;\n"
-"    border: 1px solid #ced4da;\n"
-"    border-radius: 20px;\n"
-"    padding:0px 10px;\n"
-"}\n"
-"QLineEdit:focus\n"
-"{\n"
-"border:1px solid #3F4254;\n"
-"}\n"
-"\n"
-"")
-        self.lineEdit_10.setInputMethodHints(QtCore.Qt.ImhNone)
-        self.lineEdit_10.setFrame(True)
-        self.lineEdit_10.setObjectName("lineEdit_10")
-        self.label_8 = QtWidgets.QLabel(self.groupBox)
-        self.label_8.setGeometry(QtCore.QRect(350, 210, 91, 16))
-        font = QtGui.QFont()
-        font.setFamily("Poppins")
-        font.setPointSize(8)
-        self.label_8.setFont(font)
-        self.label_8.setStyleSheet("color: #5E6278;")
-        self.label_8.setObjectName("label_8")
-        self.pushButton_2 = QtWidgets.QPushButton(self.groupBox)
-        self.pushButton_2.setGeometry(QtCore.QRect(390, 280, 91, 31))
-        font = QtGui.QFont()
-        font.setPointSize(-1)
-        font.setBold(True)
-        font.setWeight(62)
-        self.pushButton_2.setFont(font)
-        self.pushButton_2.setStyleSheet("QPushButton\n"
-"{\n"
-"    background-color: #0DBCC0;\n"
-"    border: 0;\n"
-"    font-size: 14px;\n"
-"    font-weight: 500;\n"
-"    border-radius: 4px;\n"
-"color: #ffffff;\n"
-"border: 0;\n"
-"}\n"
-"\n"
-"QPushButton:hover\n"
-"{\n"
-"background-color: #089598;\n"
-"}\n"
-"\n"
-"")
-        self.pushButton_2.setObjectName("pushButton_2")
-        self.label_5 = QtWidgets.QLabel(self.groupBox)
-        self.label_5.setGeometry(QtCore.QRect(450, 60, 81, 16))
-        font = QtGui.QFont()
-        font.setFamily("Poppins")
-        font.setPointSize(8)
-        self.label_5.setFont(font)
-        self.label_5.setStyleSheet("color: #5E6278;")
-        self.label_5.setObjectName("label_5")
-        self.label_6 = QtWidgets.QLabel(self.groupBox)
-        self.label_6.setGeometry(QtCore.QRect(50, 210, 91, 16))
-        font = QtGui.QFont()
-        font.setFamily("Poppins")
-        font.setPointSize(8)
-        self.label_6.setFont(font)
-        self.label_6.setStyleSheet("color: #5E6278;")
-        self.label_6.setObjectName("label_6")
-        self.lineEdit_16 = QtWidgets.QLineEdit(self.groupBox)
-        self.lineEdit_16.setGeometry(QtCore.QRect(50, 80, 121, 31))
-        font = QtGui.QFont()
-        font.setPointSize(-1)
-        font.setBold(False)
-        font.setWeight(50)
-        self.lineEdit_16.setFont(font)
-        self.lineEdit_16.setStyleSheet("QLineEdit\n"
-"{\n"
-"font-size: 15px;\n"
-"    font-weight: 400;\n"
-"    color: #212529;\n"
-"    background-color: #ffffff;\n"
-"    background-clip: padding-box;\n"
-"    border: 1px solid #ced4da;\n"
-"    border-radius: 20px;\n"
-"    padding:0px 10px;\n"
-"}\n"
-"QLineEdit:focus\n"
-"{\n"
-"border:1px solid #3F4254;\n"
-"}\n"
-"\n"
-"")
-        self.lineEdit_16.setInputMethodHints(QtCore.Qt.ImhNone)
-        self.lineEdit_16.setFrame(True)
-        self.lineEdit_16.setObjectName("lineEdit_16")
-        self.lineEdit_18 = QtWidgets.QLineEdit(self.groupBox)
-        self.lineEdit_18.setGeometry(QtCore.QRect(50, 150, 651, 31))
-        font = QtGui.QFont()
-        font.setPointSize(-1)
-        font.setBold(False)
-        font.setWeight(50)
-        self.lineEdit_18.setFont(font)
-        self.lineEdit_18.setStyleSheet("QLineEdit\n"
-"{\n"
-"font-size: 15px;\n"
-"    font-weight: 400;\n"
-"    color: #212529;\n"
-"    background-color: #ffffff;\n"
-"    background-clip: padding-box;\n"
-"    border: 1px solid #ced4da;\n"
-"    border-radius: 20px;\n"
-"    padding:0px 10px;\n"
-"}\n"
-"QLineEdit:focus\n"
-"{\n"
-"border:1px solid #3F4254;\n"
-"}\n"
-"\n"
-"")
-        self.lineEdit_18.setInputMethodHints(QtCore.Qt.ImhNone)
-        self.lineEdit_18.setFrame(True)
-        self.lineEdit_18.setObjectName("lineEdit_18")
-        self.lineEdit_15 = QtWidgets.QLineEdit(self.groupBox)
-        self.lineEdit_15.setGeometry(QtCore.QRect(190, 80, 231, 31))
-        font = QtGui.QFont()
-        font.setPointSize(-1)
-        font.setBold(False)
-        font.setWeight(50)
-        self.lineEdit_15.setFont(font)
-        self.lineEdit_15.setStyleSheet("QLineEdit\n"
-"{\n"
-"font-size: 15px;\n"
-"    font-weight: 400;\n"
-"    color: #212529;\n"
-"    background-color: #ffffff;\n"
-"    background-clip: padding-box;\n"
-"    border: 1px solid #ced4da;\n"
-"    border-radius: 20px;\n"
-"    padding:0px 10px;\n"
-"}\n"
-"QLineEdit:focus\n"
-"{\n"
-"border:1px solid #3F4254;\n"
-"}\n"
-"\n"
-"")
-        self.lineEdit_15.setInputMethodHints(QtCore.Qt.ImhNone)
-        self.lineEdit_15.setFrame(True)
-        self.lineEdit_15.setObjectName("lineEdit_15")
-        self.lineEdit_12 = QtWidgets.QLineEdit(self.groupBox)
-        self.lineEdit_12.setGeometry(QtCore.QRect(50, 230, 231, 31))
-        font = QtGui.QFont()
-        font.setPointSize(-1)
-        font.setBold(False)
-        font.setWeight(50)
-        self.lineEdit_12.setFont(font)
-        self.lineEdit_12.setStyleSheet("QLineEdit\n"
-"{\n"
-"font-size: 15px;\n"
-"    font-weight: 400;\n"
-"    color: #212529;\n"
-"    background-color: #ffffff;\n"
-"    background-clip: padding-box;\n"
-"    border: 1px solid #ced4da;\n"
-"    border-radius: 20px;\n"
-"    padding:0px 10px;\n"
-"}\n"
-"QLineEdit:focus\n"
-"{\n"
-"border:1px solid #3F4254;\n"
-"}\n"
-"\n"
-"")
-        self.lineEdit_12.setInputMethodHints(QtCore.Qt.ImhNone)
-        self.lineEdit_12.setFrame(True)
-        self.lineEdit_12.setObjectName("lineEdit_12")
+# class Ui_deviceForm(object):
+#     def setupUi(self, Form):
+#         Form.setObjectName("Form")
+#         Form.resize(811, 588)
+#         Form.setMaximumSize(QtCore.QSize(811, 16777215))
+#         font = QtGui.QFont()
+#         font.setPointSize(10)
+#         Form.setFont(font)
+#         Form.setStyleSheet("background-color: #ffffff;")
+#         self.label = QtWidgets.QLabel(Form)
+#         self.label.setEnabled(True)
+#         self.label.setGeometry(QtCore.QRect(20, 30, 211, 35))
+#         self.label.setMinimumSize(QtCore.QSize(5, 5))
+#         self.label.setMaximumSize(QtCore.QSize(16777215, 16777215))
+#         self.label.setSizeIncrement(QtCore.QSize(3, 3))
+#         font = QtGui.QFont()
+#         font.setPointSize(15)
+#         font.setBold(True)
+#         font.setWeight(75)
+#         self.label.setFont(font)
+#         self.label.setAutoFillBackground(False)
+#         self.label.setStyleSheet("color: #181C32;")
+#         self.label.setObjectName("label")
+#         self.groupBox = QtWidgets.QGroupBox(Form)
+#         self.groupBox.setGeometry(QtCore.QRect(0, 90, 971, 481))
+#         self.groupBox.setTitle("")
+#         self.groupBox.setObjectName("groupBox")
+#         self.lineEdit_6 = QtWidgets.QLineEdit(self.groupBox)
+#         self.lineEdit_6.setGeometry(QtCore.QRect(450, 80, 251, 31))
+#         font = QtGui.QFont()
+#         font.setPointSize(-1)
+#         font.setBold(False)
+#         font.setWeight(50)
+#         self.lineEdit_6.setFont(font)
+#         self.lineEdit_6.setStyleSheet("QLineEdit\n"
+# "{\n"
+# "font-size: 15px;\n"
+# "    font-weight: 400;\n"
+# "    color: #212529;\n"
+# "    background-color: #ffffff;\n"
+# "    background-clip: padding-box;\n"
+# "    border: 1px solid #ced4da;\n"
+# "    border-radius: 20px;\n"
+# "    padding:0px 10px;\n"
+# "}\n"
+# "QLineEdit:focus\n"
+# "{\n"
+# "border:1px solid #3F4254;\n"
+# "}\n"
+# "\n"
+# "")
+#         self.lineEdit_6.setInputMethodHints(QtCore.Qt.ImhNone)
+#         self.lineEdit_6.setFrame(True)
+#         self.lineEdit_6.setObjectName("lineEdit_6")
+#         self.pushButton = QtWidgets.QPushButton(self.groupBox)
+#         self.pushButton.setGeometry(QtCore.QRect(290, 280, 91, 31))
+#         font = QtGui.QFont()
+#         font.setPointSize(-1)
+#         font.setBold(True)
+#         font.setWeight(62)
+#         self.pushButton.setFont(font)
+#         self.pushButton.setStyleSheet("QPushButton\n"
+# "{\n"
+# "    background-color: #0DBCC0;\n"
+# "    border: 0;\n"
+# "    font-size: 14px;\n"
+# "    font-weight: 500;\n"
+# "    border-radius: 4px;\n"
+# "color: #ffffff;\n"
+# "border: 0;\n"
+# "}\n"
+# "\n"
+# "QPushButton:hover\n"
+# "{\n"
+# "background-color: #089598;\n"
+# "}\n"
+# "\n"
+# "")
+#         self.pushButton.setObjectName("pushButton")
+#         self.label_4 = QtWidgets.QLabel(self.groupBox)
+#         self.label_4.setGeometry(QtCore.QRect(50, 130, 81, 16))
+#         font = QtGui.QFont()
+#         font.setFamily("Poppins")
+#         font.setPointSize(8)
+#         self.label_4.setFont(font)
+#         self.label_4.setStyleSheet("color: #5E6278;")
+#         self.label_4.setObjectName("label_4")
+#         self.label_2 = QtWidgets.QLabel(self.groupBox)
+#         self.label_2.setGeometry(QtCore.QRect(50, 60, 71, 16))
+#         font = QtGui.QFont()
+#         font.setFamily("Poppins")
+#         font.setPointSize(8)
+#         self.label_2.setFont(font)
+#         self.label_2.setStyleSheet("color: #5E6278;")
+#         self.label_2.setObjectName("label_2")
+#         self.label_3 = QtWidgets.QLabel(self.groupBox)
+#         self.label_3.setGeometry(QtCore.QRect(190, 60, 91, 16))
+#         font = QtGui.QFont()
+#         font.setFamily("Poppins")
+#         font.setPointSize(8)
+#         self.label_3.setFont(font)
+#         self.label_3.setStyleSheet("color: #5E6278;")
+#         self.label_3.setObjectName("label_3")
+#         self.lineEdit_10 = QtWidgets.QLineEdit(self.groupBox)
+#         self.lineEdit_10.setGeometry(QtCore.QRect(350, 230, 351, 31))
+#         font = QtGui.QFont()
+#         font.setPointSize(-1)
+#         font.setBold(False)
+#         font.setWeight(50)
+#         self.lineEdit_10.setFont(font)
+#         self.lineEdit_10.setStyleSheet("QLineEdit\n"
+# "{\n"
+# "font-size: 15px;\n"
+# "    font-weight: 400;\n"
+# "    color: #212529;\n"
+# "    background-color: #ffffff;\n"
+# "    background-clip: padding-box;\n"
+# "    border: 1px solid #ced4da;\n"
+# "    border-radius: 20px;\n"
+# "    padding:0px 10px;\n"
+# "}\n"
+# "QLineEdit:focus\n"
+# "{\n"
+# "border:1px solid #3F4254;\n"
+# "}\n"
+# "\n"
+# "")
+#         self.lineEdit_10.setInputMethodHints(QtCore.Qt.ImhNone)
+#         self.lineEdit_10.setFrame(True)
+#         self.lineEdit_10.setObjectName("lineEdit_10")
+#         self.label_8 = QtWidgets.QLabel(self.groupBox)
+#         self.label_8.setGeometry(QtCore.QRect(350, 210, 91, 16))
+#         font = QtGui.QFont()
+#         font.setFamily("Poppins")
+#         font.setPointSize(8)
+#         self.label_8.setFont(font)
+#         self.label_8.setStyleSheet("color: #5E6278;")
+#         self.label_8.setObjectName("label_8")
+#         self.pushButton_2 = QtWidgets.QPushButton(self.groupBox)
+#         self.pushButton_2.setGeometry(QtCore.QRect(390, 280, 91, 31))
+#         font = QtGui.QFont()
+#         font.setPointSize(-1)
+#         font.setBold(True)
+#         font.setWeight(62)
+#         self.pushButton_2.setFont(font)
+#         self.pushButton_2.setStyleSheet("QPushButton\n"
+# "{\n"
+# "    background-color: #0DBCC0;\n"
+# "    border: 0;\n"
+# "    font-size: 14px;\n"
+# "    font-weight: 500;\n"
+# "    border-radius: 4px;\n"
+# "color: #ffffff;\n"
+# "border: 0;\n"
+# "}\n"
+# "\n"
+# "QPushButton:hover\n"
+# "{\n"
+# "background-color: #089598;\n"
+# "}\n"
+# "\n"
+# "")
+#         self.pushButton_2.setObjectName("pushButton_2")
+#         self.label_5 = QtWidgets.QLabel(self.groupBox)
+#         self.label_5.setGeometry(QtCore.QRect(450, 60, 81, 16))
+#         font = QtGui.QFont()
+#         font.setFamily("Poppins")
+#         font.setPointSize(8)
+#         self.label_5.setFont(font)
+#         self.label_5.setStyleSheet("color: #5E6278;")
+#         self.label_5.setObjectName("label_5")
+#         self.label_6 = QtWidgets.QLabel(self.groupBox)
+#         self.label_6.setGeometry(QtCore.QRect(50, 210, 91, 16))
+#         font = QtGui.QFont()
+#         font.setFamily("Poppins")
+#         font.setPointSize(8)
+#         self.label_6.setFont(font)
+#         self.label_6.setStyleSheet("color: #5E6278;")
+#         self.label_6.setObjectName("label_6")
+#         self.lineEdit_16 = QtWidgets.QLineEdit(self.groupBox)
+#         self.lineEdit_16.setGeometry(QtCore.QRect(50, 80, 121, 31))
+#         font = QtGui.QFont()
+#         font.setPointSize(-1)
+#         font.setBold(False)
+#         font.setWeight(50)
+#         self.lineEdit_16.setFont(font)
+#         self.lineEdit_16.setStyleSheet("QLineEdit\n"
+# "{\n"
+# "font-size: 15px;\n"
+# "    font-weight: 400;\n"
+# "    color: #212529;\n"
+# "    background-color: #ffffff;\n"
+# "    background-clip: padding-box;\n"
+# "    border: 1px solid #ced4da;\n"
+# "    border-radius: 20px;\n"
+# "    padding:0px 10px;\n"
+# "}\n"
+# "QLineEdit:focus\n"
+# "{\n"
+# "border:1px solid #3F4254;\n"
+# "}\n"
+# "\n"
+# "")
+#         self.lineEdit_16.setInputMethodHints(QtCore.Qt.ImhNone)
+#         self.lineEdit_16.setFrame(True)
+#         self.lineEdit_16.setObjectName("lineEdit_16")
+#         self.lineEdit_18 = QtWidgets.QLineEdit(self.groupBox)
+#         self.lineEdit_18.setGeometry(QtCore.QRect(50, 150, 651, 31))
+#         font = QtGui.QFont()
+#         font.setPointSize(-1)
+#         font.setBold(False)
+#         font.setWeight(50)
+#         self.lineEdit_18.setFont(font)
+#         self.lineEdit_18.setStyleSheet("QLineEdit\n"
+# "{\n"
+# "font-size: 15px;\n"
+# "    font-weight: 400;\n"
+# "    color: #212529;\n"
+# "    background-color: #ffffff;\n"
+# "    background-clip: padding-box;\n"
+# "    border: 1px solid #ced4da;\n"
+# "    border-radius: 20px;\n"
+# "    padding:0px 10px;\n"
+# "}\n"
+# "QLineEdit:focus\n"
+# "{\n"
+# "border:1px solid #3F4254;\n"
+# "}\n"
+# "\n"
+# "")
+#         self.lineEdit_18.setInputMethodHints(QtCore.Qt.ImhNone)
+#         self.lineEdit_18.setFrame(True)
+#         self.lineEdit_18.setObjectName("lineEdit_18")
+#         self.lineEdit_15 = QtWidgets.QLineEdit(self.groupBox)
+#         self.lineEdit_15.setGeometry(QtCore.QRect(190, 80, 231, 31))
+#         font = QtGui.QFont()
+#         font.setPointSize(-1)
+#         font.setBold(False)
+#         font.setWeight(50)
+#         self.lineEdit_15.setFont(font)
+#         self.lineEdit_15.setStyleSheet("QLineEdit\n"
+# "{\n"
+# "font-size: 15px;\n"
+# "    font-weight: 400;\n"
+# "    color: #212529;\n"
+# "    background-color: #ffffff;\n"
+# "    background-clip: padding-box;\n"
+# "    border: 1px solid #ced4da;\n"
+# "    border-radius: 20px;\n"
+# "    padding:0px 10px;\n"
+# "}\n"
+# "QLineEdit:focus\n"
+# "{\n"
+# "border:1px solid #3F4254;\n"
+# "}\n"
+# "\n"
+# "")
+#         self.lineEdit_15.setInputMethodHints(QtCore.Qt.ImhNone)
+#         self.lineEdit_15.setFrame(True)
+#         self.lineEdit_15.setObjectName("lineEdit_15")
+#         self.lineEdit_12 = QtWidgets.QLineEdit(self.groupBox)
+#         self.lineEdit_12.setGeometry(QtCore.QRect(50, 230, 231, 31))
+#         font = QtGui.QFont()
+#         font.setPointSize(-1)
+#         font.setBold(False)
+#         font.setWeight(50)
+#         self.lineEdit_12.setFont(font)
+#         self.lineEdit_12.setStyleSheet("QLineEdit\n"
+# "{\n"
+# "font-size: 15px;\n"
+# "    font-weight: 400;\n"
+# "    color: #212529;\n"
+# "    background-color: #ffffff;\n"
+# "    background-clip: padding-box;\n"
+# "    border: 1px solid #ced4da;\n"
+# "    border-radius: 20px;\n"
+# "    padding:0px 10px;\n"
+# "}\n"
+# "QLineEdit:focus\n"
+# "{\n"
+# "border:1px solid #3F4254;\n"
+# "}\n"
+# "\n"
+# "")
+#         self.lineEdit_12.setInputMethodHints(QtCore.Qt.ImhNone)
+#         self.lineEdit_12.setFrame(True)
+#         self.lineEdit_12.setObjectName("lineEdit_12")
 
-        self.retranslateUi(Form)
-        QtCore.QMetaObject.connectSlotsByName(Form)
+#         self.retranslateUi(Form)
+#         QtCore.QMetaObject.connectSlotsByName(Form)
 
-    def retranslateUi(self, Form):
-        _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
-        self.label.setText(_translate("Form", "Register Device"))
-        self.pushButton.setText(_translate("Form", "Save"))
-        self.label_4.setText(_translate("Form", "Address"))
-        self.label_2.setText(_translate("Form", "Device ID"))
-        self.label_3.setText(_translate("Form", "Client ID"))
-        self.label_8.setText(_translate("Form", "Email ID"))
-        self.pushButton_2.setText(_translate("Form", "Clear"))
-        self.label_5.setText(_translate("Form", "Client Name"))
-        self.label_6.setText(_translate("Form", "Mobile No"))
+#     def retranslateUi(self, Form):
+#         _translate = QtCore.QCoreApplication.translate
+#         Form.setWindowTitle(_translate("Form", "Form"))
+#         self.label.setText(_translate("Form", "Register Device"))
+#         self.pushButton.setText(_translate("Form", "Save"))
+#         self.label_4.setText(_translate("Form", "Address"))
+#         self.label_2.setText(_translate("Form", "Device ID"))
+#         self.label_3.setText(_translate("Form", "Client ID"))
+#         self.label_8.setText(_translate("Form", "Email ID"))
+#         self.pushButton_2.setText(_translate("Form", "Clear"))
+#         self.label_5.setText(_translate("Form", "Client Name"))
+#         self.label_6.setText(_translate("Form", "Mobile No"))
 
-class DeviceRegistrationForm(QtWidgets.QWidget):
-    def __init__(self, main_window):
-        super().__init__()
-        self.main_window = main_window
+# class DeviceRegistrationForm(QtWidgets.QWidget):
+#     def __init__(self, main_window):
+#         super().__init__()
+#         self.main_window = main_window
 
-        self.ui = Ui_deviceForm()
-        self.ui.setupUi(self)
+#         self.ui = Ui_deviceForm()
+#         self.ui.setupUi(self)
 
-        # Connect the Tab key press event to the check_availability method
-        self.ui.lineEdit_16.installEventFilter(self)
-        self.ui.lineEdit_15.installEventFilter(self)
+#         # Connect the Tab key press event to the check_availability method
+#         self.ui.lineEdit_16.installEventFilter(self)
+#         self.ui.lineEdit_15.installEventFilter(self)
 
-        # Connect the "Register" button click event to register_device method
-        self.ui.pushButton.clicked.connect(self.register_device)
+#         # Connect the "Register" button click event to register_device method
+#         self.ui.pushButton.clicked.connect(self.register_device)
 
-    def eventFilter(self, obj, event):
-      if event.type() == QtCore.QEvent.KeyPress and event.key() == Qt.Key_Tab:
-          if obj == self.ui.lineEdit_16 or obj == self.ui.lineEdit_15:
-              # Get the deviceid and clientid from the UI
-              deviceid = self.ui.lineEdit_16.text()
-              clientid = self.ui.lineEdit_15.text()
+#     def eventFilter(self, obj, event):
+#       if event.type() == QtCore.QEvent.KeyPress and event.key() == Qt.Key_Tab:
+#           if obj == self.ui.lineEdit_16 or obj == self.ui.lineEdit_15:
+#               # Get the deviceid and clientid from the UI
+#               deviceid = self.ui.lineEdit_16.text()
+#               clientid = self.ui.lineEdit_15.text()
                          
-              # Make an API call to check if the deviceid and clientid are available
-              api_url = f'http://127.0.0.1:8000/register_client/?clientid={clientid}&deviceid={deviceid}'  # Replace with your API URL
-              try:
-                 response = requests.get(api_url)
-                 if response.status_code == 200:
-                     response_data = response.json()
-                     if 'clientid' in response_data and 'deviceid' in response_data:
-                         if response_data['clientid'] == clientid and response_data['deviceid'] == deviceid:
-                            self.ui.lineEdit_6.setText(response_data['ClientName'])
-                            self.show_message("Availability", "Device found")
+#               # Make an API call to check if the deviceid and clientid are available
+#               api_url = f'http://127.0.0.1:8000/register_client/?clientid={clientid}&deviceid={deviceid}'  # Replace with your API URL
+#               try:
+#                  response = requests.get(api_url)
+#                  if response.status_code == 200:
+#                      response_data = response.json()
+#                      if 'clientid' in response_data and 'deviceid' in response_data:
+#                          if response_data['clientid'] == clientid and response_data['deviceid'] == deviceid:
+#                             self.ui.lineEdit_6.setText(response_data['ClientName'])
+#                             self.ui.lineEdit_18.setText(response_data['Address'])
+#                             self.ui.lineEdit_12.setText(response_data['MobileNo'])
+#                             self.ui.lineEdit_10.setText(response_data['EmailID'])
+        
+#                             # self.show_message("Availability", "Device found")
                                                                                                                     
-                         else:
-                             self.show_message("Availability", "Device not found")
-                     else:
-                         self.show_message("Error", "Response data does not contain 'clientid' and 'deviceid'.")
-                 else:
-                     self.show_message("API Request Failed", f"Status Code: {response.status_code}\n{response.text}")
+#                          else:
+#                              self.show_message("Availability", "Device not found")
+#                      else:
+#                          self.show_message("Error", "Response data does not contain 'clientid' and 'deviceid'.")
+#                  else:
+#                      self.show_message("API Request Failed", f"Status Code: {response.status_code}\n{response.text}")
  
-              except requests.exceptions.RequestException as e:
-                  self.show_message("Error", f'Error: {e}')
+#               except requests.exceptions.RequestException as e:
+#                   self.show_message("Error", f'Error: {e}')
               
                   
-              # Return True to indicate that the event was handled
-              return True
+#               # Return True to indicate that the event was handled
+#               return True
 
-      # If the event was not handled, return False
-      return False
+#       # If the event was not handled, return False
+#       return False
 
                 
-    def show_message(self, title, message):
-        msg_box = QMessageBox()
-        msg_box.setWindowTitle(title)
-        msg_box.setText(message)
-        msg_box.exec_()
+#     def show_message(self, title, message):
+#         msg_box = QMessageBox()
+#         msg_box.setWindowTitle(title)
+#         msg_box.setText(message)
+#         msg_box.exec_()
         
-    def register_device(self):
-       device_id = self.ui.lineEdit_16.text()
-       client_id = self.ui.lineEdit_15.text()
-       address = self.ui.lineEdit_18.text()
-       client_name = self.ui.lineEdit_6.text()
-       mobile_no = self.ui.lineEdit_12.text()
-       email_id = self.ui.lineEdit_10.text()
+#     def register_device(self):
+#        device_id = self.ui.lineEdit_16.text()
+#        client_id = self.ui.lineEdit_15.text()
+#        address = self.ui.lineEdit_18.text()
+#        client_name = self.ui.lineEdit_6.text()
+#        mobile_no = self.ui.lineEdit_12.text()
+#        email_id = self.ui.lineEdit_10.text()
 
-       connection = sqlite3.connect("patient_data.db")
-       cursor = connection.cursor()
+#        connection = sqlite3.connect("patient_data.db")
+#        cursor = connection.cursor()
 
-       # Check if both device_id and client_id are already registered
-       cursor.execute("SELECT DeviceID FROM device WHERE DeviceID = ? AND ClientID = ?", (device_id, client_id))
-       existing_device = cursor.fetchone()
+#        # Check if both device_id and client_id are already registered
+#        cursor.execute("SELECT DeviceID FROM device WHERE DeviceID = ? AND ClientID = ?", (device_id, client_id))
+#        existing_device = cursor.fetchone()
 
-       if existing_device:
-           # Both device_id and client_id are already registered, show a message and redirect to the login page
-           print("Device and client are already registered.")
-           connection.close()
+#        if existing_device:
+#            # Both device_id and client_id are already registered, show a message and redirect to the login page
+#            print("Device and client are already registered.")
+#            connection.close()
            
-           # Optionally, you can show a QMessageBox here to inform the user
+#            # Optionally, you can show a QMessageBox here to inform the user
            
-           # Redirect to the login page
-           self.close()
-           self.login_form = LoginForm1()
-           self.login_form.show()
+#            # Redirect to the login page
+#            self.close()
+#            self.login_form = LoginForm1()
+#            self.login_form.show()
            
-           return  # Return without further execution of the code
+#            return  # Return without further execution of the code
 
-       # Insert the device information into the database
-       cursor.execute('''
-           INSERT INTO device (DeviceID, ClientName, ClientID, Address, MobileNo, EmailID, clientidstatus, Deviceidstatus, Createdon)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-       ''', (device_id, client_name, client_id, address, mobile_no, email_id, 1, 'status_value', 'timestamp_value'))
+#        # Insert the device information into the database
+#        cursor.execute('''
+#            INSERT INTO device (DeviceID, ClientName, ClientID, Address, MobileNo, EmailID, clientidstatus, Deviceidstatus, Createdon)
+#            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+#        ''', (device_id, client_name, client_id, address, mobile_no, email_id, 1, 'status_value', 'timestamp_value'))
 
-       # Commit changes and close the connection
-       connection.commit()
-       connection.close()
+#        # Commit changes and close the connection
+#        connection.commit()
+#        connection.close()
 
-       print("Device registered successfully.")
+#        print("Device registered successfully.")
 
-       # Close the current registration form
-       self.close()
+#        # Close the current registration form
+#        self.close()
 
-       # Show the login form
-       self.login_form = LoginForm1()
-       self.login_form.show()
+#        # Show the login form
+#        self.login_form = LoginForm1()
+#        self.login_form.show()
 
    
    
    
 
 
-class Ui_LoginForm(object):
-    def setupUi(self, LoginForm):
-        LoginForm.setObjectName("LoginForm")
-        LoginForm.resize(811, 588)
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.label = QtWidgets.QLabel(LoginForm)
-        self.label.setEnabled(True)
-        self.label.setGeometry(QtCore.QRect(370, 90, 81, 35))
-        self.label.setMinimumSize(QtCore.QSize(5, 5))
-        self.label.setMaximumSize(QtCore.QSize(16777215, 16777215))
-        self.label.setSizeIncrement(QtCore.QSize(3, 3))
-        font = QtGui.QFont()
-        font.setPointSize(15)
-        font.setBold(True)
-        font.setWeight(75)
-        self.label.setFont(font)
-        self.label.setAutoFillBackground(False)
-        self.label.setStyleSheet("color: #181C32;")
-        self.label.setObjectName("label")
+# class Ui_LoginForm(object):
+#     def setupUi(self, LoginForm):
+#         LoginForm.setObjectName("LoginForm")
+#         LoginForm.resize(811, 588)
+#         font = QtGui.QFont()
+#         font.setPointSize(10)
+#         self.label = QtWidgets.QLabel(LoginForm)
+#         self.label.setEnabled(True)
+#         self.label.setGeometry(QtCore.QRect(370, 90, 81, 35))
+#         self.label.setMinimumSize(QtCore.QSize(5, 5))
+#         self.label.setMaximumSize(QtCore.QSize(16777215, 16777215))
+#         self.label.setSizeIncrement(QtCore.QSize(3, 3))
+#         font = QtGui.QFont()
+#         font.setPointSize(15)
+#         font.setBold(True)
+#         font.setWeight(75)
+#         self.label.setFont(font)
+#         self.label.setAutoFillBackground(False)
+#         self.label.setStyleSheet("color: #181C32;")
+#         self.label.setObjectName("label")
         
-        self.centralwidget = QtWidgets.QWidget(LoginForm)
-        self.centralwidget.setObjectName("centralwidget")
-        LoginForm.setCentralWidget(self.centralwidget)
+#         self.centralwidget = QtWidgets.QWidget(LoginForm)
+#         self.centralwidget.setObjectName("centralwidget")
+#         LoginForm.setCentralWidget(self.centralwidget)
         
-        self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(160, 30, 81, 20))
-        self.label.setObjectName("label")
+#         self.label = QtWidgets.QLabel(self.centralwidget)
+#         self.label.setGeometry(QtCore.QRect(160, 30, 81, 20))
+#         self.label.setObjectName("label")
         
-        # self.usernameLineEdit = QtWidgets.QLineEdit(self.centralwidget)
-        # self.usernameLineEdit.setGeometry(QtCore.QRect(100, 80, 201, 31))
-        # self.usernameLineEdit.setObjectName("usernameLineEdit")
+#         # self.usernameLineEdit = QtWidgets.QLineEdit(self.centralwidget)
+#         # self.usernameLineEdit.setGeometry(QtCore.QRect(100, 80, 201, 31))
+#         # self.usernameLineEdit.setObjectName("usernameLineEdit")
         
-        self.passwordLineEdit = QtWidgets.QLineEdit(LoginForm)
-        self.passwordLineEdit.setGeometry(QtCore.QRect(310, 310, 201, 31))
-        font = QtGui.QFont()
-        font.setPointSize(-1)
-        font.setBold(False)
-        font.setWeight(50)
-        self.passwordLineEdit.setFont(font)
-        self.passwordLineEdit.setStyleSheet("QLineEdit\n"
-"{\n"
-"font-size: 15px;\n"
-"    font-weight: 400;\n"
-"    color: #212529;\n"
-"    background-color: #ffffff;\n"
-"    background-clip: padding-box;\n"
-"    border: 1px solid #ced4da;\n"
-"    border-radius: 20px;\n"
-"    padding:0px 10px;\n"
-"}\n"
-"QLineEdit:focus\n"
-"{\n"
-"border:1px solid #3F4254;\n"
-"}\n"
-"\n"
-"")
-        self.passwordLineEdit.setInputMethodHints(QtCore.Qt.ImhNone)
-        self.passwordLineEdit.setFrame(True)
-        self.passwordLineEdit.setObjectName("lineEdit_6")
-        self.passwordLineEdit.setEchoMode(QtWidgets.QLineEdit.Password)
+#         self.passwordLineEdit = QtWidgets.QLineEdit(LoginForm)
+#         self.passwordLineEdit.setGeometry(QtCore.QRect(310, 310, 201, 31))
+#         font = QtGui.QFont()
+#         font.setPointSize(-1)
+#         font.setBold(False)
+#         font.setWeight(50)
+#         self.passwordLineEdit.setFont(font)
+#         self.passwordLineEdit.setStyleSheet("QLineEdit\n"
+# "{\n"
+# "font-size: 15px;\n"
+# "    font-weight: 400;\n"
+# "    color: #212529;\n"
+# "    background-color: #ffffff;\n"
+# "    background-clip: padding-box;\n"
+# "    border: 1px solid #ced4da;\n"
+# "    border-radius: 20px;\n"
+# "    padding:0px 10px;\n"
+# "}\n"
+# "QLineEdit:focus\n"
+# "{\n"
+# "border:1px solid #3F4254;\n"
+# "}\n"
+# "\n"
+# "")
+#         self.passwordLineEdit.setInputMethodHints(QtCore.Qt.ImhNone)
+#         self.passwordLineEdit.setFrame(True)
+#         self.passwordLineEdit.setObjectName("lineEdit_6")
+#         self.passwordLineEdit.setEchoMode(QtWidgets.QLineEdit.Password)
         
-        self.usernameLineEdit = QtWidgets.QLineEdit(LoginForm)
-        self.usernameLineEdit.setGeometry(QtCore.QRect(310, 230, 201, 31))
-        font = QtGui.QFont()
-        font.setPointSize(-1)
-        font.setBold(False)
-        font.setWeight(50)
-        self.usernameLineEdit.setFont(font)
-        self.usernameLineEdit.setStyleSheet("QLineEdit\n"
-"{\n"
-"font-size: 15px;\n"
-"    font-weight: 400;\n"
-"    color: #212529;\n"
-"    background-color: #ffffff;\n"
-"    background-clip: padding-box;\n"
-"    border: 1px solid #ced4da;\n"
-"    border-radius: 20px;\n"
-"    padding:0px 10px;\n"
-"}\n"
-"QLineEdit:focus\n"
-"{\n"
-"border:1px solid #3F4254;\n"
-"}\n"
-"\n"
-"")
-        self.usernameLineEdit.setInputMethodHints(QtCore.Qt.ImhNone)
-        self.usernameLineEdit.setFrame(True)
-        self.usernameLineEdit.setObjectName("lineEdit_18")    
+#         self.usernameLineEdit = QtWidgets.QLineEdit(LoginForm)
+#         self.usernameLineEdit.setGeometry(QtCore.QRect(310, 230, 201, 31))
+#         font = QtGui.QFont()
+#         font.setPointSize(-1)
+#         font.setBold(False)
+#         font.setWeight(50)
+#         self.usernameLineEdit.setFont(font)
+#         self.usernameLineEdit.setStyleSheet("QLineEdit\n"
+# "{\n"
+# "font-size: 15px;\n"
+# "    font-weight: 400;\n"
+# "    color: #212529;\n"
+# "    background-color: #ffffff;\n"
+# "    background-clip: padding-box;\n"
+# "    border: 1px solid #ced4da;\n"
+# "    border-radius: 20px;\n"
+# "    padding:0px 10px;\n"
+# "}\n"
+# "QLineEdit:focus\n"
+# "{\n"
+# "border:1px solid #3F4254;\n"
+# "}\n"
+# "\n"
+# "")
+#         self.usernameLineEdit.setInputMethodHints(QtCore.Qt.ImhNone)
+#         self.usernameLineEdit.setFrame(True)
+#         self.usernameLineEdit.setObjectName("lineEdit_18")    
         
         
-        self.loginButton = QtWidgets.QPushButton(LoginForm)
-        self.loginButton.setGeometry(QtCore.QRect(350, 370, 131, 31))
-        font = QtGui.QFont()
-        font.setPointSize(-1)
-        font.setBold(True)
-        font.setWeight(62)
-        self.loginButton.setFont(font)
-        self.loginButton.setStyleSheet("QPushButton\n"
-"{\n"
-"    background-color: #0DBCC0;\n"
-"    border: 0;\n"
-"    font-size: 14px;\n"
-"    font-weight: 500;\n"
-"    border-radius: 4px;\n"
-"color: #ffffff;\n"
-"border: 0;\n"
-"}\n"
-"\n"
-"QPushButton:hover\n"
-"{\n"
-"background-color: #089598;\n"
-"}\n"
-"\n"
-"")
-        self.loginButton.setObjectName("pushButton_2") 
-        self.label = QtWidgets.QLabel(LoginForm)
-        self.label.setEnabled(True)
-        self.label.setGeometry(QtCore.QRect(370, 90, 81, 35))
-        self.label.setMinimumSize(QtCore.QSize(5, 5))
-        self.label.setMaximumSize(QtCore.QSize(16777215, 16777215))
-        self.label.setSizeIncrement(QtCore.QSize(3, 3))
-        font = QtGui.QFont()
-        font.setPointSize(15)
-        font.setBold(True)
-        font.setWeight(75)
-        self.label.setFont(font)
-        self.label.setAutoFillBackground(False)
-        self.label.setStyleSheet("color: #181C32;")
-        self.label.setObjectName("label")
+#         self.loginButton = QtWidgets.QPushButton(LoginForm)
+#         self.loginButton.setGeometry(QtCore.QRect(350, 370, 131, 31))
+#         font = QtGui.QFont()
+#         font.setPointSize(-1)
+#         font.setBold(True)
+#         font.setWeight(62)
+#         self.loginButton.setFont(font)
+#         self.loginButton.setStyleSheet("QPushButton\n"
+# "{\n"
+# "    background-color: #0DBCC0;\n"
+# "    border: 0;\n"
+# "    font-size: 14px;\n"
+# "    font-weight: 500;\n"
+# "    border-radius: 4px;\n"
+# "color: #ffffff;\n"
+# "border: 0;\n"
+# "}\n"
+# "\n"
+# "QPushButton:hover\n"
+# "{\n"
+# "background-color: #089598;\n"
+# "}\n"
+# "\n"
+# "")
+#         self.loginButton.setObjectName("pushButton_2") 
+#         self.label = QtWidgets.QLabel(LoginForm)
+#         self.label.setEnabled(True)
+#         self.label.setGeometry(QtCore.QRect(370, 90, 81, 35))
+#         self.label.setMinimumSize(QtCore.QSize(5, 5))
+#         self.label.setMaximumSize(QtCore.QSize(16777215, 16777215))
+#         self.label.setSizeIncrement(QtCore.QSize(3, 3))
+#         font = QtGui.QFont()
+#         font.setPointSize(15)
+#         font.setBold(True)
+#         font.setWeight(75)
+#         self.label.setFont(font)
+#         self.label.setAutoFillBackground(False)
+#         self.label.setStyleSheet("color: #181C32;")
+#         self.label.setObjectName("label")
        
        
-        self.imageLabel = QtWidgets.QLabel(LoginForm)
-        self.imageLabel.setGeometry(QtCore.QRect(250, 150, 300, 30))  # Adjust the geometry and size as needed
-        self.imageLabel.setAlignment(QtCore.Qt.AlignCenter)
+#         self.imageLabel = QtWidgets.QLabel(LoginForm)
+#         self.imageLabel.setGeometry(QtCore.QRect(250, 150, 300, 30))  # Adjust the geometry and size as needed
+#         self.imageLabel.setAlignment(QtCore.Qt.AlignCenter)
         
-        # Load the image and resize it before setting it to the QLabel
-        image = QtGui.QPixmap('images/rdpl.png')  # Provide the correct path to your image
-        image = image.scaled(self.imageLabel.size(), QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
-        self.imageLabel.setPixmap(image)
+#         # Load the image and resize it before setting it to the QLabel
+#         image = QtGui.QPixmap('images/rdpl.png')  # Provide the correct path to your image
+#         image = image.scaled(self.imageLabel.size(), QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
+#         self.imageLabel.setPixmap(image)
         
         
        
         
-        self.retranslateUi(LoginForm)
-        QtCore.QMetaObject.connectSlotsByName(LoginForm)
+#         self.retranslateUi(LoginForm)
+#         QtCore.QMetaObject.connectSlotsByName(LoginForm)
     
-    def retranslateUi(self, LoginForm):
-        _translate = QtCore.QCoreApplication.translate
-        LoginForm.setWindowTitle(_translate("LoginForm", "Ekon"))
-        # self.label.setText(_translate("LoginForm", "Login"))
-        self.loginButton.setText(_translate("LoginForm", "Login"))
+#     def retranslateUi(self, LoginForm):
+#         _translate = QtCore.QCoreApplication.translate
+#         LoginForm.setWindowTitle(_translate("LoginForm", "Ekon"))
+#         # self.label.setText(_translate("LoginForm", "Login"))
+#         self.loginButton.setText(_translate("LoginForm", "Login"))
 
-class LoginForm(QtWidgets.QMainWindow):
-    def __init__(self):
-        super().__init__()
+# class LoginForm(QtWidgets.QMainWindow):
+#     def __init__(self):
+#         super().__init__()
         
-        self.ui = Ui_LoginForm()
-        self.ui.setupUi(self)
+#         self.ui = Ui_LoginForm()
+#         self.ui.setupUi(self)
         
-        self.ui.loginButton.clicked.connect(self.check_login)
+#         self.ui.loginButton.clicked.connect(self.check_login)
         
-    def check_login(self):
-        # Check username and password here
-        # For this example, let's assume valid credentials are "username" and "password"
-        if self.ui.usernameLineEdit.text() == "" and self.ui.passwordLineEdit.text() == "":
-            self.main_window = MainWindow()
-            self.close()
-            #self.main_window.show()
-        else:
-            QtWidgets.QMessageBox.warning(self, "Login Failed", "Invalid username or password.")
+#     def check_login(self):
+#         # Check username and password here
+#         # For this example, let's assume valid credentials are "username" and "password"
+#         if self.ui.usernameLineEdit.text() == "" and self.ui.passwordLineEdit.text() == "":
+#             self.main_window = MainWindow()
+#             self.close()
+#             #self.main_window.show()
+#         else:
+#             QtWidgets.QMessageBox.warning(self, "Login Failed", "Invalid username or password.")
         
-        self.close() 
+#         self.close() 
 
-class LoginForm1(QtWidgets.QMainWindow):
-    def __init__(self):
-        super().__init__()
+# class LoginForm1(QtWidgets.QMainWindow):
+#     def __init__(self):
+#         super().__init__()
         
-        self.ui = Ui_LoginForm()
-        self.ui.setupUi(self)
+#         self.ui = Ui_LoginForm()
+#         self.ui.setupUi(self)
         
-        self.ui.loginButton.clicked.connect(self.check_login)
+#         self.ui.loginButton.clicked.connect(self.check_login)
         
-    def check_login(self):
-        # Check username and password here
-        # For this example, let's assume valid credentials are "username" and "password"
-        if self.ui.usernameLineEdit.text() == "" and self.ui.passwordLineEdit.text() == "":
-            self.main_window = MainWindow()
-            self.close()
-            # self.main_window.show()
-        else:
-            QtWidgets.QMessageBox.warning(self, "Login Failed", "Invalid username or password.")
+#     def check_login(self):
+#         # Check username and password here
+#         # For this example, let's assume valid credentials are "username" and "password"
+#         if self.ui.usernameLineEdit.text() == "" and self.ui.passwordLineEdit.text() == "":
+#             self.main_window = MainWindow()
+#             self.close()
+#             # self.main_window.show()
+#         else:
+#             QtWidgets.QMessageBox.warning(self, "Login Failed", "Invalid username or password.")
         
-        self.close() 
+#         self.close() 
 
 
 class Ui_MainWindow(object):
@@ -654,7 +658,7 @@ class Ui_MainWindow(object):
         self.menuSettings.addAction(self.actionLogout)  # Add the action to the Settings menu
 
         # Connect the action to the logout method
-        self.actionLogout.triggered.connect(MainWindow.logout)  # Connect to MainWindow's logout method
+        # self.actionLogout.triggered.connect(MainWindow.logout)  # Connect to MainWindow's logout method
 
     # Define the actionLogout attribute
     
@@ -726,51 +730,51 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
-        self.ui.actionLogout = QtWidgets.QAction(self)
-        self.ui.actionLogout.setObjectName("actionLogout")
-        self.ui.actionLogout.setText("Logout") 
+    #     self.ui.actionLogout = QtWidgets.QAction(self)
+    #     self.ui.actionLogout.setObjectName("actionLogout")
+    #     self.ui.actionLogout.setText("Logout") 
         
-        device_id_to_check = '1003'
-        if self.is_device_registered(device_id_to_check):
-            # The device is registered, show the login page
-            self.show_login_page()
-        else:
-            # The device is not registered, show the device registration page
-            self.show_device_registration_page()
+    #     device_id_to_check = '1003'
+    #     if self.is_device_registered(device_id_to_check):
+    #         # The device is registered, show the login page
+    #         self.show_login_page()
+    #     else:
+    #         # The device is not registered, show the device registration page
+    #         self.show_device_registration_page()
 
-    def logout(self):
-        # Perform any necessary logout actions here
-        # For example, you can close the current window and show the login form
-        self.close()
-        login_form = LoginForm()
-        login_form.show()
+    # def logout(self):
+    #     # Perform any necessary logout actions here
+    #     # For example, you can close the current window and show the login form
+    #     self.close()
+    #     login_form = LoginForm()
+    #     login_form.show()
         
         
-    def is_device_registered(self, device_id):
-    # Replace with your actual device ID check logic
-       device_id = '1003'
+    # def is_device_registered(self, device_id):
+    # # Replace with your actual device ID check logic
+    #    device_id = '1003'
        
-       # Connect to the database
-       connection = sqlite3.connect("patient_data.db")
-       cursor = connection.cursor()
+    #    # Connect to the database
+    #    connection = sqlite3.connect("patient_data.db")
+    #    cursor = connection.cursor()
    
-       # Check if the device is already registered
-       cursor.execute("SELECT DeviceID FROM device WHERE DeviceID = ?", (device_id,))
-       existing_device = cursor.fetchone()
+    #    # Check if the device is already registered
+    #    cursor.execute("SELECT DeviceID FROM device WHERE DeviceID = ?", (device_id,))
+    #    existing_device = cursor.fetchone()
    
-       connection.close()
+    #    connection.close()
        
-       return existing_device is not None
+    #    return existing_device is not None
 
-    def show_device_registration_page(self):
-        # Pass self (the MainWindow instance) when creating DeviceRegistrationForm
-        self.device_registration_form = DeviceRegistrationForm(self)
-        self.device_registration_form.show()
+    # def show_device_registration_page(self):
+    #     # Pass self (the MainWindow instance) when creating DeviceRegistrationForm
+    #     self.device_registration_form = DeviceRegistrationForm(self)
+    #     self.device_registration_form.show()
 
-    def show_login_page(self):
-        self.login_form = LoginForm()
-        # self.login_form.show()
-        self.close()
+    # def show_login_page(self):
+    #     self.login_form = LoginForm()
+    #     # self.login_form.show()
+    #     self.close()
         
         self.patient_register_frame = QtWidgets.QFrame()
         self.patient_register_ui = Ui_addpatientForm()#patient register
@@ -906,17 +910,13 @@ class MainWindow(QtWidgets.QMainWindow):
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
-    conn=sqlite3.connect("patient_data.db")
+    conn = sqlite3.connect("patient_data.db")
     cursor = conn.cursor()
     cursor.execute('select * from device')
-    c=cursor.fetchall()
-    if len(c) != 0:
-        login_form = LoginForm1()  # Create an instance of the login form
-    else:
-        login_form = LoginForm()
-    login_form.show()
+    c = cursor.fetchall()
+
+    # Create the main window and display it
+    main_window = MainWindow()
+    main_window.show()
+
     sys.exit(app.exec_())
-    
-    
-    
-    

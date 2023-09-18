@@ -1,12 +1,15 @@
-import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sqlite3
 import datetime
+from PyQt5.QtWidgets import QComboBox
 
 class Ui_editpatientForm(object):
     def setupUi(self, Form,patient_uhid):
         self.conn = sqlite3.connect("patient_data.db")
-        self.cursor = self.conn.cursor()    
+        self.cursor = self.conn.cursor()
+        self.conn = sqlite3.connect("patient_data.db")
+        Form.setWindowFlags(QtCore.Qt.CustomizeWindowHint | QtCore.Qt.WindowTitleHint)
+        self.cursor = self.conn.cursor()
         Form.setObjectName("Form")
         Form.resize(900, 588)
         Form.setMaximumSize(QtCore.QSize(851, 16777215))
@@ -29,7 +32,7 @@ class Ui_editpatientForm(object):
         self.label.setStyleSheet("color: #181C32;")
         self.label.setObjectName("label")
         self.groupBox = QtWidgets.QGroupBox(Form)
-        self.groupBox.setGeometry(QtCore.QRect(0, 50, 961, 301))
+        self.groupBox.setGeometry(QtCore.QRect(0, 70, 961, 401))
         self.groupBox.setTitle("")
         self.groupBox.setObjectName("groupBox")
         self.label_7 = QtWidgets.QLabel(self.groupBox)
@@ -68,7 +71,7 @@ class Ui_editpatientForm(object):
         self.lineEdit_6.setFrame(True)
         self.lineEdit_6.setObjectName("lineEdit_6")
         self.pushButton = QtWidgets.QPushButton(self.groupBox)
-        self.pushButton.setGeometry(QtCore.QRect(290, 210, 91, 31))
+        self.pushButton.setGeometry(QtCore.QRect(300, 300, 111, 31))
         font = QtGui.QFont()
         font.setPointSize(-1)
         font.setBold(True)
@@ -109,7 +112,7 @@ class Ui_editpatientForm(object):
         self.label_2.setStyleSheet("color: #5E6278;")
         self.label_2.setObjectName("label_2")
         self.label_3 = QtWidgets.QLabel(self.groupBox)
-        self.label_3.setGeometry(QtCore.QRect(150, 50, 31, 16))
+        self.label_3.setGeometry(QtCore.QRect(150, 50, 61, 16))
         font = QtGui.QFont()
         font.setFamily("Poppins")
         font.setPointSize(8)
@@ -145,6 +148,9 @@ class Ui_editpatientForm(object):
         self.lineEdit_10.setObjectName("lineEdit_10")
         self.label_9 = QtWidgets.QLabel(self.groupBox)
         self.label_9.setGeometry(QtCore.QRect(570, 120, 41, 16))
+        font = QtGui.QFont()
+        font.setFamily("Poppins")
+        font.setPointSize(8)
         self.label_9.setFont(font)
         self.label_9.setStyleSheet("color: #5E6278;")
         self.label_9.setObjectName("label_9")
@@ -157,7 +163,7 @@ class Ui_editpatientForm(object):
         self.label_8.setStyleSheet("color: #5E6278;")
         self.label_8.setObjectName("label_8")
         self.pushButton_2 = QtWidgets.QPushButton(self.groupBox)
-        self.pushButton_2.setGeometry(QtCore.QRect(390, 210, 91, 31))
+        self.pushButton_2.setGeometry(QtCore.QRect(300, 250, 111, 31))
         font = QtGui.QFont()
         font.setPointSize(-1)
         font.setBold(True)
@@ -181,6 +187,10 @@ class Ui_editpatientForm(object):
 "\n"
 "")
         self.pushButton_2.setObjectName("pushButton_2")
+        self.label_5 = QtWidgets.QLabel(self.groupBox)
+        self.label_5.setGeometry(QtCore.QRect(570, 50, 41, 16))
+        font = QtGui.QFont()
+        font.setFamily("Poppins")
         self.label_5 = QtWidgets.QLabel(self.groupBox)
         self.label_5.setGeometry(QtCore.QRect(570, 50, 41, 16))
         font = QtGui.QFont()
@@ -359,32 +369,120 @@ class Ui_editpatientForm(object):
         self.lineEdit_12.setInputMethodHints(QtCore.Qt.ImhNone)
         self.lineEdit_12.setFrame(True)
         self.lineEdit_12.setObjectName("lineEdit_12")
-        self.size_grip = QtWidgets.QFrame(Form)
-        self.size_grip.setGeometry(QtCore.QRect(680, 550, 20, 20))
-        self.size_grip.setMinimumSize(QtCore.QSize(20, 20))
-        self.size_grip.setMaximumSize(QtCore.QSize(20, 20))
-        self.size_grip.setSizeIncrement(QtCore.QSize(20, 20))
-        # self.size_grip.setStyleSheet("\n"
-# "background-color: rgb(0, 0, 0);")
-        self.size_grip.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.size_grip.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.size_grip.setObjectName("size_grip")
-        self.horizontalLayout = QtWidgets.QHBoxLayout(self.size_grip)
-        self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout.setSpacing(0)
-        self.horizontalLayout.setObjectName("horizontalLayout")
-        self.frame_2 = QtWidgets.QFrame(self.size_grip)
-        self.frame_2.setMinimumSize(QtCore.QSize(120, 0))
-        self.frame_2.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_2.setObjectName("frame_2")
-        self.horizontalLayout.addWidget(self.frame_2)
-        self.patient_uhid = patient_uhid  # Store the patient ID
-        self.populate_patient_data()
+        self.label_11 = QtWidgets.QLabel(self.groupBox)
+        self.label_11.setGeometry(QtCore.QRect(20, 200, 41, 16))
+        font = QtGui.QFont()
+        font.setFamily("Poppins")
+        font.setPointSize(8)
+        self.label_11.setFont(font)
+        self.label_11.setStyleSheet("color: #5E6278;")
+        self.label_11.setObjectName("label_11")
+        self.lineEdit_25 = QtWidgets.QLineEdit(self.groupBox)
+        self.lineEdit_25.setGeometry(QtCore.QRect(20, 220, 201, 31))
+        font = QtGui.QFont()
+        font.setPointSize(-1)
+        font.setBold(False)
+        font.setWeight(50)
+        self.lineEdit_25.setFont(font)
+        self.lineEdit_25.setStyleSheet("QLineEdit\n"
+"{\n"
+"font-size: 15px;\n"
+"    font-weight: 400;\n"
+"    color: #212529;\n"
+"    background-color: #ffffff;\n"
+"    background-clip: padding-box;\n"
+"    border: 1px solid #ced4da;\n"
+"    border-radius: 20px;\n"
+"    padding:0px 10px;\n"
+"}\n"
+"QLineEdit:focus\n"
+"{\n"
+"border:1px solid #3F4254;\n"
+"}\n"
+"\n"
+"")
+        self.lineEdit_25.setInputMethodHints(QtCore.Qt.ImhNone)
+        self.lineEdit_25.setFrame(True)
+        self.lineEdit_25.setObjectName("lineEdit_25")
+        self.label_12 = QtWidgets.QLabel(self.groupBox)
+        self.label_12.setGeometry(QtCore.QRect(460, 190, 71, 16))
+        font = QtGui.QFont()
+        font.setFamily("Poppins")
+        font.setPointSize(8)
+        self.label_12.setFont(font)
+        self.label_12.setStyleSheet("color: #5E6278;")
+        self.label_12.setObjectName("label_12")
+        self.lineEdit_26 = QtWidgets.QLineEdit(self.groupBox)
+        self.lineEdit_26.setGeometry(QtCore.QRect(460, 210, 201, 31))
+        font = QtGui.QFont()
+        font.setPointSize(-1)
+        font.setBold(False)
+        font.setWeight(50)
+        self.lineEdit_26.setFont(font)
+        self.lineEdit_26.setStyleSheet("QLineEdit\n"
+"{\n"
+"font-size: 15px;\n"
+"    font-weight: 400;\n"
+"    color: #212529;\n"
+"    background-color: #ffffff;\n"
+"    background-clip: padding-box;\n"
+"    border: 1px solid #ced4da;\n"
+"    border-radius: 20px;\n"
+"    padding:0px 10px;\n"
+"}\n"
+"QLineEdit:focus\n"
+"{\n"
+"border:1px solid #3F4254;\n"
+"}\n"
+"\n"
+"")
+        self.lineEdit_26.setInputMethodHints(QtCore.Qt.ImhNone)
+        self.lineEdit_26.setFrame(True)
+        self.lineEdit_26.setObjectName("lineEdit_26")
+
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
+        self.fetch_latest_patient_number()
+        latest_patient_number = self.fetch_latest_patient_number()
+        next_patient_number = self.generate_next_patient_number(latest_patient_number)
+        self.lineEdit_16.setText(next_patient_number)  # Set the generated test code
+        
+        self.fetch_latest_accession_number()
+        latest_accession_number = self.fetch_latest_accession_number()
+        next_accession_number = self.generate_next_accession_number(latest_accession_number)
+        self.comboBox_25 = QtWidgets.QComboBox(self.groupBox)
+        self.comboBox_25.setGeometry(QtCore.QRect(20, 220, 201, 31))
+        
+        # Populate comboBox_25 with data from the database
+        refdr_data = self.fetch_refdr_from_database()
+        self.comboBox_25.addItems(refdr_data)
+
+        # Create comboBox_26
+        self.comboBox_26 = QtWidgets.QComboBox(self.groupBox)
+        self.comboBox_26.setGeometry(QtCore.QRect(460, 210, 201, 31))
+
+        # Populate comboBox_26 with data from the database
+        selecttest_data = self.fetch_selecttest_from_database()
+        self.comboBox_26.addItems(selecttest_data)
+        
+        self.listWidgetTestSelected = QtWidgets.QListWidget(self.groupBox)
+        self.listWidgetTestSelected.setGeometry(QtCore.QRect(460, 250, 201, 111))
+        self.listWidgetTestSelected.setObjectName("listWidgetTestSelected") 
         
         
+        self.pushButtonAddTest = QtWidgets.QPushButton(self.groupBox)
+        self.pushButtonAddTest.setGeometry(QtCore.QRect(680, 210, 51, 31))
+        self.pushButtonAddTest.setText("Add")
+        self.pushButtonAddTest.clicked.connect(self.add_selected_test_to_list)
+        
+        refdr_data = self.fetch_refdr_from_database()
+        self.populate_refdrdropdown(self.comboBox_25, refdr_data)  # Use your populate function
+        
+        # Populate comboBox_26 with data from the database
+        selecttest_data = self.fetch_selecttest_from_database()
+        self.populate_testdropdown(self.comboBox_26, selecttest_data)
+        self.patient_uhid = patient_uhid  # Store the patient ID
+        self.populate_patient_data() 
         
     def populate_patient_data(self):
         if self.patient_uhid:
@@ -400,30 +498,135 @@ class Ui_editpatientForm(object):
                 self.lineEdit_10.setText(patient_data[6])
                 self.lineEdit_14.setText(patient_data[7])
                 self.lineEdit_13.setText(patient_data[8])
-            
+                # self.comboBox_25.currentText(patient_data[9])
+                # self.comboBox_26.currentText(patient_data[10])
     
     def fetch_patient_data_by_id(self, patient_uhid):
         self.cursor.execute("SELECT * FROM patients WHERE uhid=?", (patient_uhid,))
         patient_data = self.cursor.fetchone()
-        return patient_data
+        return patient_data    
+        
+    def add_selected_test_to_list(self):
+     selected_test = self.comboBox_26.currentText()
+     if selected_test:
+        self.listWidgetTestSelected.addItem(selected_test)
     
     
+    
+        
+    def fetch_latest_patient_number(self):
+        try:
+            self.cursor.execute("SELECT MAX(uhid) FROM patients")
+            latest_test_number = self.cursor.fetchone()[0]
+            return latest_test_number
+        except Exception as e:
+            print("Error fetching latest patient number:", str(e))
+            return None
+
+    def generate_next_patient_number(self, latest_patient_number):
+        if latest_patient_number is None:
+            return "P00001"
+
+        prefix = "P"
+        numeric_part = int(latest_patient_number[1:])  # Convert the numeric part to integer
+        next_numeric_part = numeric_part + 1
+        next_patient_number = f"{prefix}{next_numeric_part:05}"  # Format as "T00001"
+        return next_patient_number
+    
+    def fetch_latest_accession_number(self):
+        try:
+            self.cursor.execute("SELECT MAX(accession) FROM patients")
+            latest_test_number = self.cursor.fetchone()[0]
+            return latest_test_number
+        except Exception as e:
+            print("Error fetching latest patient number:", str(e))
+            return None
+    
+    
+    def generate_next_accession_number(self, latest_accession_number):
+        if latest_accession_number is None:
+            return "100001"
+    
+        numeric_part = int(latest_accession_number)
+        next_numeric_part = numeric_part + 1
+        next_accession_number = str(next_numeric_part).zfill(6)
+        return next_accession_number
+    
+    def save_accession_data(self):
+        try:
+            DoctorCode = self.generate_next_accession_number()
+            # ... rest of your save_test_data function ...
+
+        except Exception as e:
+            print("Error:", str(e))
+    
+    
+    def save_patient_data(self):
+        try:
+            DoctorCode = self.generate_next_patient_number()
+            # ... rest of your save_test_data function ...
+
+        except Exception as e:
+            print("Error:", str(e))
+    
+    
+    
+    def fetch_refdr_from_database(self):
+    # Connect to your database
+      connection = sqlite3.connect("patient_data.db")
+      cursor = connection.cursor()
+  
+      # Fetch categories from the "category" table
+      cursor.execute("SELECT * FROM refdr")
+      refdr = cursor.fetchall()
+     
+      # Close the connection
+      connection.close()
+  
+      return [refdrs[1] for refdrs in refdr]
+    
+      
+    def fetch_selecttest_from_database(self):
+       connection = sqlite3.connect("patient_data.db")
+       cursor = connection.cursor()
+  
+       # Fetch data from the "tests" table
+       cursor.execute("SELECT * FROM tests")
+       tests = cursor.fetchall()
+
+       # Print the fetched data for debugging
+  
+       connection.close()
+  
+       return [test[1] for test in tests]
+    
+    def populate_refdrdropdown(self, combo_box, data):
+        combo_box.clear()
+        combo_box.addItems(data)
+    
+    def populate_testdropdown(self, combo_box, data):
+        combo_box.clear()
+        combo_box.addItems(data)  
+            
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Ekon"))
-        self.label.setText(_translate("Form", "Patient Registration"))
+        Form.setWindowTitle(_translate("Form", "Form"))
+        self.label.setText(_translate("Form", "Add Patient"))
         self.label_7.setText(_translate("Form", "Email ID"))
-        self.pushButton.setText(_translate("Form", "Save"))
+        self.pushButton.setText(_translate("Form", "Submit"))
+        self.pushButton_2.setText(_translate("Form", "Close"))
+        self.pushButton_2.clicked.connect(Form.close)
         self.label_4.setText(_translate("Form", "Patient Name"))
         self.label_2.setText(_translate("Form", "UHID"))
         self.label_3.setText(_translate("Form", "Title"))
         self.label_9.setText(_translate("Form", "Mobile"))
         self.label_8.setText(_translate("Form", "Age"))
-        self.pushButton_2.setText(_translate("Form", "Clear"))
         self.label_5.setText(_translate("Form", "Gender"))
         self.label_6.setText(_translate("Form", "DOB"))
+        self.label_11.setText(_translate("Form", "Ref Dr"))
+        self.label_12.setText(_translate("Form", "Select Test"))
         self.pushButton.clicked.connect(self.save_patient_data)
-    
+        
     def clear_input_fields(self):
         self.lineEdit_16.clear()
         self.lineEdit_15.clear()
@@ -433,11 +636,11 @@ class Ui_editpatientForm(object):
         self.lineEdit_10.clear()
         self.lineEdit_14.clear()
         self.lineEdit_13.clear()
-        
+        self.comboBox_25.clear()
+        self.comboBox_26.clear()
         
     def save_patient_data(self):
-        self.conn = sqlite3.connect("patient_data.db")
-        self.cursor = self.conn.cursor()
+     try:
         uhid = self.lineEdit_16.text()
         title = self.lineEdit_15.text()
         patientname = self.lineEdit_18.text()
@@ -446,21 +649,30 @@ class Ui_editpatientForm(object):
         gender = self.lineEdit_10.text()
         mobile = self.lineEdit_14.text()
         email = self.lineEdit_13.text()
+        refdr = self.comboBox_25.currentText()
+        selected_test = self.comboBox_26.currentText()
         
+        # Uncomment the code to fetch the latest accession number
+        latest_accession_number = self.fetch_latest_accession_number()
+        accession = self.generate_next_accession_number(latest_accession_number)
+
+        # Insert patient data into the database
         current_datetime = datetime.datetime.now()
         current_date = current_datetime.strftime("%d%m%Y")
-        print(uhid)
-        # Insert patient data into the database
-        
-        self.cursor.execute("UPDATE patients SET title=?, patientname=?, dob=?, age=?, gender=?, mobile=?, email=?, date=? WHERE uhid=?",
-                    (title, patientname, dob, age, gender, mobile, email, current_date, uhid))
-        self.conn.commit()
 
-        
+        self.cursor.execute("UPDATE patients SET title=?, patientname=?, dob=?, age=?, gender=?, mobile=?, email=?, date=?, refdr=?, selected_test=?, accession=? WHERE uhid=?",
+                            (title, patientname, dob, age, gender, mobile, email, current_date, refdr, selected_test,accession,uhid))
+        self.conn.commit()
+        # self.f.close()
+
         # Clear the input fields after saving
         self.clear_input_fields()
-        self.conn.close()
         
+     except sqlite3.Error as e:
+        print("Error:", str(e))
+      
+    
+
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
