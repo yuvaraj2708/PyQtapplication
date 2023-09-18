@@ -14,7 +14,7 @@ from PyQt5 import QtWidgets, QtCore
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QMessageBox
 import os
-
+import sys
 # class Ui_deviceForm(object):
 #     def setupUi(self, Form):
 #         Form.setObjectName("Form")
@@ -634,7 +634,8 @@ class Ui_MainWindow(object):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(900, 588)
         # self.showMaximized()
-        MainWindow.setMaximumSize(QtCore.QSize(851, 17777415))
+        MainWindow.showFullScreen()
+        # MainWindow.setMaximumSize(QtCore.QSize(851, 17777415))
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         MainWindow.setCentralWidget(self.centralwidget)
@@ -777,7 +778,7 @@ class MainWindow(QtWidgets.QMainWindow):
     #     self.close()
         
         self.patient_register_frame = QtWidgets.QFrame()
-        self.patient_register_ui = Ui_addpatientForm()#patient register
+        self.patient_register_ui = Ui_addpatientForm()
         self.patient_register_ui.setupUi(self.patient_register_frame)
 
         self.patient_master_frame = QtWidgets.QFrame()
@@ -908,7 +909,6 @@ class MainWindow(QtWidgets.QMainWindow):
          self.stacked_widget.setCurrentWidget(self.reportformat_frame)     
         
 if __name__ == "__main__":
-    import sys
     app = QtWidgets.QApplication(sys.argv)
     conn = sqlite3.connect("patient_data.db")
     cursor = conn.cursor()
@@ -918,5 +918,16 @@ if __name__ == "__main__":
     # Create the main window and display it
     main_window = MainWindow()
     main_window.show()
-
+    
     sys.exit(app.exec_())
+
+# if __name__ == "__main__":
+#     app = QtWidgets.QApplication(sys.argv)
+#     MainWindow = QtWidgets.QMainWindow()
+#     ui = Ui_MainWindow()
+#     ui.setupUi(MainWindow)
+
+#     # Set the main window to full-screen mode
+#     MainWindow.showFullScreen()
+
+#     sys.exit(app.exec_())

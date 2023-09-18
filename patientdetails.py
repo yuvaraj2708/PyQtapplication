@@ -27,7 +27,7 @@ class Ui_patientForm(object):
         Form.setStyleSheet("background-color: #ffffff;")
         self.label = QtWidgets.QLabel(Form)
         self.label.setEnabled(True)
-        self.label.setGeometry(QtCore.QRect(20, 20, 211, 35))
+        self.label.setGeometry(QtCore.QRect(20, 20, 226, 35))
         self.label.setMinimumSize(QtCore.QSize(5, 5))
         self.label.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.label.setSizeIncrement(QtCore.QSize(3, 3))
@@ -427,6 +427,7 @@ class Ui_patientForm(object):
               edit_button.setFixedSize(20, 20)
               edit_button.clicked.connect(lambda _, row=row: self.edit_patient(row[0]))
               button_layout.addWidget(edit_button)
+              
                 
               add_visit_button = QtWidgets.QPushButton()
               add_visit_button.setIcon(QtGui.QIcon(os.path.join('images', 'addvisit.png')))
@@ -569,7 +570,7 @@ class Ui_patientForm(object):
                     button_layout.addWidget(add_visit_button)
                 
                     # Add spacing between the label and buttons
-                  #  button_layout.addSpacing(9000000)
+                  #  button_layout.addSpacing(90 00000)
                     
                     custom_layout.addLayout(button_layout)  # Add the button layout to the custom layout
                     item.setSizeHint(custom_widget.sizeHint())
