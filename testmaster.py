@@ -18,29 +18,43 @@ from PyQt5.QtCore import QTime, QTimer
 
 
 class Ui_testForm(object):
-    def setupUi(self, Form):            
-        Form.resize(900, 588)
-        Form.setMaximumSize(QtCore.QSize(851, 16777215))
+    def setupUi(self, Form):
+        Form.setObjectName("Form")
+        Form.resize(901, 889)
+        self.textEdit = QtWidgets.QTextEdit(Form)
+        self.textEdit.setGeometry(QtCore.QRect(0, 340, 1941, 601))
+        self.textEdit.setMinimumSize(QtCore.QSize(1500, 0))
+        self.textEdit.setObjectName("textEdit")
+        self.pushButton_3 = QtWidgets.QPushButton(Form)
+        self.pushButton_3.setGeometry(QtCore.QRect(600, 140, 111, 31))
         font = QtGui.QFont()
-        font.setPointSize(10)
-        Form.setFont(font)
-        Form.setStyleSheet("background-color: #ffffff;")
-        self.label = QtWidgets.QLabel(Form)
-        self.label.setEnabled(True)
-        self.label.setGeometry(QtCore.QRect(20, 20, 211, 35))
-        self.label.setMinimumSize(QtCore.QSize(5, 5))
-        self.label.setMaximumSize(QtCore.QSize(16777215, 16777215))
-        self.label.setSizeIncrement(QtCore.QSize(3, 3))
-        font = QtGui.QFont()
-        font.setPointSize(15)
+        font.setPointSize(-1)
         font.setBold(True)
-        font.setWeight(75)
-        self.label.setFont(font)
-        self.label.setAutoFillBackground(False)
-        self.label.setStyleSheet("color: #181C32;")
-        self.label.setObjectName("label")
+        font.setWeight(62)
+        self.pushButton_3.setFont(font)
+        self.pushButton_3.setStyleSheet("QPushButton\n"
+"{\n"
+"    background-color: #0DBCC0;\n"
+"    border: 0;\n"
+"    font-size: 14px;\n"
+"    font-weight: 500;\n"
+"    border-radius: 4px;\n"
+"color: #ffffff;\n"
+"border: 0;\n"
+"}\n"
+"\n"
+"QPushButton:hover\n"
+"{\n"
+"background-color: #089598;\n"
+"}\n"
+"\n"
+"")
+        self.pushButton_3.setObjectName("pushButton_3")
+        self.label_14 = QtWidgets.QLabel(Form)
+        self.label_14.setGeometry(QtCore.QRect(720, 310, 41, 16))
+        self.label_14.setObjectName("label_14")
         self.lineEdit_18 = QtWidgets.QLineEdit(Form)
-        self.lineEdit_18.setGeometry(QtCore.QRect(20, 120, 201, 31))
+        self.lineEdit_18.setGeometry(QtCore.QRect(30, 140, 201, 31))
         font = QtGui.QFont()
         font.setPointSize(-1)
         font.setBold(False)
@@ -67,7 +81,7 @@ class Ui_testForm(object):
         self.lineEdit_18.setFrame(True)
         self.lineEdit_18.setObjectName("lineEdit_18")
         self.label_2 = QtWidgets.QLabel(Form)
-        self.label_2.setGeometry(QtCore.QRect(20, 100, 111, 16))
+        self.label_2.setGeometry(QtCore.QRect(30, 120, 111, 16))
         font = QtGui.QFont()
         font.setFamily("Poppins")
         font.setPointSize(8)
@@ -75,49 +89,15 @@ class Ui_testForm(object):
         self.label_2.setStyleSheet("color: #5E6278;")
         self.label_2.setObjectName("label_2")
         self.label_3 = QtWidgets.QLabel(Form)
-        self.label_3.setGeometry(QtCore.QRect(240, 100, 71, 16))
+        self.label_3.setGeometry(QtCore.QRect(250, 120, 101, 16))
         font = QtGui.QFont()
         font.setFamily("Poppins")
         font.setPointSize(8)
         self.label_3.setFont(font)
         self.label_3.setStyleSheet("color: #5E6278;")
         self.label_3.setObjectName("label_3")
-        self.label_13 = QtWidgets.QLabel(Form)
-        self.label_13.setGeometry(QtCore.QRect(750, 260, 41, 16))
-        self.label_13.setObjectName("label_13")
-        self.pushButton = QtWidgets.QPushButton(Form)
-        self.pushButton.setGeometry(QtCore.QRect(460, 120, 91, 31))
-        font = QtGui.QFont()
-        font.setPointSize(-1)
-        font.setBold(True)
-        font.setWeight(62)
-        self.pushButton.setFont(font)
-        self.pushButton.setStyleSheet("QPushButton\n"
-"{\n"
-"    background-color: #0DBCC0;\n"
-"    border: 0;\n"
-"    font-size: 14px;\n"
-"    font-weight: 500;\n"
-"    border-radius: 4px;\n"
-"color: #ffffff;\n"
-"border: 0;\n"
-"}\n"
-"\n"
-"QPushButton:hover\n"
-"{\n"
-"background-color: #089598;\n"
-"}\n"
-"\n"
-"")
-        self.pushButton.setObjectName("pushButton")
-        self.label_10 = QtWidgets.QLabel(Form)
-        self.label_10.setGeometry(QtCore.QRect(20, 260, 26, 16))
-        self.label_10.setObjectName("label_10")
-        self.label_11 = QtWidgets.QLabel(Form)
-        self.label_11.setGeometry(QtCore.QRect(30, 260, 58, 16))
-        self.label_11.setObjectName("label_11")
         self.lineEdit_19 = QtWidgets.QLineEdit(Form)
-        self.lineEdit_19.setGeometry(QtCore.QRect(240, 120, 201, 31))
+        self.lineEdit_19.setGeometry(QtCore.QRect(250, 140, 201, 31))
         font = QtGui.QFont()
         font.setPointSize(-1)
         font.setBold(False)
@@ -143,17 +123,26 @@ class Ui_testForm(object):
         self.lineEdit_19.setInputMethodHints(QtCore.Qt.ImhNone)
         self.lineEdit_19.setFrame(True)
         self.lineEdit_19.setObjectName("lineEdit_19")
-        self.pushButton_2 = QtWidgets.QPushButton(Form)
-        self.pushButton_2.setGeometry(QtCore.QRect(560, 120, 91, 31))
-        self.pushButton_2.setObjectName("pushButton_2")
-        self.pushButton_2.clicked.connect(self.open_add_test_form)  # Connect the clicked signal
-
+        self.label_17 = QtWidgets.QLabel(Form)
+        self.label_17.setGeometry(QtCore.QRect(450, 310, 111, 16))
+        self.label_17.setObjectName("label_17")
+        # self.label_10 = QtWidgets.QLabel(Form)
+        # self.label_10.setGeometry(QtCore.QRect(40, 310, 26, 16))
+        # self.label_10.setObjectName("label_10")
+        self.label_15 = QtWidgets.QLabel(Form)
+        self.label_15.setGeometry(QtCore.QRect(240, 310, 51, 13))
+        self.label_15.setObjectName("label_15")
+        self.label_11 = QtWidgets.QLabel(Form)
+        self.label_11.setGeometry(QtCore.QRect(110, 310, 58, 16))
+        self.label_11.setObjectName("label_11")
+        self.pushButton = QtWidgets.QPushButton(Form)
+        self.pushButton.setGeometry(QtCore.QRect(470, 140, 111, 31))
         font = QtGui.QFont()
         font.setPointSize(-1)
         font.setBold(True)
         font.setWeight(62)
-        self.pushButton_2.setFont(font)
-        self.pushButton_2.setStyleSheet("QPushButton\n"
+        self.pushButton.setFont(font)
+        self.pushButton.setStyleSheet("QPushButton\n"
 "{\n"
 "    background-color: #0DBCC0;\n"
 "    border: 0;\n"
@@ -170,34 +159,33 @@ class Ui_testForm(object):
 "}\n"
 "\n"
 "")
-        self.pushButton_2.setObjectName("pushButton_2")
-        self.label_14 = QtWidgets.QLabel(Form)
-        self.label_14.setGeometry(QtCore.QRect(120, 260, 51, 13))
-        self.label_14.setObjectName("label_14")
-        self.label_15 = QtWidgets.QLabel(Form)
-        self.label_15.setGeometry(QtCore.QRect(520, 260, 70, 13))
-        self.label_15.setObjectName("label_15")
-        self.label_16 = QtWidgets.QLabel(Form)
-        self.label_16.setGeometry(QtCore.QRect(380, 260, 57, 13))
-        self.label_16.setObjectName("label_16")
-        self.label_17 = QtWidgets.QLabel(Form)
-        self.label_17.setGeometry(QtCore.QRect(240, 260, 72, 13))
-        self.label_17.setObjectName("label_17")
-        self.label_18 = QtWidgets.QLabel(Form)
-        self.label_18.setGeometry(QtCore.QRect(630, 260, 96, 13))
-        self.label_18.setObjectName("label_18")
- 
+        self.pushButton.setObjectName("pushButton")
+        self.label = QtWidgets.QLabel(Form)
+        self.label.setEnabled(True)
+        self.label.setGeometry(QtCore.QRect(30, 40, 211, 35))
+        self.label.setMinimumSize(QtCore.QSize(5, 5))
+        self.label.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        self.label.setSizeIncrement(QtCore.QSize(3, 3))
+        font = QtGui.QFont()
+        font.setPointSize(15)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label.setFont(font)
+        self.label.setAutoFillBackground(False)
+        self.label.setStyleSheet("color: #181C32;")
+        self.label.setObjectName("label")
+
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
-        self.pushButton_2.setObjectName("pushButton_2")
-        self.textEdit = QtWidgets.QTextEdit(Form)
-        self.textEdit.setGeometry(QtCore.QRect(-27, 280, 921, 421))
-        self.textEdit.setObjectName("textEdit")
+        self.pushButton_3.setObjectName("pushButton_3")
+        # self.textEdit = QtWidgets.QTextEdit(Form)
+        # self.textEdit.setGeometry(QtCore.QRect(-27, 280, 921, 421))
+        # self.textEdit.setObjectName("textEdit")
         
         
         self.test_data = {}
         self.listWidget = QtWidgets.QListWidget(Form)
-        self.listWidget.setGeometry(QtCore.QRect(-27, 280, 921, 421))
+        self.listWidget.setGeometry(QtCore.QRect(0, 340, 1050, 600))  # Adjust the geometry as needed
         self.listWidget.setObjectName("listWidget")
 
         self.retranslateUi(Form)
@@ -229,12 +217,9 @@ class Ui_testForm(object):
          query+='TestName like ? or Testcode like ?'
          parameters.append('%'+common+'%')
          parameters.append('%'+common+'%')
-     elif dept and common=='':
-         query+='reportingrate like ?'
-         parameters.append('%'+dept+'%')
      elif common and dept:
-         query +='TestName like ? or Testcode like ? and reportingrate like ?'
-         parameters.extend(['%'+common+'%','%'+common+'%','%'+dept+'%'])
+         query +='TestName like ? or Testcode like ? '
+         parameters.extend(['%'+common+'%','%'+common+'%'])
      cursor.execute(query, parameters)
      test_data = cursor.fetchall()
      
@@ -325,7 +310,7 @@ class Ui_testForm(object):
         
     
     def fetch_and_display_test_data(self):
-    
+     self.listWidget.clear()
     # Connect to the database
      conn = sqlite3.connect('patient_data.db')
      cursor = conn.cursor()
@@ -333,7 +318,7 @@ class Ui_testForm(object):
      # Fetch reference data
      cursor.execute("SELECT * FROM tests")
      test_data = cursor.fetchall()
-     self.listWidget.clear()
+    #  self.listWidget.clear()
      if test_data:
          for row in test_data:
              item = QtWidgets.QListWidgetItem()
@@ -432,7 +417,7 @@ class Ui_testForm(object):
         
         #self.listWidget.clear()
         
-        self.ui_edit_test.pushButton.clicked.connect(self.fetch_and_display_test_data)
+        self.ui_edit_test.pushButton_5.clicked.connect(self.fetch_and_display_test_data)
    
     def fetch_test_data_by_id(self, Testcode):
         # Connect to the database
@@ -462,27 +447,25 @@ class Ui_testForm(object):
         
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Ekon"))
-        self.label.setText(_translate("Form", "Tests Master"))
+        Form.setWindowTitle(_translate("Form", "Form"))
+        self.pushButton_3.setText(_translate("Form", "Add Test"))
+        self.label_14.setText(_translate("Form", "Actions"))
         self.label_2.setText(_translate("Form", "Test Name / Code"))
-        self.label_3.setText(_translate("Form", "Department"))
-        self.label_13.setText(_translate("Form", "Actions"))
-        self.pushButton.setText(_translate("Form", "Search"))
-       # self.label_10.setText(_translate("Form", "Date"))
-        self.label_11.setText(_translate("Form", "Test Code"))
-        self.pushButton_2.setText(_translate("Form", "Add Test"))
-        self.label_14.setText(_translate("Form", "Test Name"))
-        self.label_15.setText(_translate("Form", "Report Format"))
-        self.label_16.setText(_translate("Form", "Department"))
+        self.label_3.setText(_translate("Form", "Specimen Type"))
         self.label_17.setText(_translate("Form", "Specimen Type"))
-        self.label_18.setText(_translate("Form", "Reporting Rate    "))
+        # self.label_10.setText(_translate("Form", "Date"))
+        self.label_15.setText(_translate("Form", "Test Name"))
+        self.label_11.setText(_translate("Form", "Test Code"))
+        self.pushButton.setText(_translate("Form", "Search"))
+        self.label.setText(_translate("Form", "Tests Master"))
         self.pushButton.clicked.connect(self.fetch_and_display_filtertest_data)
-   
+        self.pushButton_3.clicked.connect(self.open_add_test_form)
+        
     def open_add_test_form(self):
         self.add_test_form = QtWidgets.QWidget()
         self.ui_add_test = Ui_addtestForm()
         self.ui_add_test.setupUi(self.add_test_form)
-        self.ui_add_test.pushButton.clicked.connect(self.fetch_and_display_test_data)
+        self.ui_add_test.pushButton_5.clicked.connect(self.fetch_and_display_test_data)
         self.add_test_form.show()
    
 if __name__ == "__main__":
@@ -492,4 +475,8 @@ if __name__ == "__main__":
     ui = Ui_testForm()
     ui.setupUi(Form)
     Form.show()
+    
+    # Start the timer only once here
+    ui.timer.start()
+    
     sys.exit(app.exec_())

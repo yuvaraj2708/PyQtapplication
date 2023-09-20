@@ -572,7 +572,8 @@ class Ui_reportingForm(object):
         self.label_2.setText(_translate("Form", "Patient Name"))
         self.label_4.setText(_translate("Form", "Pathologist "))
         self.label_3.setText(_translate("Form", "Report Template"))
-
+        self.pushButton_2.clicked.connect(self.saveReport)
+        
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)

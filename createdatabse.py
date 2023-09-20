@@ -42,14 +42,9 @@ create_tests_table_query = '''
     CREATE TABLE IF NOT EXISTS tests (
         Testcode TEXT NOT NULL UNIQUE,
         TestName TEXT NOT NULL,
-        specimentype TEXT NOT NULL,
-        reportingrate TEXT NOT NULL,
-        department DATE NOT NULL,
-        reportformat TEXT NOT NULL
+        specimentype TEXT NOT NULL
         
-        
-        
-        
+       
     );
 '''
 
@@ -75,9 +70,7 @@ create_refdr_table_query = '''
         Qualification TEXT NOT NULL,
         Specialisation TEXT NOT NULL,
         Address DATE NOT NULL,
-        PINCode TEXT NOT NULL,
         Mobile  TEXT NOT NULL,
-        Emailid TEXT NOT NULL,
         date DATE NOT NULL
         
     );
@@ -250,9 +243,7 @@ create_pathologist_table_query = '''
         Qualification TEXT NOT NULL,
         Specialisation TEXT NOT NULL,
         Address DATE NOT NULL,
-        PINCode TEXT NOT NULL,
         Mobile TEXT NOT NULL,
-        Emailid TEXT NOT NULL,
         date DATE NOT NULL,
         Signature BLOB  -- Add a BLOB (Binary Large Object) column for the signature image
     );

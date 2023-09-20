@@ -15,19 +15,22 @@ import os
 from editrefdr import Ui_editrefdrForm
 from PyQt5.QtCore import QTime, QTimer
 from addpathologist import Ui_pathologisterForm
+from editpathlogist import Ui_editpathologistForm
 
 class Ui_pathologistmasterForm(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(900, 600)
-        Form.setMaximumSize(QtCore.QSize(851, 16777215))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        Form.setFont(font)
-        Form.setStyleSheet("background-color: #ffffff;")
+        Form.resize(1094, 889)
+        self.textEdit = QtWidgets.QTextEdit(Form)
+        self.textEdit.setGeometry(QtCore.QRect(0, 340, 1941, 601))
+        self.textEdit.setMinimumSize(QtCore.QSize(1500, 0))
+        self.textEdit.setObjectName("textEdit")
+        self.label_14 = QtWidgets.QLabel(Form)
+        self.label_14.setGeometry(QtCore.QRect(880, 310, 41, 16))
+        self.label_14.setObjectName("label_14")
         self.label = QtWidgets.QLabel(Form)
         self.label.setEnabled(True)
-        self.label.setGeometry(QtCore.QRect(20, 20, 220, 35))
+        self.label.setGeometry(QtCore.QRect(40, 40, 211, 35))
         self.label.setMinimumSize(QtCore.QSize(5, 5))
         self.label.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.label.setSizeIncrement(QtCore.QSize(3, 3))
@@ -39,27 +42,11 @@ class Ui_pathologistmasterForm(object):
         self.label.setAutoFillBackground(False)
         self.label.setStyleSheet("color: #181C32;")
         self.label.setObjectName("label")
-        self.label_2 = QtWidgets.QLabel(Form)
-        self.label_2.setGeometry(QtCore.QRect(20, 100, 111, 16))
-        font = QtGui.QFont()
-        font.setFamily("Poppins")
-        font.setPointSize(8)
-        self.label_2.setFont(font)
-        self.label_2.setStyleSheet("color: #5E6278;")
-        self.label_2.setObjectName("label_2")
-        self.label_3 = QtWidgets.QLabel(Form)
-        self.label_3.setGeometry(QtCore.QRect(200, 100, 71, 16))
-        font = QtGui.QFont()
-        font.setFamily("Poppins")
-        font.setPointSize(8)
-        self.label_3.setFont(font)
-        self.label_3.setStyleSheet("color: #5E6278;")
-        self.label_3.setObjectName("label_3")
-        self.label_13 = QtWidgets.QLabel(Form)
-        self.label_13.setGeometry(QtCore.QRect(790, 260, 41, 16))
-        self.label_13.setObjectName("label_13")
+        self.label_18 = QtWidgets.QLabel(Form)
+        self.label_18.setGeometry(QtCore.QRect(1150, 310, 37, 16))
+        self.label_18.setObjectName("label_18")
         self.pushButton = QtWidgets.QPushButton(Form)
-        self.pushButton.setGeometry(QtCore.QRect(200, 190, 91, 31))
+        self.pushButton.setGeometry(QtCore.QRect(480, 140, 91, 31))
         font = QtGui.QFont()
         font.setPointSize(-1)
         font.setBold(True)
@@ -83,16 +70,8 @@ class Ui_pathologistmasterForm(object):
 "\n"
 "")
         self.pushButton.setObjectName("pushButton")
-        self.label_10 = QtWidgets.QLabel(Form)
-
-        self.label_10.setGeometry(QtCore.QRect(7, 260, 60, 16))
-        self.label_10.setObjectName("label_10")
-        self.label_11 = QtWidgets.QLabel(Form)
-        self.label_11.setGeometry(QtCore.QRect(80, 260, 70, 16))
-        self.label_11.setObjectName("label_11")
-        self.lineEdit_19 = QtWidgets.QDateEdit(Form)
-        self.lineEdit_19.setGeometry(QtCore.QRect(200, 120, 161, 31))
-        self.lineEdit_19.setCalendarPopup(True)
+        self.lineEdit_19 = QtWidgets.QLineEdit(Form)
+        self.lineEdit_19.setGeometry(QtCore.QRect(260, 140, 201, 31))
         font = QtGui.QFont()
         font.setPointSize(-1)
         font.setBold(False)
@@ -118,159 +97,51 @@ class Ui_pathologistmasterForm(object):
         self.lineEdit_19.setInputMethodHints(QtCore.Qt.ImhNone)
         self.lineEdit_19.setFrame(True)
         self.lineEdit_19.setObjectName("lineEdit_19")
-        self.label_14 = QtWidgets.QLabel(Form)
-        self.label_14.setGeometry(QtCore.QRect(180, 260, 70, 16))
-        self.label_14.setObjectName("label_14")
-        self.label_15 = QtWidgets.QLabel(Form)
-        self.label_15.setGeometry(QtCore.QRect(490, 260, 48, 16))
-        self.label_15.setObjectName("label_15")
-        self.label_16 = QtWidgets.QLabel(Form)
-        self.label_16.setGeometry(QtCore.QRect(390, 260, 46, 16))
-        self.label_16.setObjectName("label_16")
-        self.label_17 = QtWidgets.QLabel(Form)
-        self.label_17.setGeometry(QtCore.QRect(250, 260, 78, 16))
-        self.label_17.setObjectName("label_17")
-        self.label_18 = QtWidgets.QLabel(Form)
-        self.label_18.setGeometry(QtCore.QRect(570, 260, 37, 16))
-        self.label_18.setObjectName("label_18")
-        self.label_email = QtWidgets.QLabel(Form)
-        self.label_email.setGeometry(QtCore.QRect(690, 260, 41, 16))
-        self.label_email.setObjectName("label_email")
-        self.label_4 = QtWidgets.QLabel(Form)
-        self.label_4.setGeometry(QtCore.QRect(560, 100, 101, 16))
+        self.label_3 = QtWidgets.QLabel(Form)
+        self.label_3.setGeometry(QtCore.QRect(260, 120, 71, 16))
         font = QtGui.QFont()
         font.setFamily("Poppins")
         font.setPointSize(8)
-        self.label_4.setFont(font)
-        self.label_4.setStyleSheet("color: #5E6278;")
-        self.label_4.setObjectName("label_4")
-        self.label_5 = QtWidgets.QLabel(Form)
-        self.label_5.setGeometry(QtCore.QRect(380, 100, 81, 16))
+        self.label_3.setFont(font)
+        self.label_3.setStyleSheet("color: #5E6278;")
+        self.label_3.setObjectName("label_3")
+        self.lineEdit_18 = QtWidgets.QLineEdit(Form)
+        self.lineEdit_18.setGeometry(QtCore.QRect(40, 140, 201, 31))
+        font = QtGui.QFont()
+        font.setPointSize(-1)
+        font.setBold(False)
+        font.setWeight(50)
+        self.lineEdit_18.setFont(font)
+        self.lineEdit_18.setStyleSheet("QLineEdit\n"
+"{\n"
+"font-size: 15px;\n"
+"    font-weight: 400;\n"
+"    color: #212529;\n"
+"    background-color: #ffffff;\n"
+"    background-clip: padding-box;\n"
+"    border: 1px solid #ced4da;\n"
+"    border-radius: 20px;\n"
+"    padding:0px 10px;\n"
+"}\n"
+"QLineEdit:focus\n"
+"{\n"
+"border:1px solid #3F4254;\n"
+"}\n"
+"\n"
+"")
+        self.lineEdit_18.setInputMethodHints(QtCore.Qt.ImhNone)
+        self.lineEdit_18.setFrame(True)
+        self.lineEdit_18.setObjectName("lineEdit_18")
+        self.label_2 = QtWidgets.QLabel(Form)
+        self.label_2.setGeometry(QtCore.QRect(40, 120, 111, 16))
         font = QtGui.QFont()
         font.setFamily("Poppins")
         font.setPointSize(8)
-        self.label_5.setFont(font)
-        self.label_5.setStyleSheet("color: #5E6278;")
-        self.label_5.setObjectName("label_5")
-        self.label_6 = QtWidgets.QLabel(Form)
-        self.label_6.setGeometry(QtCore.QRect(20, 170, 81, 16))
-        font = QtGui.QFont()
-        font.setFamily("Poppins")
-        font.setPointSize(8)
-        self.label_6.setFont(font)
-        self.label_6.setStyleSheet("color: #5E6278;")
-        self.label_6.setObjectName("label_6")
-        self.lineEdit_23 = QtWidgets.QDateEdit(Form)
-        self.lineEdit_23.setGeometry(QtCore.QRect(20, 120, 161, 31))
-        self.lineEdit_23.setCalendarPopup(True)
-        font = QtGui.QFont()
-        font.setPointSize(-1)
-        font.setBold(False)
-        font.setWeight(50)
-        self.lineEdit_23.setFont(font)
-        self.lineEdit_23.setStyleSheet("QLineEdit\n"
-"{\n"
-"font-size: 15px;\n"
-"    font-weight: 400;\n"
-"    color: #212529;\n"
-"    background-color: #ffffff;\n"
-"    background-clip: padding-box;\n"
-"    border: 1px solid #ced4da;\n"
-"    border-radius: 20px;\n"
-"    padding:0px 10px;\n"
-"}\n"
-"QLineEdit:focus\n"
-"{\n"
-"border:1px solid #3F4254;\n"
-"}\n"
-"\n"
-"")
-        self.lineEdit_23.setInputMethodHints(QtCore.Qt.ImhNone)
-        self.lineEdit_23.setFrame(True)
-        self.lineEdit_23.setObjectName("lineEdit_23")
-        self.lineEdit_24 = QtWidgets.QLineEdit(Form)
-        self.lineEdit_24.setGeometry(QtCore.QRect(560, 120, 161, 31))
-        font = QtGui.QFont()
-        font.setPointSize(-1)
-        font.setBold(False)
-        font.setWeight(50)
-        self.lineEdit_24.setFont(font)
-        self.lineEdit_24.setStyleSheet("QLineEdit\n"
-"{\n"
-"font-size: 15px;\n"
-"    font-weight: 400;\n"
-"    color: #212529;\n"
-"    background-color: #ffffff;\n"
-"    background-clip: padding-box;\n"
-"    border: 1px solid #ced4da;\n"
-"    border-radius: 20px;\n"
-"    padding:0px 10px;\n"
-"}\n"
-"QLineEdit:focus\n"
-"{\n"
-"border:1px solid #3F4254;\n"
-"}\n"
-"\n"
-"")
-        self.lineEdit_24.setInputMethodHints(QtCore.Qt.ImhNone)
-        self.lineEdit_24.setFrame(True)
-        self.lineEdit_24.setObjectName("lineEdit_24")
-        self.lineEdit_25 = QtWidgets.QLineEdit(Form)
-        self.lineEdit_25.setGeometry(QtCore.QRect(380, 120, 161, 31))
-        font = QtGui.QFont()
-        font.setPointSize(-1)
-        font.setBold(False)
-        font.setWeight(50)
-        self.lineEdit_25.setFont(font)
-        self.lineEdit_25.setStyleSheet("QLineEdit\n"
-"{\n"
-"font-size: 15px;\n"
-"    font-weight: 400;\n"
-"    color: #212529;\n"
-"    background-color: #ffffff;\n"
-"    background-clip: padding-box;\n"
-"    border: 1px solid #ced4da;\n"
-"    border-radius: 20px;\n"
-"    padding:0px 10px;\n"
-"}\n"
-"QLineEdit:focus\n"
-"{\n"
-"border:1px solid #3F4254;\n"
-"}\n"
-"\n"
-"")
-        self.lineEdit_25.setInputMethodHints(QtCore.Qt.ImhNone)
-        self.lineEdit_25.setFrame(True)
-        self.lineEdit_25.setObjectName("lineEdit_25")
-        self.lineEdit_20 = QtWidgets.QLineEdit(Form)
-        self.lineEdit_20.setGeometry(QtCore.QRect(20, 190, 161, 31))
-        font = QtGui.QFont()
-        font.setPointSize(-1)
-        font.setBold(False)
-        font.setWeight(50)
-        self.lineEdit_20.setFont(font)
-        self.lineEdit_20.setStyleSheet("QLineEdit\n"
-"{\n"
-"font-size: 15px;\n"
-"    font-weight: 400;\n"
-"    color: #212529;\n"
-"    background-color: #ffffff;\n"
-"    background-clip: padding-box;\n"
-"    border: 1px solid #ced4da;\n"
-"    border-radius: 20px;\n"
-"    padding:0px 10px;\n"
-"}\n"
-"QLineEdit:focus\n"
-"{\n"
-"border:1px solid #3F4254;\n"
-"}\n"
-"\n"
-"")
-        self.lineEdit_20.setInputMethodHints(QtCore.Qt.ImhNone)
-        self.lineEdit_20.setFrame(True)
-        self.lineEdit_20.setObjectName("lineEdit_20")
+        self.label_2.setFont(font)
+        self.label_2.setStyleSheet("color: #5E6278;")
+        self.label_2.setObjectName("label_2")
         self.pushButton_2 = QtWidgets.QPushButton(Form)
-        self.pushButton_2.setGeometry(QtCore.QRect(300, 190, 112, 31))
+        self.pushButton_2.setGeometry(QtCore.QRect(580, 140, 161, 31))
         font = QtGui.QFont()
         font.setPointSize(-1)
         font.setBold(True)
@@ -294,22 +165,34 @@ class Ui_pathologistmasterForm(object):
 "\n"
 "")
         self.pushButton_2.setObjectName("pushButton_2")
+        self.label_19 = QtWidgets.QLabel(Form)
+        self.label_19.setGeometry(QtCore.QRect(530, 310, 46, 16))
+        self.label_19.setObjectName("label_19")
+        self.label_20 = QtWidgets.QLabel(Form)
+        self.label_20.setGeometry(QtCore.QRect(410, 310, 78, 16))
+        self.label_20.setObjectName("label_20")
+        self.label_12 = QtWidgets.QLabel(Form)
+        self.label_12.setGeometry(QtCore.QRect(170, 310, 74, 16))
+        self.label_12.setObjectName("label_12")
+        self.label_16 = QtWidgets.QLabel(Form)
+        self.label_16.setGeometry(QtCore.QRect(300, 310, 70, 16))
+        self.label_16.setObjectName("label_16")
+        self.label_13 = QtWidgets.QLabel(Form)
+        self.label_13.setGeometry(QtCore.QRect(50, 310, 70, 16))
+        self.label_13.setObjectName("label_13")
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
         self.pushButton_2.setObjectName("pushButton_2")
       
  
-        self.retranslateUi(Form)
-        QtCore.QMetaObject.connectSlotsByName(Form)
-        self.pushButton_2.setObjectName("pushButton_2")
-        self.textEdit = QtWidgets.QTextEdit(Form)
-        self.textEdit.setGeometry(QtCore.QRect(-27, 280, 921, 421))
-        self.textEdit.setObjectName("textEdit")
+        # self.textEdit = QtWidgets.QTextEdit(Form)
+        # self.textEdit.setGeometry(QtCore.QRect(-27, 280, 921, 421))
+        # self.textEdit.setObjectName("textEdit")
         
        
         self.listWidget = QtWidgets.QListWidget(Form)
-        self.listWidget.setGeometry(QtCore.QRect(-27, 280, 921, 421))
+        self.listWidget.setGeometry(QtCore.QRect(0, 340, 1050, 600))  # Adjust the geometry as needed
         self.listWidget.setObjectName("listWidget")
         
         self.retranslateUi(Form)
@@ -331,43 +214,35 @@ class Ui_pathologistmasterForm(object):
 
     def filter_refdr_data(self):
      self.timer.stop()
-     docname=self.lineEdit_25.text()
-     code=self.lineEdit_24.text()
-     qual=self.lineEdit_20.text()
-     from_date = self.lineEdit_23.date().toPyDate().strftime("%d%m%Y")
-     to_date = self.lineEdit_19.date().toPyDate().strftime("%d%m%Y")
-     
+     docname = self.lineEdit_19.text()
+     code = self.lineEdit_18.text()
+     # Define from_date, to_date, and qual with appropriate values if needed
+
      conn = sqlite3.connect('patient_data.db')
      cursor = conn.cursor()
- 
+
      # Fetch reference data
-     query="SELECT * FROM pathologist where "
-     parameters=[]
+     query = "SELECT * FROM pathologist WHERE "
+     parameters = []
 
-     if from_date and docname=='' and to_date=='' and code=='' and qual=='':
-           query+='date like ?'
-           parameters.append('%'+from_date+'%')
+     if code and not docname:
+         query += 'DoctorCode LIKE ?'
+         parameters.append('%' + code + '%')
 
-     elif from_date =='' and docname=='' and to_date and code=='' and qual=='':
-           query+='date like ?'
-           parameters.append('%'+to_date+'%')
-     elif from_date and to_date and docname == '' and code=='' and qual=='':
-            query += "date BETWEEN ? AND ?"
-            parameters.extend([from_date, to_date])
-     elif from_date =='' and docname and to_date=='' and code=='' and qual=='':
-           query+='DoctorName like ?'
-           parameters.append('%'+docname+'%')
-     elif from_date=='' and docname=='' and to_date=='' and code and qual=='':
-           query+='DoctorCode like ?'
-           parameters.append('%'+code+'%')
-     elif from_date=='' and docname=='' and to_date=='' and code=='' and qual:
-           query+='Qualification like ?'
-           parameters.append('%'+qual+'%')
-     elif from_date and docname  and to_date  and code and qual:
-           query+='DoctorCode like ?'
-           parameters.append('%'+code+'%')
-     cursor.execute(query,parameters)
-     
+     elif not code and docname:
+         query += 'DoctorName LIKE ?'
+         parameters.append('%' + docname + '%')
+
+     elif code and docname:
+         query += 'DoctorCode LIKE ? AND DoctorName LIKE ?'
+         parameters.extend(['%' + code + '%', '%' + docname + '%'])
+
+     # Add other conditions as needed
+
+     cursor.execute(query, parameters)
+     # Rest of your code to fetch and display data
+
+      
 
 
      refdr_data = cursor.fetchall()
@@ -460,14 +335,14 @@ class Ui_pathologistmasterForm(object):
     
     
     def fetch_and_display_refdr_data(self):
-     
+     self.listWidget.clear() 
      conn = sqlite3.connect('patient_data.db')
      cursor = conn.cursor()
  
      # Fetch reference data
      cursor.execute("SELECT * FROM pathologist")
      refdr_data = cursor.fetchall()
-     self.listWidget.clear()
+#      self.listWidget.clear()
      if refdr_data:
          for row in refdr_data:
              item = QtWidgets.QListWidgetItem()
@@ -555,7 +430,7 @@ class Ui_pathologistmasterForm(object):
  
     def edit_refdr(self, DoctorCode):
         self.edit_refdr_form = QtWidgets.QWidget()
-        self.ui_edit_refdr = Ui_editrefdrForm()  # Replace with the correct class name
+        self.ui_edit_refdr = Ui_editpathologistForm()  # Replace with the correct class name
         self.ui_edit_refdr.setupUi(self.edit_refdr_form, DoctorCode)  # Pass the DoctorCode argument
         self.edit_refdr_form.show()
 
@@ -568,7 +443,7 @@ class Ui_pathologistmasterForm(object):
 
       #  self.listWidget.clear()
         
-        self.ui_edit_refdr.pushButton.clicked.connect(self.fetch_and_display_refdr_data)
+        self.ui_edit_refdr.pushButton_7.clicked.connect(self.fetch_and_display_refdr_data)
 
    
     def fetch_refdr_data_by_id(self, DoctorCode):
@@ -598,23 +473,18 @@ class Ui_pathologistmasterForm(object):
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Ekon"))
-        self.label.setText(_translate("Form", "pathologist Dr Master"))
-        self.label_2.setText(_translate("Form", "From Date"))
-        self.label_3.setText(_translate("Form", "To Date"))
-        self.label_13.setText(_translate("Form", "Actions"))
-        self.pushButton.setText(_translate("Form", "Search"))
-        self.label_10.setText(_translate("Form", "Doctor Code"))
-        self.label_11.setText(_translate("Form", "Doctor Name"))
-        self.label_14.setText(_translate("Form", "Qualification"))
-        self.label_15.setText(_translate("Form", "PINCode"))
-        self.label_16.setText(_translate("Form", "Address"))
-        self.label_17.setText(_translate("Form", "Specialisation"))
+        self.label_14.setText(_translate("Form", "Action"))
+        self.label.setText(_translate("Form", "Pathologist Master"))
         self.label_18.setText(_translate("Form", "Mobile"))
-        self.label_4.setText(_translate("Form", "Doctor Code"))
-        self.label_5.setText(_translate("Form", "Doctor Name"))
-        self.label_6.setText(_translate("Form", "Qualification"))
-        self.label_email.setText(_translate("Form", "Email"))
-        self.pushButton_2.setText(_translate("Form", "Add pathologist"))
+        self.pushButton.setText(_translate("Form", "Search"))
+        self.label_3.setText(_translate("Form", "Doctor Name"))
+        self.label_2.setText(_translate("Form", " Doctor Code"))
+        self.pushButton_2.setText(_translate("Form", "Add Pathologist"))
+        self.label_19.setText(_translate("Form", "Address"))
+        self.label_20.setText(_translate("Form", "Specialisation"))
+        self.label_12.setText(_translate("Form", "Doctor Name"))
+        self.label_16.setText(_translate("Form", "Qualification"))
+        self.label_13.setText(_translate("Form", "Doctor Code"))
         self.pushButton_2.clicked.connect(self.open_addrefdr_form)
         self.pushButton.clicked.connect(self.filter_refdr_data)
 
@@ -624,7 +494,7 @@ class Ui_pathologistmasterForm(object):
         self.ui_add_test = Ui_pathologisterForm()
         self.ui_add_test.setupUi(self.add_test_form)
         self.add_test_form.show()
-        self.ui_add_test.pushButton.clicked.connect(self.fetch_and_display_refdr_data)
+        self.ui_add_test.pushButton_7.clicked.connect(self.fetch_and_display_refdr_data)
 
 if __name__ == "__main__":
     import sys

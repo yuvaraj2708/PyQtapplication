@@ -3,23 +3,18 @@ import sqlite3
 import datetime
 from PyQt5.QtWidgets import QComboBox
 
+
 class Ui_editpatientForm(object):
     def setupUi(self, Form,patient_uhid):
         self.conn = sqlite3.connect("patient_data.db")
         self.cursor = self.conn.cursor()
-        self.conn = sqlite3.connect("patient_data.db")
         Form.setWindowFlags(QtCore.Qt.CustomizeWindowHint | QtCore.Qt.WindowTitleHint)
         self.cursor = self.conn.cursor()
         Form.setObjectName("Form")
-        Form.resize(900, 588)
-        Form.setMaximumSize(QtCore.QSize(851, 16777215))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        Form.setFont(font)
-        Form.setStyleSheet("background-color: #ffffff;")
+        Form.resize(1157, 889)
         self.label = QtWidgets.QLabel(Form)
         self.label.setEnabled(True)
-        self.label.setGeometry(QtCore.QRect(20, 10, 211, 35))
+        self.label.setGeometry(QtCore.QRect(47, 44, 301, 71))
         self.label.setMinimumSize(QtCore.QSize(5, 5))
         self.label.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.label.setSizeIncrement(QtCore.QSize(3, 3))
@@ -31,102 +26,42 @@ class Ui_editpatientForm(object):
         self.label.setAutoFillBackground(False)
         self.label.setStyleSheet("color: #181C32;")
         self.label.setObjectName("label")
-        self.groupBox = QtWidgets.QGroupBox(Form)
-        self.groupBox.setGeometry(QtCore.QRect(0, 70, 961, 401))
-        self.groupBox.setTitle("")
-        self.groupBox.setObjectName("groupBox")
-        self.label_7 = QtWidgets.QLabel(self.groupBox)
-        self.label_7.setGeometry(QtCore.QRect(360, 120, 51, 16))
-        font = QtGui.QFont()
-        font.setFamily("Poppins")
-        font.setPointSize(8)
-        self.label_7.setFont(font)
-        self.label_7.setStyleSheet("color: #5E6278;")
-        self.label_7.setObjectName("label_7")
-        self.lineEdit_6 = QtWidgets.QLineEdit(self.groupBox)
-        self.lineEdit_6.setGeometry(QtCore.QRect(570, 70, 201, 31))
-        font = QtGui.QFont()
-        font.setPointSize(-1)
-        font.setBold(False)
-        font.setWeight(50)
-        self.lineEdit_6.setFont(font)
-        self.lineEdit_6.setStyleSheet("QLineEdit\n"
-"{\n"
-"font-size: 15px;\n"
-"    font-weight: 400;\n"
-"    color: #212529;\n"
-"    background-color: #ffffff;\n"
-"    background-clip: padding-box;\n"
-"    border: 1px solid #ced4da;\n"
-"    border-radius: 20px;\n"
-"    padding:0px 10px;\n"
-"}\n"
-"QLineEdit:focus\n"
-"{\n"
-"border:1px solid #3F4254;\n"
-"}\n"
-"\n"
-"")
-        self.lineEdit_6.setInputMethodHints(QtCore.Qt.ImhNone)
-        self.lineEdit_6.setFrame(True)
-        self.lineEdit_6.setObjectName("lineEdit_6")
-        self.pushButton = QtWidgets.QPushButton(self.groupBox)
-        self.pushButton.setGeometry(QtCore.QRect(300, 300, 111, 31))
-        font = QtGui.QFont()
-        font.setPointSize(-1)
-        font.setBold(True)
-        font.setWeight(62)
-        self.pushButton.setFont(font)
-        self.pushButton.setStyleSheet("QPushButton\n"
-"{\n"
-"    background-color: #0DBCC0;\n"
-"    border: 0;\n"
-"    font-size: 14px;\n"
-"    font-weight: 500;\n"
-"    border-radius: 4px;\n"
-"color: #ffffff;\n"
-"border: 0;\n"
-"}\n"
-"\n"
-"QPushButton:hover\n"
-"{\n"
-"background-color: #089598;\n"
-"}\n"
-"\n"
-"")
-        self.pushButton.setObjectName("pushButton")
-        self.label_4 = QtWidgets.QLabel(self.groupBox)
-        self.label_4.setGeometry(QtCore.QRect(360, 50, 81, 16))
-        font = QtGui.QFont()
-        font.setFamily("Poppins")
-        font.setPointSize(8)
-        self.label_4.setFont(font)
-        self.label_4.setStyleSheet("color: #5E6278;")
-        self.label_4.setObjectName("label_4")
-        self.label_2 = QtWidgets.QLabel(self.groupBox)
-        self.label_2.setGeometry(QtCore.QRect(20, 50, 31, 16))
+        self.textEdit = QtWidgets.QTextEdit(Form)
+        self.textEdit.setGeometry(QtCore.QRect(-330, 130, 1941, 601))
+        self.textEdit.setMinimumSize(QtCore.QSize(1500, 0))
+        self.textEdit.setObjectName("textEdit")
+        self.label_2 = QtWidgets.QLabel(Form)
+        self.label_2.setGeometry(QtCore.QRect(40, 170, 71, 16))
         font = QtGui.QFont()
         font.setFamily("Poppins")
         font.setPointSize(8)
         self.label_2.setFont(font)
         self.label_2.setStyleSheet("color: #5E6278;")
         self.label_2.setObjectName("label_2")
-        self.label_3 = QtWidgets.QLabel(self.groupBox)
-        self.label_3.setGeometry(QtCore.QRect(150, 50, 61, 16))
+        self.label_3 = QtWidgets.QLabel(Form)
+        self.label_3.setGeometry(QtCore.QRect(270, 170, 71, 16))
         font = QtGui.QFont()
         font.setFamily("Poppins")
         font.setPointSize(8)
         self.label_3.setFont(font)
         self.label_3.setStyleSheet("color: #5E6278;")
         self.label_3.setObjectName("label_3")
-        self.lineEdit_10 = QtWidgets.QLineEdit(self.groupBox)
-        self.lineEdit_10.setGeometry(QtCore.QRect(230, 140, 121, 31))
+        self.label_4 = QtWidgets.QLabel(Form)
+        self.label_4.setGeometry(QtCore.QRect(500, 170, 101, 16))
+        font = QtGui.QFont()
+        font.setFamily("Poppins")
+        font.setPointSize(8)
+        self.label_4.setFont(font)
+        self.label_4.setStyleSheet("color: #5E6278;")
+        self.label_4.setObjectName("label_4")
+        self.lineEdit_20 = QtWidgets.QLineEdit(Form)
+        self.lineEdit_20.setGeometry(QtCore.QRect(740, 190, 201, 31))#GENDER
         font = QtGui.QFont()
         font.setPointSize(-1)
         font.setBold(False)
         font.setWeight(50)
-        self.lineEdit_10.setFont(font)
-        self.lineEdit_10.setStyleSheet("QLineEdit\n"
+        self.lineEdit_20.setFont(font)
+        self.lineEdit_20.setStyleSheet("QLineEdit\n"
 "{\n"
 "font-size: 15px;\n"
 "    font-weight: 400;\n"
@@ -143,27 +78,118 @@ class Ui_editpatientForm(object):
 "}\n"
 "\n"
 "")
-        self.lineEdit_10.setInputMethodHints(QtCore.Qt.ImhNone)
-        self.lineEdit_10.setFrame(True)
-        self.lineEdit_10.setObjectName("lineEdit_10")
-        self.label_9 = QtWidgets.QLabel(self.groupBox)
-        self.label_9.setGeometry(QtCore.QRect(570, 120, 41, 16))
+        self.lineEdit_20.setInputMethodHints(QtCore.Qt.ImhNone)
+        self.lineEdit_20.setFrame(True)
+        self.lineEdit_20.setObjectName("lineEdit_20")
+        self.comboBox_gender = QComboBox(Form)
+        self.comboBox_gender.setGeometry(QtCore.QRect(740, 190, 201, 31))
+        self.comboBox_gender.setFont(font)
+        self.comboBox_gender.setStyleSheet("QComboBox\n"
+                                   "{\n"
+                                   "font-size: 15px;\n"
+                                   "font-weight: 400;\n"
+                                   "color: #212529;\n"
+                                   "background-color: #ffffff;\n"
+                                   "background-clip: padding-box;\n"
+                                   "border: 1px solid #ced4da;\n"
+                                   "border-radius: 20px;\n"
+                                   "padding: 0px 10px;\n"
+                                   "}\n"
+                                   "QComboBox:focus\n"
+                                   "{\n"
+                                   "border: 1px solid #3F4254;\n"
+                                   "}\n")
+        self.comboBox_gender.setObjectName("comboBox_gender")
+        
+        # Populate the gender dropdown with options
+        self.comboBox_gender.addItem("Male")
+        self.comboBox_gender.addItem("Female")
+        self.comboBox_gender.addItem("Others")
+        self.label_5 = QtWidgets.QLabel(Form)
+        self.label_5.setGeometry(QtCore.QRect(740, 170, 71, 16))
         font = QtGui.QFont()
         font.setFamily("Poppins")
         font.setPointSize(8)
-        self.label_9.setFont(font)
-        self.label_9.setStyleSheet("color: #5E6278;")
-        self.label_9.setObjectName("label_9")
-        self.label_8 = QtWidgets.QLabel(self.groupBox)
-        self.label_8.setGeometry(QtCore.QRect(230, 120, 31, 16))
+        self.label_5.setFont(font)
+        self.label_5.setStyleSheet("color: #5E6278;")
+        self.label_5.setObjectName("label_5")
+        self.label_6 = QtWidgets.QLabel(Form)
+        self.label_6.setGeometry(QtCore.QRect(40, 310, 71, 16))
+        font = QtGui.QFont()
+        font.setFamily("Poppins")
+        font.setPointSize(8)
+        self.label_6.setFont(font)
+        self.label_6.setStyleSheet("color: #5E6278;")
+        self.label_6.setObjectName("label_6")
+        self.label_7 = QtWidgets.QLabel(Form)
+        self.label_7.setGeometry(QtCore.QRect(280, 310, 71, 16))
+        font = QtGui.QFont()
+        font.setFamily("Poppins")
+        font.setPointSize(8)
+        self.label_7.setFont(font)
+        self.label_7.setStyleSheet("color: #5E6278;")
+        self.label_7.setObjectName("label_7")
+        self.label_8 = QtWidgets.QLabel(Form)
+        self.label_8.setGeometry(QtCore.QRect(500, 310, 71, 16))
         font = QtGui.QFont()
         font.setFamily("Poppins")
         font.setPointSize(8)
         self.label_8.setFont(font)
         self.label_8.setStyleSheet("color: #5E6278;")
         self.label_8.setObjectName("label_8")
-        self.pushButton_2 = QtWidgets.QPushButton(self.groupBox)
-        self.pushButton_2.setGeometry(QtCore.QRect(300, 250, 111, 31))
+        self.lineEdit_24 = QtWidgets.QLineEdit(Form)
+        self.lineEdit_24.setGeometry(QtCore.QRect(740, 330, 201, 31))#MOBILE
+        font = QtGui.QFont()
+        font.setPointSize(-1)
+        font.setBold(False)
+        font.setWeight(50)
+        self.lineEdit_24.setFont(font)
+        self.lineEdit_24.setStyleSheet("QLineEdit\n"
+"{\n"
+"font-size: 15px;\n"
+"    font-weight: 400;\n"
+"    color: #212529;\n"
+"    background-color: #ffffff;\n"
+"    background-clip: padding-box;\n"
+"    border: 1px solid #ced4da;\n"
+"    border-radius: 20px;\n"
+"    padding:0px 10px;\n"
+"}\n"
+"QLineEdit:focus\n"
+"{\n"
+"border:1px solid #3F4254;\n"
+"}\n"
+"\n"
+"")
+        self.lineEdit_24.setInputMethodHints(QtCore.Qt.ImhNone)
+        self.lineEdit_24.setFrame(True)
+        self.lineEdit_24.setObjectName("lineEdit_24")
+        self.label_9 = QtWidgets.QLabel(Form)
+        self.label_9.setGeometry(QtCore.QRect(740, 310, 71, 16))
+        font = QtGui.QFont()
+        font.setFamily("Poppins")
+        font.setPointSize(8)
+        self.label_9.setFont(font)
+        self.label_9.setStyleSheet("color: #5E6278;")
+        self.label_9.setObjectName("label_9")
+        self.label_10 = QtWidgets.QLabel(Form)
+        self.label_10.setGeometry(QtCore.QRect(40, 460, 71, 16))
+        font = QtGui.QFont()
+        font.setFamily("Poppins")
+        font.setPointSize(8)
+        self.label_10.setFont(font)
+        self.label_10.setStyleSheet("color: #5E6278;")
+        self.label_10.setObjectName("label_10")
+        self.label_11 = QtWidgets.QLabel(Form)
+        self.label_11.setGeometry(QtCore.QRect(280, 460, 71, 16))
+        font = QtGui.QFont()
+        font.setFamily("Poppins")
+        font.setPointSize(8)
+        self.label_11.setFont(font)
+        self.label_11.setStyleSheet("color: #5E6278;")
+        self.label_11.setObjectName("label_11")
+        self.pushButton_2 = QtWidgets.QPushButton(Form)
+        self.pushButton_2.setGeometry(QtCore.QRect(600, 620, 161, 31))
         font = QtGui.QFont()
         font.setPointSize(-1)
         font.setBold(True)
@@ -187,34 +213,39 @@ class Ui_editpatientForm(object):
 "\n"
 "")
         self.pushButton_2.setObjectName("pushButton_2")
-        self.label_5 = QtWidgets.QLabel(self.groupBox)
-        self.label_5.setGeometry(QtCore.QRect(570, 50, 41, 16))
+        self.pushButton_3 = QtWidgets.QPushButton(Form)
+        self.pushButton_3.setGeometry(QtCore.QRect(780, 620, 161, 31))
         font = QtGui.QFont()
-        font.setFamily("Poppins")
-        self.label_5 = QtWidgets.QLabel(self.groupBox)
-        self.label_5.setGeometry(QtCore.QRect(570, 50, 41, 16))
-        font = QtGui.QFont()
-        font.setFamily("Poppins")
-        font.setPointSize(8)
-        self.label_5.setFont(font)
-        self.label_5.setStyleSheet("color: #5E6278;")
-        self.label_5.setObjectName("label_5")
-        self.label_6 = QtWidgets.QLabel(self.groupBox)
-        self.label_6.setGeometry(QtCore.QRect(20, 120, 31, 16))
-        font = QtGui.QFont()
-        font.setFamily("Poppins")
-        font.setPointSize(8)
-        self.label_6.setFont(font)
-        self.label_6.setStyleSheet("color: #5E6278;")
-        self.label_6.setObjectName("label_6")
-        self.lineEdit_16 = QtWidgets.QLineEdit(self.groupBox)
-        self.lineEdit_16.setGeometry(QtCore.QRect(20, 70, 121, 31))
+        font.setPointSize(-1)
+        font.setBold(True)
+        font.setWeight(62)
+        self.pushButton_3.setFont(font)
+        self.pushButton_3.setStyleSheet("QPushButton\n"
+"{\n"
+"    background-color: #0DBCC0;\n"
+"    border: 0;\n"
+"    font-size: 14px;\n"
+"    font-weight: 500;\n"
+"    border-radius: 4px;\n"
+"color: #ffffff;\n"
+"border: 0;\n"
+"}\n"
+"\n"
+"QPushButton:hover\n"
+"{\n"
+"background-color: #089598;\n"
+"}\n"
+"\n"
+"")
+        self.pushButton_3.setObjectName("pushButton_3")
+        self.lineEdit_27 = QtWidgets.QLineEdit(Form)
+        self.lineEdit_27.setGeometry(QtCore.QRect(500, 190, 211, 31))#PATIENT NAME
         font = QtGui.QFont()
         font.setPointSize(-1)
         font.setBold(False)
         font.setWeight(50)
-        self.lineEdit_16.setFont(font)
-        self.lineEdit_16.setStyleSheet("QLineEdit\n"
+        self.lineEdit_27.setFont(font)
+        self.lineEdit_27.setStyleSheet("QLineEdit\n"
 "{\n"
 "font-size: 15px;\n"
 "    font-weight: 400;\n"
@@ -231,17 +262,17 @@ class Ui_editpatientForm(object):
 "}\n"
 "\n"
 "")
-        self.lineEdit_16.setInputMethodHints(QtCore.Qt.ImhNone)
-        self.lineEdit_16.setFrame(True)
-        self.lineEdit_16.setObjectName("lineEdit_16")
-        self.lineEdit_18 = QtWidgets.QLineEdit(self.groupBox)
-        self.lineEdit_18.setGeometry(QtCore.QRect(360, 70, 201, 31))
+        self.lineEdit_27.setInputMethodHints(QtCore.Qt.ImhNone)
+        self.lineEdit_27.setFrame(True)
+        self.lineEdit_27.setObjectName("lineEdit_27")
+        self.lineEdit_28 = QtWidgets.QLineEdit(Form)
+        self.lineEdit_28.setGeometry(QtCore.QRect(500, 330, 211, 31))#EMAILID
         font = QtGui.QFont()
         font.setPointSize(-1)
         font.setBold(False)
         font.setWeight(50)
-        self.lineEdit_18.setFont(font)
-        self.lineEdit_18.setStyleSheet("QLineEdit\n"
+        self.lineEdit_28.setFont(font)
+        self.lineEdit_28.setStyleSheet("QLineEdit\n"
 "{\n"
 "font-size: 15px;\n"
 "    font-weight: 400;\n"
@@ -258,17 +289,17 @@ class Ui_editpatientForm(object):
 "}\n"
 "\n"
 "")
-        self.lineEdit_18.setInputMethodHints(QtCore.Qt.ImhNone)
-        self.lineEdit_18.setFrame(True)
-        self.lineEdit_18.setObjectName("lineEdit_18")
-        self.lineEdit_15 = QtWidgets.QLineEdit(self.groupBox)
-        self.lineEdit_15.setGeometry(QtCore.QRect(150, 70, 201, 31))
+        self.lineEdit_28.setInputMethodHints(QtCore.Qt.ImhNone)
+        self.lineEdit_28.setFrame(True)
+        self.lineEdit_28.setObjectName("lineEdit_28")
+        self.lineEdit_29 = QtWidgets.QLineEdit(Form)
+        self.lineEdit_29.setGeometry(QtCore.QRect(270, 190, 211, 31))#TITLE
         font = QtGui.QFont()
         font.setPointSize(-1)
         font.setBold(False)
         font.setWeight(50)
-        self.lineEdit_15.setFont(font)
-        self.lineEdit_15.setStyleSheet("QLineEdit\n"
+        self.lineEdit_29.setFont(font)
+        self.lineEdit_29.setStyleSheet("QLineEdit\n"
 "{\n"
 "font-size: 15px;\n"
 "    font-weight: 400;\n"
@@ -285,17 +316,17 @@ class Ui_editpatientForm(object):
 "}\n"
 "\n"
 "")
-        self.lineEdit_15.setInputMethodHints(QtCore.Qt.ImhNone)
-        self.lineEdit_15.setFrame(True)
-        self.lineEdit_15.setObjectName("lineEdit_15")
-        self.lineEdit_14 = QtWidgets.QLineEdit(self.groupBox)
-        self.lineEdit_14.setGeometry(QtCore.QRect(570, 140, 201, 31))
+        self.lineEdit_29.setInputMethodHints(QtCore.Qt.ImhNone)
+        self.lineEdit_29.setFrame(True)
+        self.lineEdit_29.setObjectName("lineEdit_29")
+        self.lineEdit_30 = QtWidgets.QLineEdit(Form)
+        self.lineEdit_30.setGeometry(QtCore.QRect(270, 330, 211, 31))#AGE
         font = QtGui.QFont()
         font.setPointSize(-1)
         font.setBold(False)
         font.setWeight(50)
-        self.lineEdit_14.setFont(font)
-        self.lineEdit_14.setStyleSheet("QLineEdit\n"
+        self.lineEdit_30.setFont(font)
+        self.lineEdit_30.setStyleSheet("QLineEdit\n"
 "{\n"
 "font-size: 15px;\n"
 "    font-weight: 400;\n"
@@ -312,108 +343,11 @@ class Ui_editpatientForm(object):
 "}\n"
 "\n"
 "")
-        self.lineEdit_14.setInputMethodHints(QtCore.Qt.ImhNone)
-        self.lineEdit_14.setFrame(True)
-        self.lineEdit_14.setObjectName("lineEdit_14")
-        self.lineEdit_13 = QtWidgets.QLineEdit(self.groupBox)
-        self.lineEdit_13.setGeometry(QtCore.QRect(360, 140, 201, 31))
-        font = QtGui.QFont()
-        font.setPointSize(-1)
-        font.setBold(False)
-        font.setWeight(50)
-        self.lineEdit_13.setFont(font)
-        self.lineEdit_13.setStyleSheet("QLineEdit\n"
-"{\n"
-"font-size: 15px;\n"
-"    font-weight: 400;\n"
-"    color: #212529;\n"
-"    background-color: #ffffff;\n"
-"    background-clip: padding-box;\n"
-"    border: 1px solid #ced4da;\n"
-"    border-radius: 20px;\n"
-"    padding:0px 10px;\n"
-"}\n"
-"QLineEdit:focus\n"
-"{\n"
-"border:1px solid #3F4254;\n"
-"}\n"
-"\n"
-"")
-        self.lineEdit_13.setInputMethodHints(QtCore.Qt.ImhNone)
-        self.lineEdit_13.setFrame(True)
-        self.lineEdit_13.setObjectName("lineEdit_13")
-        self.lineEdit_12 = QtWidgets.QLineEdit(self.groupBox)
-        self.lineEdit_12.setGeometry(QtCore.QRect(20, 140, 201, 31))
-        font = QtGui.QFont()
-        font.setPointSize(-1)
-        font.setBold(False)
-        font.setWeight(50)
-        self.lineEdit_12.setFont(font)
-        self.lineEdit_12.setStyleSheet("QLineEdit\n"
-"{\n"
-"font-size: 15px;\n"
-"    font-weight: 400;\n"
-"    color: #212529;\n"
-"    background-color: #ffffff;\n"
-"    background-clip: padding-box;\n"
-"    border: 1px solid #ced4da;\n"
-"    border-radius: 20px;\n"
-"    padding:0px 10px;\n"
-"}\n"
-"QLineEdit:focus\n"
-"{\n"
-"border:1px solid #3F4254;\n"
-"}\n"
-"\n"
-"")
-        self.lineEdit_12.setInputMethodHints(QtCore.Qt.ImhNone)
-        self.lineEdit_12.setFrame(True)
-        self.lineEdit_12.setObjectName("lineEdit_12")
-        self.label_11 = QtWidgets.QLabel(self.groupBox)
-        self.label_11.setGeometry(QtCore.QRect(20, 200, 41, 16))
-        font = QtGui.QFont()
-        font.setFamily("Poppins")
-        font.setPointSize(8)
-        self.label_11.setFont(font)
-        self.label_11.setStyleSheet("color: #5E6278;")
-        self.label_11.setObjectName("label_11")
-        self.lineEdit_25 = QtWidgets.QLineEdit(self.groupBox)
-        self.lineEdit_25.setGeometry(QtCore.QRect(20, 220, 201, 31))
-        font = QtGui.QFont()
-        font.setPointSize(-1)
-        font.setBold(False)
-        font.setWeight(50)
-        self.lineEdit_25.setFont(font)
-        self.lineEdit_25.setStyleSheet("QLineEdit\n"
-"{\n"
-"font-size: 15px;\n"
-"    font-weight: 400;\n"
-"    color: #212529;\n"
-"    background-color: #ffffff;\n"
-"    background-clip: padding-box;\n"
-"    border: 1px solid #ced4da;\n"
-"    border-radius: 20px;\n"
-"    padding:0px 10px;\n"
-"}\n"
-"QLineEdit:focus\n"
-"{\n"
-"border:1px solid #3F4254;\n"
-"}\n"
-"\n"
-"")
-        self.lineEdit_25.setInputMethodHints(QtCore.Qt.ImhNone)
-        self.lineEdit_25.setFrame(True)
-        self.lineEdit_25.setObjectName("lineEdit_25")
-        self.label_12 = QtWidgets.QLabel(self.groupBox)
-        self.label_12.setGeometry(QtCore.QRect(460, 190, 71, 16))
-        font = QtGui.QFont()
-        font.setFamily("Poppins")
-        font.setPointSize(8)
-        self.label_12.setFont(font)
-        self.label_12.setStyleSheet("color: #5E6278;")
-        self.label_12.setObjectName("label_12")
-        self.lineEdit_26 = QtWidgets.QLineEdit(self.groupBox)
-        self.lineEdit_26.setGeometry(QtCore.QRect(460, 210, 201, 31))
+        self.lineEdit_30.setInputMethodHints(QtCore.Qt.ImhNone)
+        self.lineEdit_30.setFrame(True)
+        self.lineEdit_30.setObjectName("lineEdit_30")
+        self.lineEdit_26 = QtWidgets.QLineEdit(Form)
+        self.lineEdit_26.setGeometry(QtCore.QRect(270, 480, 211, 31))#TEST
         font = QtGui.QFont()
         font.setPointSize(-1)
         font.setBold(False)
@@ -439,39 +373,151 @@ class Ui_editpatientForm(object):
         self.lineEdit_26.setInputMethodHints(QtCore.Qt.ImhNone)
         self.lineEdit_26.setFrame(True)
         self.lineEdit_26.setObjectName("lineEdit_26")
+        self.lineEdit_25 = QtWidgets.QLineEdit(Form)
+        self.lineEdit_25.setGeometry(QtCore.QRect(40, 190, 211, 31))#UHID
+        
+        font = QtGui.QFont()
+        font.setPointSize(-1)
+        font.setBold(False)
+        font.setWeight(50)
+        self.comboBox_title = QComboBox(Form)
+        self.comboBox_title.setGeometry(QtCore.QRect(270, 190, 211, 31))
+        self.comboBox_title.setFont(font)
+        self.comboBox_title.setStyleSheet("QComboBox\n"
+                                   "{\n"
+                                   "font-size: 15px;\n"
+                                   "font-weight: 400;\n"
+                                   "color: #212529;\n"
+                                   "background-color: #ffffff;\n"
+                                   "background-clip: padding-box;\n"
+                                   "border: 1px solid #ced4da;\n"
+                                   "border-radius: 20px;\n"
+                                   "padding: 0px 10px;\n"
+                                   "}\n"
+                                   "QComboBox:focus\n"
+                                   "{\n"
+                                   "border: 1px solid #3F4254;\n"
+                                   "}\n")
+        self.comboBox_title.setObjectName("comboBox_title")
+        
+        # Populate the title dropdown with options
+        self.comboBox_title.addItem("Mr")
+        self.comboBox_title.addItem("SMT")
+        self.comboBox_title.addItem("Others")
+        self.comboBox_title.addItem("Animal")
+        self.comboBox_title.addItem("Baby")
+        self.comboBox_title.addItem("MS")
+        self.comboBox_title.addItem("MRS")
+        self.lineEdit_25.setFont(font)
+        self.lineEdit_25.setStyleSheet("QLineEdit\n"
+"{\n"
+"font-size: 15px;\n"
+"    font-weight: 400;\n"
+"    color: #212529;\n"
+"    background-color: #ffffff;\n"
+"    background-clip: padding-box;\n"
+"    border: 1px solid #ced4da;\n"
+"    border-radius: 20px;\n"
+"    padding:0px 10px;\n"
+"}\n"
+"QLineEdit:focus\n"
+"{\n"
+"border:1px solid #3F4254;\n"
+"}\n"
+"\n"
+"")
+        self.lineEdit_25.setInputMethodHints(QtCore.Qt.ImhNone)
+        self.lineEdit_25.setFrame(True)
+        self.lineEdit_25.setObjectName("lineEdit_25")
+        
+        self.lineEdit_31 = QtWidgets.QLineEdit(Form)
+        self.lineEdit_31.setGeometry(QtCore.QRect(40, 330, 211, 31))#DOB
+        font = QtGui.QFont()
+        font.setPointSize(-1)
+        font.setBold(False)
+        font.setWeight(50)
+        self.lineEdit_31.setFont(font)
+        self.lineEdit_31.setStyleSheet("QLineEdit\n"
+"{\n"
+"font-size: 15px;\n"
+"    font-weight: 400;\n"
+"    color: #212529;\n"
+"    background-color: #ffffff;\n"
+"    background-clip: padding-box;\n"
+"    border: 1px solid #ced4da;\n"
+"    border-radius: 20px;\n"
+"    padding:0px 10px;\n"
+"}\n"
+"QLineEdit:focus\n"
+"{\n"
+"border:1px solid #3F4254;\n"
+"}\n"
+"\n"
+"")
+        self.lineEdit_31.setInputMethodHints(QtCore.Qt.ImhNone)
+        self.lineEdit_31.setFrame(True)
+        self.lineEdit_31.setObjectName("lineEdit_31")
+        self.lineEdit_32 = QtWidgets.QLineEdit(Form)
+        self.lineEdit_32.setGeometry(QtCore.QRect(40, 480, 211, 31))#REFDR
+        font = QtGui.QFont()
+        font.setPointSize(-1)
+        font.setBold(False)
+        font.setWeight(50)
+        self.lineEdit_32.setFont(font)
+        self.lineEdit_32.setStyleSheet("QLineEdit\n"
+"{\n"
+"font-size: 15px;\n"
+"    font-weight: 400;\n"
+"    color: #212529;\n"
+"    background-color: #ffffff;\n"
+"    background-clip: padding-box;\n"
+"    border: 1px solid #ced4da;\n"
+"    border-radius: 20px;\n"
+"    padding:0px 10px;\n"
+"}\n"
+"QLineEdit:focus\n"
+"{\n"
+"border:1px solid #3F4254;\n"
+"}\n"
+"\n"
+"")
+        self.lineEdit_32.setInputMethodHints(QtCore.Qt.ImhNone)
+        self.lineEdit_32.setFrame(True)
+        self.lineEdit_32.setObjectName("lineEdit_32")
+
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
         self.fetch_latest_patient_number()
         latest_patient_number = self.fetch_latest_patient_number()
         next_patient_number = self.generate_next_patient_number(latest_patient_number)
-        self.lineEdit_16.setText(next_patient_number)  # Set the generated test code
+        self.lineEdit_25.setText(next_patient_number)  # Set the generated test code
         
         self.fetch_latest_accession_number()
         latest_accession_number = self.fetch_latest_accession_number()
         next_accession_number = self.generate_next_accession_number(latest_accession_number)
-        self.comboBox_25 = QtWidgets.QComboBox(self.groupBox)
-        self.comboBox_25.setGeometry(QtCore.QRect(20, 220, 201, 31))
+        self.comboBox_25 = QtWidgets.QComboBox(Form)
+        self.comboBox_25.setGeometry(QtCore.QRect(40, 480, 211, 31))
         
         # Populate comboBox_25 with data from the database
         refdr_data = self.fetch_refdr_from_database()
         self.comboBox_25.addItems(refdr_data)
 
         # Create comboBox_26
-        self.comboBox_26 = QtWidgets.QComboBox(self.groupBox)
-        self.comboBox_26.setGeometry(QtCore.QRect(460, 210, 201, 31))
+        self.comboBox_26 = QtWidgets.QComboBox(Form)
+        self.comboBox_26.setGeometry(QtCore.QRect(270, 480, 211, 31))
 
         # Populate comboBox_26 with data from the database
         selecttest_data = self.fetch_selecttest_from_database()
         self.comboBox_26.addItems(selecttest_data)
         
-        self.listWidgetTestSelected = QtWidgets.QListWidget(self.groupBox)
-        self.listWidgetTestSelected.setGeometry(QtCore.QRect(460, 250, 201, 111))
+        self.listWidgetTestSelected = QtWidgets.QListWidget(Form)
+        self.listWidgetTestSelected.setGeometry(QtCore.QRect(270, 510, 211, 111))
         self.listWidgetTestSelected.setObjectName("listWidgetTestSelected") 
         
         
-        self.pushButtonAddTest = QtWidgets.QPushButton(self.groupBox)
-        self.pushButtonAddTest.setGeometry(QtCore.QRect(680, 210, 51, 31))
+        self.pushButtonAddTest = QtWidgets.QPushButton(Form)
+        self.pushButtonAddTest.setGeometry(QtCore.QRect(500, 480, 51, 31))
         self.pushButtonAddTest.setText("Add")
         self.pushButtonAddTest.clicked.connect(self.add_selected_test_to_list)
         
@@ -490,14 +536,14 @@ class Ui_editpatientForm(object):
             patient_data = self.fetch_patient_data_by_id(self.patient_uhid)
             if patient_data:
                 # Populate the form fields with the patient data
-                self.lineEdit_16.setText(str(patient_data[0]))
-                self.lineEdit_15.setText(patient_data[2])  # Assuming the second item is the title
-                self.lineEdit_18.setText(patient_data[3])  # Assuming the third item is the patient name
-                self.lineEdit_6.setText(patient_data[4])
-                self.lineEdit_12.setText(patient_data[5])
-                self.lineEdit_10.setText(patient_data[6])
-                self.lineEdit_14.setText(patient_data[7])
-                self.lineEdit_13.setText(patient_data[8])
+                self.lineEdit_25.setText(str(patient_data[0]))
+                self.lineEdit_29.setText(patient_data[2])  # Assuming the second item is the title
+                self.lineEdit_27.setText(patient_data[3])  # Assuming the third item is the patient name
+                self.lineEdit_31.setText(str(patient_data[4]))
+                self.lineEdit_30.setText(patient_data[5])
+                self.lineEdit_20.setText(patient_data[6])
+                self.lineEdit_24.setText(patient_data[7])
+                self.lineEdit_28.setText(patient_data[8])
                 # self.comboBox_25.currentText(patient_data[9])
                 # self.comboBox_26.currentText(patient_data[10])
     
@@ -610,45 +656,46 @@ class Ui_editpatientForm(object):
             
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
+        Form.setWindowTitle(_translate("Form", "Ekon"))
         self.label.setText(_translate("Form", "Add Patient"))
-        self.label_7.setText(_translate("Form", "Email ID"))
-        self.pushButton.setText(_translate("Form", "Submit"))
-        self.pushButton_2.setText(_translate("Form", "Close"))
-        self.pushButton_2.clicked.connect(Form.close)
-        self.label_4.setText(_translate("Form", "Patient Name"))
         self.label_2.setText(_translate("Form", "UHID"))
         self.label_3.setText(_translate("Form", "Title"))
-        self.label_9.setText(_translate("Form", "Mobile"))
-        self.label_8.setText(_translate("Form", "Age"))
+        self.label_4.setText(_translate("Form", "Patient Name"))
         self.label_5.setText(_translate("Form", "Gender"))
         self.label_6.setText(_translate("Form", "DOB"))
-        self.label_11.setText(_translate("Form", "Ref Dr"))
-        self.label_12.setText(_translate("Form", "Select Test"))
-        self.pushButton.clicked.connect(self.save_patient_data)
+        self.label_7.setText(_translate("Form", "Age"))
+        self.label_8.setText(_translate("Form", "Email ID"))
+        self.label_9.setText(_translate("Form", "Mobile"))
+        self.label_10.setText(_translate("Form", "Ref Dr"))
+        self.label_11.setText(_translate("Form", "Select Test"))
+        self.pushButton_2.setText(_translate("Form", "Close"))
+        self.pushButton_3.setText(_translate("Form", "Save"))
+        self.pushButton_3.clicked.connect(self.save_patient_data)
+        self.pushButton_2.clicked.connect(Form.close)
+        
         
     def clear_input_fields(self):
-        self.lineEdit_16.clear()
-        self.lineEdit_15.clear()
-        self.lineEdit_18.clear()
-        self.lineEdit_6.clear()
-        self.lineEdit_12.clear()
-        self.lineEdit_10.clear()
-        self.lineEdit_14.clear()
-        self.lineEdit_13.clear()
+        self.lineEdit_25.clear()
+        self.lineEdit_29.clear()
+        self.lineEdit_27.clear()
+        self.lineEdit_31.clear()
+        self.lineEdit_30.clear()
+        self.lineEdit_20.clear()
+        self.lineEdit_24.clear()
+        self.lineEdit_28.clear()
         self.comboBox_25.clear()
         self.comboBox_26.clear()
         
     def save_patient_data(self):
      try:
-        uhid = self.lineEdit_16.text()
-        title = self.lineEdit_15.text()
-        patientname = self.lineEdit_18.text()
-        dob = self.lineEdit_6.text()
-        age = self.lineEdit_12.text()
-        gender = self.lineEdit_10.text()
-        mobile = self.lineEdit_14.text()
-        email = self.lineEdit_13.text()
+        uhid = self.lineEdit_25.text()
+        title = self.comboBox_title.currentText()
+        patientname = self.lineEdit_27.text()
+        dob = self.lineEdit_31.text()
+        age = self.lineEdit_30.text()
+        gender = self.comboBox_gender.currentText()
+        mobile = self.lineEdit_24.text()
+        email = self.lineEdit_28.text()
         refdr = self.comboBox_25.currentText()
         selected_test = self.comboBox_26.currentText()
         

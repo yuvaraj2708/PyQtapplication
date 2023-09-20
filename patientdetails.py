@@ -11,187 +11,42 @@ from registrationsummary import Ui_visitsummaryForm
 import sys
 import threading
 import time
-
+from fpdf import FPDF
 from PyQt5.QtCore import * #QObject, pyqtSignal
 from PyQt5.QtWidgets import * #QApplication, QLabel, QMainWindow
+import qrcode
+import barcode
+from barcode.writer import ImageWriter
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+from report import Ui_reportingForm
+
 
 class Ui_patientForm(object):
     def setupUi(self, Form):
-
         Form.setObjectName("Form")
-        Form.resize(811, 588)
-        Form.setMaximumSize(QtCore.QSize(851, 16777215))
+        Form.resize(1032, 889)
+        self.label_4 = QtWidgets.QLabel(Form)
+        self.label_4.setGeometry(QtCore.QRect(450, 140, 81, 16))
         font = QtGui.QFont()
-        font.setPointSize(10)
-        Form.setFont(font)
-        Form.setStyleSheet("background-color: #ffffff;")
-        self.label = QtWidgets.QLabel(Form)
-        self.label.setEnabled(True)
-        self.label.setGeometry(QtCore.QRect(20, 20, 226, 35))
-        self.label.setMinimumSize(QtCore.QSize(5, 5))
-        self.label.setMaximumSize(QtCore.QSize(16777215, 16777215))
-        self.label.setSizeIncrement(QtCore.QSize(3, 3))
-        font = QtGui.QFont()
-        font.setPointSize(15)
-        font.setBold(True)
-        font.setWeight(75)
-        self.label.setFont(font)
-        self.label.setAutoFillBackground(False)
-        self.label.setStyleSheet("color: #181C32;")
-        self.label.setObjectName("label")
-        self.lineEdit_18 = QtWidgets.QLineEdit(Form)
-        self.lineEdit_18.setGeometry(QtCore.QRect(310, 120, 201, 31))
-        font = QtGui.QFont()
-        font.setPointSize(-1)
-        font.setBold(False)
-        font.setWeight(50)
-        self.lineEdit_18.setFont(font)
-        self.lineEdit_18.setStyleSheet("QLineEdit\n"
-"{\n"
-"font-size: 15px;\n"
-"    font-weight: 400;\n"
-"    color: #212529;\n"
-"    background-color: #ffffff;\n"
-"    background-clip: padding-box;\n"
-"    border: 1px solid #ced4da;\n"
-"    border-radius: 20px;\n"
-"    padding:0px 10px;\n"
-"}\n"
-"QLineEdit:focus\n"
-"{\n"
-"border:1px solid #3F4254;\n"
-"}\n"
-"\n"
-"")
-        self.lineEdit_18.setInputMethodHints(QtCore.Qt.ImhNone)
-        self.lineEdit_18.setFrame(True)
-        self.lineEdit_18.setObjectName("lineEdit_18")
+        font.setFamily("Poppins")
+        font.setPointSize(8)
+        self.label_4.setFont(font)
+        self.label_4.setStyleSheet("color: #5E6278;")
+        self.label_4.setObjectName("label_4")
+        self.label_13 = QtWidgets.QLabel(Form)
+        self.label_13.setGeometry(QtCore.QRect(870, 290, 47, 13))
+        self.label_13.setObjectName("label_13")
         self.label_2 = QtWidgets.QLabel(Form)
-        self.label_2.setGeometry(QtCore.QRect(20, 100, 71, 16))
+        self.label_2.setGeometry(QtCore.QRect(50, 140, 71, 16))
         font = QtGui.QFont()
         font.setFamily("Poppins")
         font.setPointSize(8)
         self.label_2.setFont(font)
         self.label_2.setStyleSheet("color: #5E6278;")
         self.label_2.setObjectName("label_2")
-        self.label_5 = QtWidgets.QLabel(Form)
-        self.label_5.setGeometry(QtCore.QRect(540, 100, 41, 16))
-        font = QtGui.QFont()
-        font.setFamily("Poppins")
-        font.setPointSize(8)
-        self.label_5.setFont(font)
-        self.label_5.setStyleSheet("color: #5E6278;")
-        self.label_5.setObjectName("label_5")
-        self.label_12 = QtWidgets.QLabel(Form)
-        self.label_12.setGeometry(QtCore.QRect(480, 260, 47, 13))
-        self.label_12.setObjectName("label_12")
-        self.label_3 = QtWidgets.QLabel(Form)
-        self.label_3.setGeometry(QtCore.QRect(150, 100, 61, 16))
-        font = QtGui.QFont()
-        font.setFamily("Poppins")
-        font.setPointSize(8)
-        self.label_3.setFont(font)
-        self.label_3.setStyleSheet("color: #5E6278;")
-        self.label_3.setObjectName("label_3")
-        self.lineEdit_16 = QtWidgets.QDateEdit(Form)
-        self.lineEdit_16.setGeometry(QtCore.QRect(20, 120, 121, 31))
-        self.lineEdit_16.setCalendarPopup(True)  # Enable the calendar popup
-
-        font = QtGui.QFont()
-        font.setPointSize(-1)
-        font.setBold(False)
-        font.setWeight(50)
-        self.lineEdit_16.setDate(QDate.currentDate())
-        self.lineEdit_16.setDisplayFormat("dd-MMM-yyyy")
-        self.lineEdit_16.setFont(font)
-        self.lineEdit_16.setStyleSheet("QLineEdit\n"
-"{\n"
-"font-size: 15px;\n"
-"    font-weight: 400;\n"
-"    color: #212529;\n"
-"    background-color: #ffffff;\n"
-"    background-clip: padding-box;\n"
-"    border: 1px solid #ced4da;\n"
-"    border-radius: 20px;\n"
-"    padding:0px 10px;\n"
-"}\n"
-"QLineEdit:focus\n"
-"{\n"
-"border:1px solid #3F4254;\n"
-"}\n"
-"\n"
-"")
-        self.lineEdit_16.setInputMethodHints(QtCore.Qt.ImhNone)
-        self.lineEdit_16.setFrame(True)
-        self.lineEdit_16.setObjectName("lineEdit_16")
-
-        self.lineEdit_15 = QtWidgets.QDateEdit(Form)
-        self.lineEdit_15.setGeometry(QtCore.QRect(150, 120, 131, 31))
-        self.lineEdit_15.setCalendarPopup(True)
-        font = QtGui.QFont()
-        font.setPointSize(-1)
-        font.setBold(False)
-        font.setWeight(50)
-        self.lineEdit_15.setDate(QDate.currentDate())
-        self.lineEdit_15.setDisplayFormat("dd-MMM-yyyy")
-        self.lineEdit_15.setFont(font)
-        self.lineEdit_15.setStyleSheet("QLineEdit\n"
-"{\n"
-"font-size: 15px;\n"
-"    font-weight: 400;\n"
-"    color: #212529;\n"
-"    background-color: #ffffff;\n"
-"    background-clip: padding-box;\n"
-"    border: 1px solid #ced4da;\n"
-"    border-radius: 20px;\n"
-"    padding:0px 10px;\n"
-"}\n"
-"QLineEdit:focus\n"
-"{\n"
-"border:1px solid #3F4254;\n"
-"}\n"
-"\n"
-"")
-        self.lineEdit_15.setInputMethodHints(QtCore.Qt.ImhNone)
-        self.lineEdit_15.setFrame(True)
-        self.lineEdit_15.setObjectName("lineEdit_15")
-
-        self.label_14 = QtWidgets.QLabel(Form)
-        self.label_14.setGeometry(QtCore.QRect(570, 260, 47, 13))
-        self.label_14.setObjectName("label_14")
-        self.label_13 = QtWidgets.QLabel(Form)
-        self.label_13.setGeometry(QtCore.QRect(780, 260, 47, 13))
-        self.label_13.setObjectName("label_13")
-        self.lineEdit_6 = QtWidgets.QLineEdit(Form)
-        self.lineEdit_6.setGeometry(QtCore.QRect(540, 120, 201, 31))
-        font = QtGui.QFont()
-        font.setPointSize(-1)
-        font.setBold(False)
-        font.setWeight(50)
-        self.lineEdit_6.setFont(font)
-        self.lineEdit_6.setStyleSheet("QLineEdit\n"
-"{\n"
-"font-size: 15px;\n"
-"    font-weight: 400;\n"
-"    color: #212529;\n"
-"    background-color: #ffffff;\n"
-"    background-clip: padding-box;\n"
-"    border: 1px solid #ced4da;\n"
-"    border-radius: 20px;\n"
-"    padding:0px 10px;\n"
-"}\n"
-"QLineEdit:focus\n"
-"{\n"
-"border:1px solid #3F4254;\n"
-"}\n"
-"\n"
-"")
-        self.lineEdit_6.setInputMethodHints(QtCore.Qt.ImhNone)
-        self.lineEdit_6.setFrame(True)
-        self.lineEdit_6.setObjectName("lineEdit_6")
         self.pushButton = QtWidgets.QPushButton(Form)
-        self.pushButton.setGeometry(QtCore.QRect(30, 170, 91, 31))
-        self.pushButton.clicked.connect(self.filter_patient_data)
+        self.pushButton.setGeometry(QtCore.QRect(50, 230, 121, 31))
         font = QtGui.QFont()
         font.setPointSize(-1)
         font.setBold(True)
@@ -216,21 +71,53 @@ class Ui_patientForm(object):
 "")
         self.pushButton.setObjectName("pushButton")
         self.label_10 = QtWidgets.QLabel(Form)
-        self.label_10.setGeometry(QtCore.QRect(30, 260, 61, 16))
+        self.label_10.setGeometry(QtCore.QRect(57, 320, 101, 16))
         self.label_10.setObjectName("label_10")
-        self.label_4 = QtWidgets.QLabel(Form)
-        self.label_4.setGeometry(QtCore.QRect(310, 100, 81, 16))
+        self.textEdit = QtWidgets.QTextEdit(Form)
+        self.textEdit.setGeometry(QtCore.QRect(-200, 320, 1500, 621))
+        self.textEdit.setMinimumSize(QtCore.QSize(1500, 0))
+        self.textEdit.setObjectName("textEdit")
+        self.label_5 = QtWidgets.QLabel(Form)
+        self.label_5.setGeometry(QtCore.QRect(650, 140, 41, 16))
         font = QtGui.QFont()
         font.setFamily("Poppins")
         font.setPointSize(8)
-        self.label_4.setFont(font)
-        self.label_4.setStyleSheet("color: #5E6278;")
-        self.label_4.setObjectName("label_4")
+        self.label_5.setFont(font)
+        self.label_5.setStyleSheet("color: #5E6278;")
+        self.label_5.setObjectName("label_5")
+        self.label_12 = QtWidgets.QLabel(Form)
+        self.label_12.setGeometry(QtCore.QRect(430, 290, 47, 13))
+        self.label_12.setObjectName("label_12")
+        self.label_14 = QtWidgets.QLabel(Form)
+        self.label_14.setGeometry(QtCore.QRect(630, 290, 47, 13))
+        self.label_14.setObjectName("label_14")
+        self.label_3 = QtWidgets.QLabel(Form)
+        self.label_3.setGeometry(QtCore.QRect(250, 140, 61, 16))
+        font = QtGui.QFont()
+        font.setFamily("Poppins")
+        font.setPointSize(8)
+        self.label_3.setFont(font)
+        self.label_3.setStyleSheet("color: #5E6278;")
+        self.label_3.setObjectName("label_3")
         self.label_11 = QtWidgets.QLabel(Form)
-        self.label_11.setGeometry(QtCore.QRect(260, 260, 71, 16))
+        self.label_11.setGeometry(QtCore.QRect(230, 290, 111, 16))
         self.label_11.setObjectName("label_11")
+        self.label = QtWidgets.QLabel(Form)
+        self.label.setEnabled(True)
+        self.label.setGeometry(QtCore.QRect(47, 44, 301, 71))
+        self.label.setMinimumSize(QtCore.QSize(5, 5))
+        self.label.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        self.label.setSizeIncrement(QtCore.QSize(3, 3))
+        font = QtGui.QFont()
+        font.setPointSize(15)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label.setFont(font)
+        self.label.setAutoFillBackground(False)
+        self.label.setStyleSheet("color: #181C32;")
+        self.label.setObjectName("label")
         self.pushButton_2 = QtWidgets.QPushButton(Form)
-        self.pushButton_2.setGeometry(QtCore.QRect(650, 20, 131, 31))
+        self.pushButton_2.setGeometry(QtCore.QRect(820, 70, 161, 31))
         font = QtGui.QFont()
         font.setPointSize(-1)
         font.setBold(True)
@@ -253,15 +140,135 @@ class Ui_patientForm(object):
 "}\n"
 "\n"
 "")
-
         self.pushButton_2.setObjectName("pushButton_2")
-        self.textEdit = QtWidgets.QTextEdit(Form)
-        self.textEdit.setGeometry(QtCore.QRect(-27, 280, 921, 421))
-        self.textEdit.setObjectName("textEdit")
+        self.lineEdit_17 = QtWidgets.QDateEdit(Form)
+        self.lineEdit_17.setCalendarPopup(True) 
+        self.lineEdit_17.setGeometry(QtCore.QRect(50, 160, 171, 31))
+        self.lineEdit_17.setDate(QDate.currentDate())
+        self.lineEdit_17.setDisplayFormat("dd-MMM-yyyy")#from date
+        font = QtGui.QFont()
+        font.setPointSize(-1)
+        font.setBold(False)
+        font.setWeight(50)
+        self.lineEdit_17.setFont(font)
+        self.lineEdit_17.setStyleSheet("QLineEdit\n"
+"{\n"
+"font-size: 15px;\n"
+"    font-weight: 400;\n"
+"    color: #212529;\n"
+"    background-color: #ffffff;\n"
+"    background-clip: padding-box;\n"
+"    border: 1px solid #ced4da;\n"
+"    border-radius: 20px;\n"
+"    padding:0px 10px;\n"
+"}\n"
+"QLineEdit:focus\n"
+"{\n"
+"border:1px solid #3F4254;\n"
+"}\n"
+"\n"
+"")
+        self.lineEdit_17.setInputMethodHints(QtCore.Qt.ImhNone)
+        self.lineEdit_17.setFrame(True)
+        self.lineEdit_17.setObjectName("lineEdit_17")
+        self.lineEdit_21 = QtWidgets.QDateEdit(Form)
+        self.lineEdit_21.setGeometry(QtCore.QRect(250, 160, 171, 31))
+        font = QtGui.QFont()
+        font.setPointSize(-1)
+        font.setBold(False)
+        font.setWeight(50)
+        self.lineEdit_21.setFont(font)
+        self.lineEdit_21.setStyleSheet("QLineEdit\n"
+"{\n"
+"font-size: 15px;\n"
+"    font-weight: 400;\n"
+"    color: #212529;\n"
+"    background-color: #ffffff;\n"
+"    background-clip: padding-box;\n"
+"    border: 1px solid #ced4da;\n"
+"    border-radius: 20px;\n"
+"    padding:0px 10px;\n"
+"}\n"
+"QLineEdit:focus\n"
+"{\n"
+"border:1px solid #3F4254;\n"
+"}\n"
+"\n"
+"")
+        self.lineEdit_21.setInputMethodHints(QtCore.Qt.ImhNone)
+        self.lineEdit_21.setCalendarPopup(True) 
+        self.lineEdit_21.setDate(QDate.currentDate())
+        self.lineEdit_21.setDisplayFormat("dd-MMM-yyyy")
+        self.lineEdit_21.setFrame(True)# to date
+        self.lineEdit_21.setObjectName("lineEdit_21")
+        self.lineEdit_22 = QtWidgets.QLineEdit(Form)
+        self.lineEdit_22.setGeometry(QtCore.QRect(650, 160, 171, 31))
+        font = QtGui.QFont()
+        font.setPointSize(-1)
+        font.setBold(False)
+        font.setWeight(50)
+        self.lineEdit_22.setFont(font)
+        self.lineEdit_22.setStyleSheet("QLineEdit\n"
+"{\n"
+"font-size: 15px;\n"
+"    font-weight: 400;\n"
+"    color: #212529;\n"
+"    background-color: #ffffff;\n"
+"    background-clip: padding-box;\n"
+"    border: 1px solid #ced4da;\n"
+"    border-radius: 20px;\n"
+"    padding:0px 10px;\n"
+"}\n"
+"QLineEdit:focus\n"
+"{\n"
+"border:1px solid #3F4254;\n"
+"}\n"
+"\n"
+"")
+        self.lineEdit_22.setInputMethodHints(QtCore.Qt.ImhNone)
+        self.lineEdit_22.setFrame(True)
+        self.lineEdit_22.setObjectName("lineEdit_22")
+        self.lineEdit_23 = QtWidgets.QLineEdit(Form)
+        self.lineEdit_23.setGeometry(QtCore.QRect(450, 160, 171, 31))#patientname
+        font = QtGui.QFont()
+        font.setPointSize(-1)
+        font.setBold(False)
+        font.setWeight(50)
+        self.lineEdit_23.setFont(font)
+        self.lineEdit_23.setStyleSheet("QLineEdit\n"
+"{\n"
+"font-size: 15px;\n"
+"    font-weight: 400;\n"
+"    color: #212529;\n"
+"    background-color: #ffffff;\n"
+"    background-clip: padding-box;\n"
+"    border: 1px solid #ced4da;\n"
+"    border-radius: 20px;\n"
+"    padding:0px 10px;\n"
+"}\n"
+"QLineEdit:focus\n"
+"{\n"
+"border:1px solid #3F4254;\n"
+"}\n"
+"\n"
+"")
+        self.lineEdit_23.setInputMethodHints(QtCore.Qt.ImhNone)
+        self.lineEdit_23.setFrame(True)
+        self.lineEdit_23.setObjectName("lineEdit_23")
+        self.label_15 = QtWidgets.QLabel(Form)
+        self.label_15.setGeometry(QtCore.QRect(70, 290, 101, 16))
+        self.label_15.setObjectName("label_15")
+
+        self.retranslateUi(Form)
+        QtCore.QMetaObject.connectSlotsByName(Form)
+
+        
+        self.pushButton_2.setObjectName("pushButton_2")
+        
 
         self.patient_data = {}
         self.listWidget = QtWidgets.QListWidget(Form)
-        self.listWidget.setGeometry(QtCore.QRect(-27, 280, 921, 421))
+        self.listWidget.setGeometry(QtCore.QRect(-20, 350, 2000, 700))
         self.listWidget.setObjectName("listWidget")
 
         self.patient_data = {}
@@ -286,10 +293,10 @@ class Ui_patientForm(object):
         
     def filter_patient_data(self):
       self.timer.stop()
-      patient_name = self.lineEdit_18.text()
-      mobile = self.lineEdit_6.text()
-      from_date = self.lineEdit_16.date().toPyDate().strftime("%d%m%Y")
-      to_date = self.lineEdit_15.date().toPyDate().strftime("%d%m%Y")
+      patient_name = self.lineEdit_23.text()
+      mobile = self.lineEdit_22.text()
+      from_date = self.lineEdit_17.date().toPyDate().strftime("%d%m%Y")
+      to_date = self.lineEdit_21.date().toPyDate().strftime("%d%m%Y")
 
       # Connect to the database
       conn = sqlite3.connect('patient_data.db')
@@ -429,11 +436,38 @@ class Ui_patientForm(object):
               button_layout.addWidget(edit_button)
               
                 
-              add_visit_button = QtWidgets.QPushButton()
-              add_visit_button.setIcon(QtGui.QIcon(os.path.join('images', 'addvisit.png')))
-              add_visit_button.setFixedSize(20, 20)
-              add_visit_button.clicked.connect(lambda _, row=row: self.open_add_visit_form(row))
-              button_layout.addWidget(add_visit_button)
+            #   add_visit_button = QtWidgets.QPushButton()
+            #   add_visit_button.setIcon(QtGui.QIcon(os.path.join('images', 'addvisit.png')))
+            #   add_visit_button.setFixedSize(20, 20)
+            #   add_visit_button.clicked.connect(lambda _, row=row: self.open_add_visit_form(row))
+            #   button_layout.addWidget(add_visit_button)
+              
+              more_button = QtWidgets.QPushButton()
+              more_button.setIcon(QtGui.QIcon(os.path.join('images', 'qr.png')))
+              more_button.setFixedSize(20, 20)
+              more_button.clicked.connect(lambda _, row=row: self.generate_qr_code_pdf())
+              button_layout.addWidget(more_button)
+              
+              more_button = QtWidgets.QPushButton()
+              more_button.setIcon(QtGui.QIcon(os.path.join('images', 'barcode.png')))
+              more_button.setFixedSize(20, 20)
+              more_button.clicked.connect(lambda _, row=row: self.generate_bar_code_pdf(row))
+              button_layout.addWidget(more_button)
+              # Add spacing between the label and buttons
+              
+              more_button = QtWidgets.QPushButton()
+              more_button.setIcon(QtGui.QIcon(os.path.join('images', 'barcode.png')))
+              more_button.setFixedSize(20, 20)
+              more_button.clicked.connect(lambda _, row=row: self.open_add_report_form(row))
+              button_layout.addWidget(more_button)
+              
+              more_button = QtWidgets.QPushButton()
+              more_button.setIcon(QtGui.QIcon(os.path.join('images', 'barcode.png')))
+              more_button.setFixedSize(20, 20)
+              more_button.clicked.connect(lambda _, row=row: self.generate_bar_code_pdf(row))
+              button_layout.addWidget(more_button)
+              
+              
                 
                     # Add spacing between the label and buttons
               button_layout.addSpacing(90)
@@ -563,22 +597,164 @@ class Ui_patientForm(object):
                     
                     button_layout.addWidget(edit_button)
                 
-                    add_visit_button = QtWidgets.QPushButton()
-                    add_visit_button.setIcon(QtGui.QIcon(os.path.join('images', 'addvisit.png')))
-                    add_visit_button.setFixedSize(20, 20)
-                    add_visit_button.clicked.connect(lambda _, row=row: self.open_add_visit_form(row))
-                    button_layout.addWidget(add_visit_button)
-                
+                    # add_visit_button = QtWidgets.QPushButton()
+                    # add_visit_button.setIcon(QtGui.QIcon(os.path.join('images', 'addvisit.png')))
+                    # add_visit_button.setFixedSize(20, 20)
+                    # add_visit_button.clicked.connect(lambda _, row=row: self.open_add_visit_form(row))
+                    # button_layout.addWidget(add_visit_button)
+                    
+                    more_button = QtWidgets.QPushButton()
+                    more_button.setIcon(QtGui.QIcon(os.path.join('images', 'qr.png')))
+                    more_button.setFixedSize(20, 20)
+                    more_button.clicked.connect(lambda _, row=row: self.generate_qr_code_pdf())
+                    button_layout.addWidget(more_button)
+                    
+                    more_button = QtWidgets.QPushButton()
+                    more_button.setIcon(QtGui.QIcon(os.path.join('images', 'barcode.png')))
+                    more_button.setFixedSize(20, 20)
+                    more_button.clicked.connect(lambda _, row=row: self.generate_bar_code_pdf(row))
+                    button_layout.addWidget(more_button)
                     # Add spacing between the label and buttons
                   #  button_layout.addSpacing(90 00000)
+                    more_button = QtWidgets.QPushButton()
+                    more_button.setIcon(QtGui.QIcon(os.path.join('images', 'report.png')))
+                    more_button.setFixedSize(20, 20)
+                    more_button.clicked.connect(lambda _, row=row: self.open_add_report_form(row))
+                    button_layout.addWidget(more_button)
+                    
+                    more_button = QtWidgets.QPushButton()
+                    more_button.setIcon(QtGui.QIcon(os.path.join('images', 'barcode.png')))
+                    more_button.setFixedSize(20, 20)
+                    more_button.clicked.connect(lambda _, row=row: self.generate_bar_code_pdf(row))
+                    button_layout.addWidget(more_button)
                     
                     custom_layout.addLayout(button_layout)  # Add the button layout to the custom layout
                     item.setSizeHint(custom_widget.sizeHint())
                     self.listWidget.setItemWidget(item, custom_widget)
                     item.patient_data = row
-
+    
+    def open_add_report_form(self ,visit_data):
+        #self.timer.start()
+        self.add_test_form = QtWidgets.QWidget()
+        self.ui_add_test = Ui_reportingForm()
+        self.ui_add_test.setupUi(self.add_test_form)
         
+        self.ui_add_test.set_patient_data(visit_data)
+        
+        self.add_test_form.show()   
+        
+    def generate_bar_code_pdf(self, accession):
+        # Extract the accession number from the row, assuming it's in a specific column (adjust as needed).
+        accession_number = accession[11]  # Assuming the accession number is in the second column (change as needed)
+        accession_str = str(accession_number)
+    
+        # Define the barcode dimensions (adjust as needed)
+        barcode_width = 200
+        barcode_height = 50
+    
+        # Generate the barcode image using the string representation of the accession number and save it to a file.
+        barcode.generate('Code128', accession_str, writer=ImageWriter(), output=os.path.join('images', 'barcode'))
+    
+        # Create a PDF with the barcode image.
+        pdf_filename = f'barcode_{accession_number}.pdf'
+        c = canvas.Canvas(pdf_filename, pagesize=letter)
+    
+        # Adjust the x, y, width, and height to position and size the barcode as needed.
+        x = 100  # Adjust the x-coordinate as needed
+        y = 500  # Adjust the y-coordinate as needed
+    
+        c.drawImage(os.path.join('images', 'barcode.png'), x, y, width=barcode_width, height=barcode_height)
+        c.showPage()
+        c.save()
+    
+        # Optionally, you can open the generated PDF.
+        os.system(pdf_filename)
 
+
+    
+    
+        
+    def generate_qr_code_pdf(self):
+    # visit_id, ref_dr, patient_category, patient_name, dob, age, gender, mobile, email, date, selected_test,acc= visit_data
+ 
+     # Retrieve patient information based on patient_id from the patients table
+     conn = sqlite3.connect('patient_data.db')
+     cursor = conn.cursor()
+ 
+     cursor.execute("""
+             SELECT  patients.refdr, 
+                    patients.patientname, patients.dob, patients.age, patients.gender, 
+                    patients.mobile, patients.email, patients.date, patients.selected_test,patients.uhid
+             FROM patients
+             
+         """)
+     patient_info = cursor.fetchone()
+ 
+     conn.close()
+ 
+     if patient_info:
+        ref_dr,patientname,dob, age, gender, mobile, email, date, selected_test,patient_id = patient_info
+
+        # Create a formatted string with all the details
+        details_string = (
+            # f"Visit ID: {visit_id}\n"
+            f"Patient ID: {patient_id}\n"
+            f"Patient Name: {patientname}\n"
+            f"DOB: {dob}\n"
+            f"Age: {age}\n"
+            f"Gender: {gender}\n"
+            f"Mobile: {mobile}\n"
+            f"Email: {email}\n"
+            f"Referring Doctor: {ref_dr}\n"
+            f"Selected Test: {selected_test}\n"
+            f"Date: {date}\n"
+        )
+
+        # Generate the QR code using the formatted details string
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=10,
+            border=4,
+        )
+        qr.add_data(details_string)
+        qr.make(fit=True)
+
+        # Generate the QR code image
+        qr_img = qr.make_image(fill_color="black", back_color="white")
+        qr_img.save(f'qr_code_{patient_id}.png')
+
+        # Create a PDF with mm as the unit
+        pdf = FPDF()
+
+        # Calculate the position and size for the QR code within the page
+        x_position = (150 - 15) / 2  # Center the QR code horizontally
+        y_position = (150 - 15) / 2  # Center the QR code vertically
+        qr_size = 15
+
+        # Set the page size to 15mm x 15mm by modifying the _page_format attribute
+        pdf._page_format = [qr_size, qr_size]
+
+        # Add a page
+        pdf.add_page()
+
+        # Add the QR code to the PDF
+        pdf.image(f'qr_code_{patient_id}.png', x=x_position, y=y_position, w=qr_size)
+
+        # Add visit details to the PDF
+        pdf.set_font("Arial", size=8)
+        pdf.multi_cell(150, 10, details_string, border=0, align="L")
+
+        # Set the PDF file path
+        pdf_file_path = f'qr_code_{patient_id}.pdf'
+
+        # Output the PDF file
+        pdf.output(pdf_file_path)
+
+        QtWidgets.QMessageBox.information(
+            None, 'QR Code PDF',
+            f'QR code PDF for Visit ID {patient_id} has been generated as "{pdf_file_path}"'
+        )
 
 
     def edit_patient(self, patient_uhid):
@@ -595,7 +771,7 @@ class Ui_patientForm(object):
         self.edit_patient_form.show()
         self.listWidget.clear()
         
-        self.ui_edit_patient.pushButton.clicked.connect(self.fetch_and_display_patient_data)
+        self.ui_edit_patient.pushButton_3.clicked.connect(self.fetch_and_display_patient_data)
         
        
 
@@ -664,14 +840,15 @@ class Ui_patientForm(object):
         self.pushButton_2.setText(_translate("Form", "Add Patient"))
         self.pushButton_2.setObjectName("pushButton_2")
         self.pushButton_2.clicked.connect(self.open_add_patient_form) 
-    
+        self.pushButton.clicked.connect(self.filter_patient_data)
+        
     def open_add_patient_form(self):
         #self.timer.start()
         self.add_test_form = QtWidgets.QWidget()
         self.ui_add_test = Ui_addpatientForm()
         self.ui_add_test.setupUi(self.add_test_form)
         self.add_test_form.show()
-        self.ui_add_test.pushButton.clicked.connect(self.fetch_and_display_patient_data)
+        self.ui_add_test.pushButton_2.clicked.connect(self.fetch_and_display_patient_data)
         # self.fetch_and_display_patient_data()
 
 if __name__ == "__main__":

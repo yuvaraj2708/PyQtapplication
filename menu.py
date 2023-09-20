@@ -681,14 +681,14 @@ class Ui_MainWindow(object):
         self.actionpathologist_Master = QtWidgets.QAction(MainWindow)
         self.actionpathologist_Master.setObjectName("actionReport_Format")
         
-        self.actionregistrationsummary = QtWidgets.QAction(MainWindow)
-        self.actionregistrationsummary.setObjectName("actionregistrationsummary")
-        self.actionscansummary = QtWidgets.QAction(MainWindow)
-        self.actionscansummary.setObjectName("actionscansummary")
+        # self.actionregistrationsummary = QtWidgets.QAction(MainWindow)
+        # self.actionregistrationsummary.setObjectName("actionregistrationsummary")
+        # self.actionscansummary = QtWidgets.QAction(MainWindow)
+        # self.actionscansummary.setObjectName("actionscansummary")
         # self.menuPatientRegister.addAction(self.actionPatientregister)
         self.menuPatientRegister.addAction(self.actionAdd_Patient)
-        self.menuPatientRegister.addAction(self.actionregistrationsummary)
-        self.menuPatientRegister.addAction(self.actionscansummary)
+        # self.menuPatientRegister.addAction(self.actionregistrationsummary)
+        # self.menuPatientRegister.addAction(self.actionscansummary)
         self.menuMaster.addAction(self.actionRefDr_Master)
         self.menuMaster.addAction(self.actionTest_Master)
         self.menuMaster.addAction(self.actionReport_Format)
@@ -712,14 +712,14 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "Ekon"))
         # self.menusdsa.setTitle(_translate("MainWindow", "Dasboard"))
         self.menuPatientRegister.setTitle(_translate("MainWindow", "Front Desk"))
-        self.actionregistrationsummary.setText(_translate("MainWindow", "Registration Summary"))
+        # self.actionregistrationsummary.setText(_translate("MainWindow", "Registration Summary"))
         self.menuscan_Summary.setTitle(_translate("MainWindow", "Scan"))
         self.menuMaster.setTitle(_translate("MainWindow", "Master"))
         self.menuLogout.setTitle(_translate("MainWindow", "Settings"))
         self.menuSettings.setTitle(_translate("MainWindow", "Logout"))
         # self.actionPatientregister.setText(_translate("MainWindow", "Add Patient"))
         self.actionAdd_Patient.setText(_translate("MainWindow", "Patient Management"))
-        self.actionscansummary.setText(_translate("MainWindow", "Scan Summary"))
+        # self.actionscansummary.setText(_translate("MainWindow", "Scan Summary"))
         self.actionRefDr_Master.setText(_translate("MainWindow", "RefDr Master"))
         self.actionTest_Master.setText(_translate("MainWindow", "Test Master"))
         self.actionReport_Format.setText(_translate("MainWindow", "Report Format"))
@@ -793,13 +793,13 @@ class MainWindow(QtWidgets.QMainWindow):
         self.add_testmaster_ui = Ui_testForm()# Test master
         self.add_testmaster_ui.setupUi(self.add_testmaster_frame)
         
-        self.add_visitsummary_frame = QtWidgets.QFrame()
-        self.add_visitsummary_ui = Ui_visitsummaryForm()# Test master
-        self.add_visitsummary_ui.setupUi(self.add_visitsummary_frame)
+        # self.add_visitsummary_frame = QtWidgets.QFrame()
+        # self.add_visitsummary_ui = Ui_visitsummaryForm()# Test master
+        # self.add_visitsummary_ui.setupUi(self.add_visitsummary_frame)
         
-        self.add_scansummary_frame = QtWidgets.QFrame()
-        self.add_scansummary_ui = Ui_scansummaryForm()# Test master
-        self.add_scansummary_ui.setupUi(self.add_scansummary_frame)
+        # self.add_scansummary_frame = QtWidgets.QFrame()
+        # self.add_scansummary_ui = Ui_scansummaryForm()# Test master
+        # self.add_scansummary_ui.setupUi(self.add_scansummary_frame)
         
         self.reportformat_frame = QtWidgets.QFrame()
         self.reportformat_ui = Ui_resulttemplateForm()# report format
@@ -814,8 +814,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.actionAdd_Patient.triggered.connect(self.show_patient_master_frame)
         self.ui.actionRefDr_Master.triggered.connect(self.show_refdr_frame)
         self.ui.actionTest_Master.triggered.connect(self.show_testmaster_frame) 
-        self.ui.actionregistrationsummary.triggered.connect(self.show_visitsummary_frame)
-        self.ui.actionscansummary.triggered.connect(self.show_scansummary_frame)
+        # self.ui.actionregistrationsummary.triggered.connect(self.show_visitsummary_frame)
+        # self.ui.actionscansummary.triggered.connect(self.show_scansummary_frame)
         self.ui.actionReport_Format.triggered.connect(self.show_reportformat_frame)
         self.ui.actionpathologist_Master.triggered.connect(self.show_pathologist_frame)
         
@@ -831,8 +831,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.stacked_widget.addWidget(self.patient_master_frame)
         self.stacked_widget.addWidget(self.add_refdr_frame)
         self.stacked_widget.addWidget(self.add_testmaster_frame)
-        self.stacked_widget.addWidget(self.add_visitsummary_frame)
-        self.stacked_widget.addWidget(self.add_scansummary_frame)
+        # self.stacked_widget.addWidget(self.add_visitsummary_frame)
+        # self.stacked_widget.addWidget(self.add_scansummary_frame)
         self.stacked_widget.addWidget(self.reportformat_frame)
         self.stacked_widget.addWidget(self.pathologist_frame)
         self.setCentralWidget(self.stacked_widget)
@@ -852,8 +852,8 @@ class MainWindow(QtWidgets.QMainWindow):
        self.stacked_widget.addWidget(self.patient_master_frame)
        self.stacked_widget.addWidget(self.add_refdr_frame)
        self.stacked_widget.addWidget(self.add_testmaster_frame)
-       self.stacked_widget.addWidget(self.add_visitsummary_frame)
-       self.stacked_widget.addWidget(self.add_scansummary_frame)
+    #    self.stacked_widget.addWidget(self.add_visitsummary_frame)
+    #    self.stacked_widget.addWidget(self.add_scansummary_frame)
        self.stacked_widget.addWidget(self.reportformat_frame)
        self.stacked_widget.addWidget(self.category_frame)
        self.setCentralWidget(self.stacked_widget)
@@ -869,18 +869,18 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def show_patient_master_frame(self):
 
-        self.patient_master_ui.lineEdit_18.setText('')
-        self.patient_master_ui.lineEdit_6.setText('')
+        # self.patient_master_ui.lineEdit_17.setText('')
+        # self.patient_master_ui.lineEdit_21.setText('')
         
         self.patient_master_ui.timer.start()
         self.stacked_widget.setCurrentWidget(self.patient_master_frame)
         
     def show_refdr_frame(self):
 
-        self.add_refdr_ui.lineEdit_20.setText('')
+        self.add_refdr_ui.lineEdit_18.setText('')
 
-        self.add_refdr_ui.lineEdit_24.setText('')
-        self.add_refdr_ui.lineEdit_25.setText('')
+        self.add_refdr_ui.lineEdit_19.setText('')
+        # self.add_refdr_ui.lineEdit_25.setText('')
         self.add_refdr_ui.timer.start()
         self.stacked_widget.setCurrentWidget(self.add_refdr_frame)    
 
@@ -893,14 +893,14 @@ class MainWindow(QtWidgets.QMainWindow):
     def show_visitsummary_frame(self):
         self.add_visitsummary_ui.lineEdit_18.setText('')
 
-        self.add_visitsummary_ui.timer.start()
-        self.stacked_widget.setCurrentWidget(self.add_visitsummary_frame) 
+    #     self.add_visitsummary_ui.timer.start()
+    #     self.stacked_widget.setCurrentWidget(self.add_visitsummary_frame) 
     
-    def show_scansummary_frame(self):
+    # def show_scansummary_frame(self):
 
-        self.add_scansummary_ui.lineEdit_18.setText('')
-        self.add_scansummary_ui.timer.start()
-        self.stacked_widget.setCurrentWidget(self.add_scansummary_frame) 
+    #     self.add_scansummary_ui.lineEdit_18.setText('')
+    #     self.add_scansummary_ui.timer.start()
+    #     self.stacked_widget.setCurrentWidget(self.add_scansummary_frame) 
     
     def show_reportformat_frame(self):
          self.reportformat_ui.lineEdit_18.setText('')
