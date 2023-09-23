@@ -725,6 +725,43 @@ class Ui_MainWindow(object):
         self.actionReport_Format.setText(_translate("MainWindow", "Report Format"))
         self.actionpathologist_Master.setText(_translate("MainWindow", "Pathologist Master"))
 
+
+
+
+# class LoginDialog(QtWidgets.QDialog):
+#     def __init__(self):
+#         super().__init__()
+#         self.setWindowTitle("Login")
+#         self.username_label = QtWidgets.QLabel("Username:")
+#         self.username_edit = QtWidgets.QLineEdit()
+#         self.password_label = QtWidgets.QLabel("Password:")
+#         self.password_edit = QtWidgets.QLineEdit()
+#         self.password_edit.setEchoMode(QtWidgets.QLineEdit.Password)
+#         self.login_button = QtWidgets.QPushButton("Login")
+
+#         layout = QtWidgets.QVBoxLayout()
+#         layout.addWidget(self.username_label)
+#         layout.addWidget(self.username_edit)
+#         layout.addWidget(self.password_label)
+#         layout.addWidget(self.password_edit)
+#         layout.addWidget(self.login_button)
+#         self.setLayout(layout)
+
+#         self.login_button.clicked.connect(self.login)
+
+#     def login(self):
+#         # Validate the username and password here (e.g., by checking a database)
+#         username = self.username_edit.text()
+#         password = self.password_edit.text()
+
+#         # Replace this with your authentication logic
+#         if username == "admin" and password == "password":
+#             self.accept()  # Close the dialog and return QDialog.Accepted
+#         else:
+#             QtWidgets.QMessageBox.warning(self, "Login Failed", "Invalid username or password")
+
+
+
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
@@ -907,27 +944,24 @@ class MainWindow(QtWidgets.QMainWindow):
          self.reportformat_ui.lineEdit_19.setText('')
          self.reportformat_ui.timer.start()
          self.stacked_widget.setCurrentWidget(self.reportformat_frame)     
-        
+
+
+
+
+
+
+
+
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    conn = sqlite3.connect("patient_data.db")
-    cursor = conn.cursor()
-    cursor.execute('select * from device')
-    c = cursor.fetchall()
 
-    # Create the main window and display it
+    # Create a login dialog and show it
+    # login_dialog = LoginDialog()
+    # if login_dialog.exec_() == QtWidgets.QDialog.Accepted:
+    
+        # The login was successful, so create and show the main window
+    
     main_window = MainWindow()
     main_window.show()
-    
+
     sys.exit(app.exec_())
-
-# if __name__ == "__main__":
-#     app = QtWidgets.QApplication(sys.argv)
-#     MainWindow = QtWidgets.QMainWindow()
-#     ui = Ui_MainWindow()
-#     ui.setupUi(MainWindow)
-
-#     # Set the main window to full-screen mode
-#     MainWindow.showFullScreen()
-
-#     sys.exit(app.exec_())

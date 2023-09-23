@@ -678,7 +678,7 @@ class Ui_addpatientForm(object):
         mobile = self.lineEdit_24.text()
         email = self.lineEdit_28.text()
         refdr = self.comboBox_25.currentText()
-        selected_test = self.comboBox_26.currentText()
+        selected_test = [self.listWidgetTestSelected.item(i).text() for i in range(self.listWidgetTestSelected.count())]
         
         # Uncomment the code to fetch the latest accession number
         latest_accession_number = self.fetch_latest_accession_number()
@@ -689,7 +689,7 @@ class Ui_addpatientForm(object):
         current_date = current_datetime.strftime("%d%m%Y")
 
         self.cursor.execute("INSERT INTO patients (uhid, title, patientname, dob, age, gender, mobile, email, date, refdr, selected_test, accession) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                            (uhid, title, patientname, dob, age, gender, mobile, email, current_date, refdr, selected_test,accession))
+                            (uhid, title, patientname, dob, age, gender, mobile, email, current_date, refdr, ', '.join(selected_test),accession))
         self.conn.commit()
         self.f.close()
         # Clear the input fields after saving
