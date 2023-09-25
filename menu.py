@@ -73,12 +73,15 @@ class Ui_deviceForm(object):
         self.lineEdit_6.setInputMethodHints(QtCore.Qt.ImhNone)
         self.lineEdit_6.setFrame(True)
         self.lineEdit_6.setObjectName("lineEdit_6")
+        self.lineEdit_6.setReadOnly(True)
         self.pushButton = QtWidgets.QPushButton(self.groupBox)
         self.pushButton.setGeometry(QtCore.QRect(290, 280, 91, 31))
         font = QtGui.QFont()
         font.setPointSize(-1)
         font.setBold(True)
         font.setWeight(62)
+        self.pushButton.setEnabled(False)  # Initialize the button as disabled
+        self.pushButton.clicked.connect(self.save_button_clicked)  # Connect the button to a save function
         self.pushButton.setFont(font)
         self.pushButton.setStyleSheet("QPushButton\n"
 "{\n"
@@ -123,6 +126,7 @@ class Ui_deviceForm(object):
         self.label_3.setStyleSheet("color: #5E6278;")
         self.label_3.setObjectName("label_3")
         self.lineEdit_10 = QtWidgets.QLineEdit(self.groupBox)
+        self.lineEdit_10.setReadOnly(True)
         self.lineEdit_10.setGeometry(QtCore.QRect(350, 230, 351, 31))
         font = QtGui.QFont()
         font.setPointSize(-1)
@@ -226,6 +230,7 @@ class Ui_deviceForm(object):
         self.lineEdit_16.setFrame(True)
         self.lineEdit_16.setObjectName("lineEdit_16")
         self.lineEdit_18 = QtWidgets.QLineEdit(self.groupBox)
+        self.lineEdit_18.setReadOnly(True)
         self.lineEdit_18.setGeometry(QtCore.QRect(50, 150, 651, 31))
         font = QtGui.QFont()
         font.setPointSize(-1)
@@ -280,6 +285,7 @@ class Ui_deviceForm(object):
         self.lineEdit_15.setFrame(True)
         self.lineEdit_15.setObjectName("lineEdit_15")
         self.lineEdit_12 = QtWidgets.QLineEdit(self.groupBox)
+        self.lineEdit_12.setReadOnly(True)
         self.lineEdit_12.setGeometry(QtCore.QRect(50, 230, 231, 31))
         font = QtGui.QFont()
         font.setPointSize(-1)
@@ -309,7 +315,31 @@ class Ui_deviceForm(object):
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
+        self.lineEdit_16.textChanged.connect(self.validate_required_fields)
+        self.lineEdit_15.textChanged.connect(self.validate_required_fields)
+        self.lineEdit_12.textChanged.connect(self.validate_required_fields)
+        self.lineEdit_18.textChanged.connect(self.validate_required_fields)
+        self.lineEdit_10.textChanged.connect(self.validate_required_fields)
+    
+    def save_button_clicked(self):
+        # Handle the save button click event here
+        # This function will only be called when all required fields are filled in
+        pass
+        
+    def validate_required_fields(self):
+        # Check if all required fields are filled in
+        device_id = self.lineEdit_16.text()
+        client_id = self.lineEdit_15.text()
+        address = self.lineEdit_12.text()
+        client_name = self.lineEdit_18.text()
+        mobile_no = self.lineEdit_10.text()
 
+        if device_id and client_id and address and client_name and mobile_no:
+            self.pushButton.setEnabled(True)  # Enable the "Save" button
+        else:
+            self.pushButton.setEnabled(False)  # Disable the "Save" button 
+            
+               
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))

@@ -343,7 +343,7 @@ class Ui_pathologistmasterForm(object):
      cursor.execute("SELECT * FROM pathologist")
      refdr_data = cursor.fetchall()
 #      self.listWidget.clear()
-     if refdr_data:
+     if refdr_data: 
          for row in refdr_data:
              item = QtWidgets.QListWidgetItem()
              self.listWidget.addItem(item)

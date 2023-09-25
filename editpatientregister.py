@@ -321,6 +321,7 @@ class Ui_editpatientForm(object):
         self.lineEdit_29.setObjectName("lineEdit_29")
         self.lineEdit_30 = QtWidgets.QLineEdit(Form)
         self.lineEdit_30.setGeometry(QtCore.QRect(270, 330, 211, 31))#AGE
+        self.lineEdit_30.setReadOnly(True)
         font = QtGui.QFont()
         font.setPointSize(-1)
         font.setBold(False)
@@ -374,6 +375,7 @@ class Ui_editpatientForm(object):
         self.lineEdit_26.setFrame(True)
         self.lineEdit_26.setObjectName("lineEdit_26")
         self.lineEdit_25 = QtWidgets.QLineEdit(Form)
+        self.lineEdit_25.setReadOnly(True)
         self.lineEdit_25.setGeometry(QtCore.QRect(40, 190, 211, 31))#UHID
         
         font = QtGui.QFont()
@@ -432,6 +434,7 @@ class Ui_editpatientForm(object):
         
         self.lineEdit_31 = QtWidgets.QLineEdit(Form)
         self.lineEdit_31.setGeometry(QtCore.QRect(40, 330, 211, 31))#DOB
+        self.lineEdit_31.setReadOnly(True)
         font = QtGui.QFont()
         font.setPointSize(-1)
         font.setBold(False)

@@ -625,7 +625,7 @@ class Ui_patientForm(object):
                     more_button = QtWidgets.QPushButton()
                     more_button.setIcon(QtGui.QIcon(os.path.join('images', 'barcode.png')))
                     more_button.setFixedSize(20, 20)
-                    more_button.clicked.connect(lambda _, row=row: self.generate_bar_code_pdf(row))
+                    more_button.clicked.connect(lambda _, report_id=row[0]: self.preview_pdf(report_id))
                     button_layout.addWidget(more_button)
                     
                     # more_button = QtWidgets.QCheckBox()
@@ -639,6 +639,40 @@ class Ui_patientForm(object):
                     self.listWidget.setItemWidget(item, custom_widget)
                     item.patient_data = row
     
+    
+    def preview_pdf(self, report_id):
+        # Fetch all report data for the patient from the database
+        connection = sqlite3.connect("patient_data.db")
+        cursor = connection.cursor()
+        cursor.execute("SELECT report_content FROM patient_reports WHERE report_id = ?", (report_id,))
+        report_data = cursor.fetchall()
+        connection.close()
+    
+        if report_data:
+            # Create a PDF file with the patient's ID and report data
+            pdf_filename = f"patient_{report_id}_reports.pdf"
+            c = canvas.Canvas(pdf_filename, pagesize=letter)
+            c.drawString(100, 750, f"Patient ID: {report_id}")
+    
+            # Iterate through the report data and add it to the PDF
+            y_position = 730  # Adjust the starting y-position as needed
+            for report_content in report_data:
+                c.drawString(100, y_position, report_content[0])
+                y_position -= 20  # Adjust the vertical spacing as needed
+    
+            # Save and display the PDF
+            c.save()
+    
+            # Here you can open the PDF using the default PDF viewer
+            # You might need to adjust this depending on your system and preferences.
+            import subprocess
+            subprocess.Popen(['xdg-open', pdf_filename])
+    
+        else:
+            # Display an error message within the main application window (self)
+            QtWidgets.QMessageBox.warning(self, "Error", "No reports found for this patient.")
+    
+              
     def open_add_report_form(self ,visit_data):
         #self.timer.start()
         self.add_test_form = QtWidgets.QWidget()
@@ -648,7 +682,7 @@ class Ui_patientForm(object):
         self.ui_add_test.set_patient_data(visit_data)
         
         self.add_test_form.show()   
-        
+            
     def generate_bar_code_pdf(self, accession):
         # Extract the accession number from the row, assuming it's in a specific column (adjust as needed).
         accession_number = accession[11]  # Assuming the accession number is in the second column (change as needed)
@@ -805,29 +839,7 @@ class Ui_patientForm(object):
        self.listWidget.clear()
        # Refresh the displayed patient data immediately after deletion
        self.fetch_and_display_patient_data()
-       
-            
-    # def open_add_visit_form(self, patient_data):
-    #     self.add_visit_form = QtWidgets.QWidget()
-    #     self.ui_add_visit = Ui_addvisitForm()
-    #     self.ui_add_visit.setupUi(self.add_visit_form)
-
-    #     # Pass patient data to Ui_addvisitForm
-    #     self.ui_add_visit.set_patient_data(patient_data)
-    #     self.listWidget.clear()
-    #     self.obj_form=QtWidgets.QWidget()
-    #     self.obj=Ui_visitsummaryForm()
-    #     self.obj.setupUi(self.obj_form)
-    #     self.obj.timer.start()
-
-    #     self.add_visit_form.show()
-
-        
-
-
-
-       
-
+      
      
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate

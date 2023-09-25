@@ -39,7 +39,7 @@ class Ui_reportingForm(object):
         self.groupBox.setObjectName("groupBox")
         self.pushButton_2 = QtWidgets.QPushButton(self.groupBox)
         self.pushButton_2.setGeometry(QtCore.QRect(330, 470, 131, 31))
-        self.pushButton_2.clicked.connect(self.saveReport)
+        
         font = QtGui.QFont()
         font.setPointSize(-1)
         font.setBold(True)
@@ -133,14 +133,12 @@ class Ui_reportingForm(object):
         self.comboBox_24.currentIndexChanged.connect(self.previewpathologist)
         
         
-        self.retranslateUi(Form)
-        QtCore.QMetaObject.connectSlotsByName(Form)
+        
 
         # Fetch and populate data from the database
         self.populate_pathologist_templates()
         self.populate_report_templates()
-        self.retranslateUi(Form)
-        QtCore.QMetaObject.connectSlotsByName(Form)
+        
         self.toolButton_7 = QtWidgets.QToolButton(Form)
         self.toolButton_7.setGeometry(QtCore.QRect(180, 220, 25, 19))
         self.toolButton_7.setObjectName("toolButton_7")
@@ -444,10 +442,7 @@ class Ui_reportingForm(object):
              self.tableView.hide()
              self.textEdit.show()
     def fetch_report_template(self, report_name):
-      # Fetch the template content from the database based on the report name.
-      # Implement your database query to retrieve the template content.
-      # Replace this with your actual database retrieval logic.
-
+      
       connection = sqlite3.connect("patient_data.db")
       cursor = connection.cursor()
       cursor.execute("SELECT template FROM reporttemplates WHERE name = ?", (report_name,))
@@ -460,12 +455,7 @@ class Ui_reportingForm(object):
           return "Template not found."
 
     def display_table_in_tableView(self, template_content):
-        # Implement the logic to parse the table content from the template and display it in the tableView.
-        # You'll need to split the content and populate the tableView accordingly.
-    
-        # Example:
-        # Assuming that your template_content contains tabular data separated by newline characters,
-        # you can split the content and populate the tableView as follows:
+        
     
         table_data = [line.split('\t') for line in template_content.split('\n')]
     
@@ -479,11 +469,7 @@ class Ui_reportingForm(object):
         self.tableView.setModel(model) 
       
     def fetch_report_content(self, name):
-        # You need to fetch the report content from your database based on the report name.
-        # Implement the database retrieval logic here and return the report content as a string.
-        # For this example, I'm assuming you have a table named "reporttemplates" with a column "content"
-        # where you store the report content.
-
+       
         connection = sqlite3.connect("patient_data.db")
         cursor = connection.cursor()
         cursor.execute("SELECT name FROM reporttemplates WHERE name = ?", (name,))
@@ -509,7 +495,7 @@ class Ui_reportingForm(object):
         
     
     def populate_report_templates(self):
-        # Fetch report templates from the database and add them to the combo box
+      
         connection = sqlite3.connect("patient_data.db")
         cursor = connection.cursor()
         cursor.execute("SELECT * FROM reporttemplates")
@@ -536,33 +522,35 @@ class Ui_reportingForm(object):
     
     
     def saveReport(self):
-        # Get the selected report template
-        selected_report = self.comboBox_26.currentText()
-        report_content = self.fetch_report_content(selected_report)
-        selected_pathologist = self.comboBox_24.currentText()
-        pathologist_content = self.fetch_pathologist_content(selected_pathologist)
-                                
-        # Get patient information (you can modify this part to get patient data)
-        patient_name = self.lineEdit_18.text()
-        # Here, you can add more fields like patient ID, date, etc.
+       print("Save Report button clicked")
+    # Get the selected report template
+       selected_report = self.comboBox_26.currentText()
+       report_content = self.fetch_report_content(selected_report)
+       selected_pathologist = self.comboBox_24.currentText()
+       pathologist_content = self.fetch_pathologist_content(selected_pathologist)
+                               
+       # Get patient information (you can modify this part to get patient data)
+       patient_name = self.lineEdit_18.text()
+       # Here, you can add more fields like patient ID, date, etc.
 
-        # Get the report content from the QTextEdit
-        edited_report = self.textEdit.toPlainText()
+       # Get the report content from the QTextEdit
+       edited_report = self.textEdit.toPlainText()
 
-        # Create a new record in the patient-specific reports table
-        connection = sqlite3.connect("patient_data.db")
-        cursor = connection.cursor()
-        cursor.execute(
-            "INSERT INTO patient_reports (patient_name, report_template,pathologist, report_content) VALUES (?, ?, ?, ?)",
-            (patient_name, selected_report,selected_pathologist, edited_report),
-        )
-        connection.commit()
-        connection.close()
+       # Create a new record in the patient-specific reports table
+       connection = sqlite3.connect("patient_data.db")
+       cursor = connection.cursor()
+       cursor.execute(
+           "INSERT INTO patient_reports (patient_name, report_template, pathologist, report_content) VALUES (?, ?, ?, ?)",
+           (patient_name, selected_report, selected_pathologist, edited_report),
+       )
+       connection.commit()
+       connection.close()
 
-        # Optionally, you can show a message or update the UI to indicate that the report has been saved.
+       # Optionally, you can show a message or update the UI to indicate that the report has been saved.
 
-        # Clear the QTextEdit if needed
-        self.textEdit.clear()
+       # Clear the QTextEdit if needed
+       self.textEdit.clear()
+
     
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
