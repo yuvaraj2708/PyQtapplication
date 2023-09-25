@@ -13,8 +13,8 @@ import os
 class Ui_reportingForm(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(900, 588)
-        Form.setMaximumSize(QtCore.QSize(851, 16777215))
+        Form.resize(1032, 889)
+        # Form.setMaximumSize(QtCore.QSize(851, 16777215))
         font = QtGui.QFont()
         font.setPointSize(10)
         Form.setFont(font)
@@ -529,7 +529,7 @@ class Ui_reportingForm(object):
         connection.close()
 
         # Extract the report names and add them to the combo box
-        pathology_names = [pathology[1] for pathology in pathologys]
+        pathology_names = [pathology[2] for pathology in pathologys]
         self.comboBox_24.addItems(pathology_names)
     
     

@@ -15,9 +15,10 @@ import datetime
 class Ui_editrefdrForm(object):
     def setupUi(self, Form,DoctorCode):
         self.conn = sqlite3.connect("patient_data.db")
+        Form.setWindowFlags(QtCore.Qt.CustomizeWindowHint | QtCore.Qt.WindowTitleHint)
         self.cursor = self.conn.cursor()       
         Form.setObjectName("Form")
-        Form.resize(1157, 642)
+        Form.resize(1157, 889)
         self.textEdit = QtWidgets.QTextEdit(Form)
         self.textEdit.setGeometry(QtCore.QRect(-240, -10, 1941, 701))
         self.textEdit.setMinimumSize(QtCore.QSize(1500, 0))
@@ -338,7 +339,8 @@ class Ui_editrefdrForm(object):
         self.label_19.setText(_translate("Form", "Mobile "))
         self.label.setText(_translate("Form", "RefDr Master"))
         self.pushButton_5.clicked.connect(self.save_refdr_data)
-    
+        self.pushButton_6.clicked.connect(Form.close)
+        
     def clear_input_fields(self):
         self.lineEdit_8.clear()
         self.lineEdit_22.clear()

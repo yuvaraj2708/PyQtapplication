@@ -376,6 +376,7 @@ class Ui_addpatientForm(object):
         self.lineEdit_26.setObjectName("lineEdit_26")
         self.lineEdit_25 = QtWidgets.QLineEdit(Form)
         self.lineEdit_25.setGeometry(QtCore.QRect(40, 190, 211, 31))#UHID
+        self.lineEdit_25.setReadOnly(True)
         self.comboBox_title = QComboBox(Form)
         self.comboBox_title.setGeometry(QtCore.QRect(270, 190, 211, 31))
         self.comboBox_title.setFont(font)

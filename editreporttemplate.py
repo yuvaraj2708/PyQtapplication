@@ -9,6 +9,7 @@ import sqlite3
 
 class Ui_editreportForm(object):
     def setupUi(self, Form,reporttemplate_code):
+        Form.setWindowFlags(QtCore.Qt.CustomizeWindowHint | QtCore.Qt.WindowTitleHint)
         self.conn = sqlite3.connect("patient_data.db")
         self.cursor = self.conn.cursor()
         Form.setObjectName("Form")
@@ -226,11 +227,11 @@ class Ui_editreportForm(object):
             if reporttemplate_data:
                 # Populate the form fields with the patient data
                 # Assuming the second item is the title
-                self.lineEdit_18.setText(reporttemplate_data[0])  # Assuming the third item is the patient name
-                self.lineEdit_6.setText(reporttemplate_data[1])
+                self.lineEdit_18.setText(reporttemplate_data[1])  # Assuming the third item is the patient name
+                self.lineEdit_6.setText(reporttemplate_data[0])
                 self.textEdit.setPlainText(reporttemplate_data[2])
-                print(reporttemplate_data[0])
                 print(reporttemplate_data[1])
+                print(reporttemplate_data[0])
                 print(reporttemplate_data[2])
                 
 

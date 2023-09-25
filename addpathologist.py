@@ -11,6 +11,7 @@ class Ui_pathologisterForm(object):
     def setupUi(self, Form):
         self.f=Form
         self.conn = sqlite3.connect("patient_data.db")
+        Form.setWindowFlags(QtCore.Qt.CustomizeWindowHint | QtCore.Qt.WindowTitleHint)
         self.cursor = self.conn.cursor()       
         Form.setObjectName("Form")
         Form.resize(1157, 642)
@@ -140,6 +141,7 @@ class Ui_pathologisterForm(object):
         self.label_25.setObjectName("label_25")
         self.lineEdit_28 = QtWidgets.QLineEdit(self.groupBox)
         self.lineEdit_28.setGeometry(QtCore.QRect(70, 70, 121, 31))#code
+        self.lineEdit_28.setReadOnly(True)
         font = QtGui.QFont()
         font.setPointSize(-1)
         font.setBold(False)
@@ -405,7 +407,8 @@ class Ui_pathologisterForm(object):
         self.label_27.setText(_translate("Form", "Signature"))
         self.label.setText(_translate("Form", "Add Pathologist"))
         self.pushButton_7.clicked.connect(self.save_refdr_data)
-    
+        self.pushButton_8.clicked.connect(Form.close)
+        
     def clear_input_fields(self):
         self.lineEdit_9.clear()
         self.lineEdit_28.clear()

@@ -6,10 +6,11 @@ class Ui_addtestForm(object):
 
     def setupUi(self, Form):
         self.f=Form
+        Form.setWindowFlags(QtCore.Qt.CustomizeWindowHint | QtCore.Qt.WindowTitleHint)
         self.conn = sqlite3.connect("patient_data.db")
         self.cursor = self.conn.cursor()       
         Form.setObjectName("Form")
-        Form.resize(1157, 642)
+        Form.resize(1157, 889)
         self.textEdit = QtWidgets.QTextEdit(Form)
         self.textEdit.setGeometry(QtCore.QRect(-240, -10, 1941, 701))
         self.textEdit.setMinimumSize(QtCore.QSize(1500, 0))
@@ -148,6 +149,7 @@ class Ui_addtestForm(object):
         self.lineEdit_25.setObjectName("lineEdit_25")
         self.lineEdit_26 = QtWidgets.QLineEdit(self.groupBox)
         self.lineEdit_26.setGeometry(QtCore.QRect(110, 80, 251, 31))
+        self.lineEdit_26.setReadOnly(True)
         font = QtGui.QFont()
         font.setPointSize(-1)
         font.setBold(False)
@@ -228,7 +230,8 @@ class Ui_addtestForm(object):
         self.label_9.setText(_translate("Form", "Test Name"))
         self.label.setText(_translate("Form", "Add Test"))
         self.pushButton_5.clicked.connect(self.save_test_data)
-    
+        self.pushButton_6.clicked.connect(Form.close)
+        
     def clear_input_fields_test(self):
         self.lineEdit_23.clear()
         self.lineEdit_25.clear()

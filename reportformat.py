@@ -10,8 +10,9 @@ import sqlite3
 class Ui_reportForm(object):
     def setupUi(self, Form):
         self.f=Form
+        # Form.setWindowFlags(QtCore.Qt.CustomizeWindowHint | QtCore.Qt.WindowTitleHint)
         Form.setObjectName("Form")
-        Form.resize(1157, 642)
+        Form.resize(1157, 889)
         self.toolButton_14 = QtWidgets.QToolButton(Form)
         self.toolButton_14.setGeometry(QtCore.QRect(430, 270, 25, 19))
         self.toolButton_14.setObjectName("toolButton_14")

@@ -382,20 +382,20 @@ class Ui_patientForm(object):
 
                         if i==0:
                             
-                            label.setFixedSize(70, 15)
+                            label.setFixedSize(50, 15)
                         elif i==1:
                             
                             label.setFixedSize(70, 15)
                         elif i==2:
                             
-                            label.setFixedSize(20, 15)
+                            label.setFixedSize(36, 15)
                         elif i==3:
                             
                             label.setFixedSize(80, 15)
                         elif i==4:
-                            label.setFixedSize(30, 15)
+                            label.setFixedSize(100, 15)
                         elif i==5:
-                            label.setFixedSize(50, 15)
+                            label.setFixedSize(20, 15)
                         elif i==6:
                             label.setFixedSize(50, 15)
                         elif i==7:
@@ -549,14 +549,14 @@ class Ui_patientForm(object):
                             label.setFixedSize(70, 15)
                         elif i==2:
                             
-                            label.setFixedSize(20, 15)
+                            label.setFixedSize(36, 15)
                         elif i==3:
                             
                             label.setFixedSize(80, 15)
                         elif i==4:
-                            label.setFixedSize(30, 15)
+                            label.setFixedSize(55, 15)
                         elif i==5:
-                            label.setFixedSize(50, 15)
+                            label.setFixedSize(20, 15)
                         elif i==6:
                             label.setFixedSize(50, 15)
                         elif i==7:
@@ -619,7 +619,7 @@ class Ui_patientForm(object):
                     more_button = QtWidgets.QPushButton()
                     more_button.setIcon(QtGui.QIcon(os.path.join('images', 'report.png')))
                     more_button.setFixedSize(20, 20)
-                    more_button.clicked.connect(lambda _, row=row: self.open_add_report_form(row))
+                    more_button.clicked.connect(lambda _, row=row: self.open_add_report_form(row[0]))
                     button_layout.addWidget(more_button)
                     
                     more_button = QtWidgets.QPushButton()

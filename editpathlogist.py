@@ -13,10 +13,11 @@ import sqlite3
 
 class Ui_editpathologistForm(object):
     def setupUi(self, Form,DoctorCode):
+        Form.setWindowFlags(QtCore.Qt.CustomizeWindowHint | QtCore.Qt.WindowTitleHint)
         self.conn = sqlite3.connect("patient_data.db")
         self.cursor = self.conn.cursor()       
         Form.setObjectName("Form")
-        Form.resize(1157, 642)
+        Form.resize(1157, 889)
         self.textEdit = QtWidgets.QTextEdit(Form)
         self.textEdit.setGeometry(QtCore.QRect(-10, 140, 1161, 341))
         self.textEdit.setObjectName("textEdit")
@@ -380,7 +381,7 @@ class Ui_editpathologistForm(object):
         self.label_27.setText(_translate("Form", "Signature"))
         self.label.setText(_translate("Form", "Add Pathologist"))
         self.pushButton_7.clicked.connect(self.save_refdr_data)
-        
+        self.pushButton_8.clicked.connect(Form.close)
         
     def clear_input_fields(self):
         self.lineEdit_9.clear()
