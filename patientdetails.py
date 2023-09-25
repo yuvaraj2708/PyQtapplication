@@ -628,11 +628,11 @@ class Ui_patientForm(object):
                     more_button.clicked.connect(lambda _, row=row: self.generate_bar_code_pdf(row))
                     button_layout.addWidget(more_button)
                     
-                    more_button = QtWidgets.QCheckBox()
-                    more_button.setIcon(QtGui.QIcon(os.path.join('images', 'barcode.png')))
-                    more_button.setFixedSize(20, 20)
-                    more_button.clicked.connect(lambda _, row=row: self.generate_bar_code_pdf(row))
-                    button_layout.addWidget(more_button)
+                    # more_button = QtWidgets.QCheckBox()
+                    # more_button.setIcon(QtGui.QIcon(os.path.join('images', 'barcode.png')))
+                    # more_button.setFixedSize(20, 20)
+                    # more_button.clicked.connect(lambda _, row=row: self.generate_bar_code_pdf(row))
+                    # button_layout.addWidget(more_button)
                     
                     custom_layout.addLayout(button_layout)  # Add the button layout to the custom layout
                     item.setSizeHint(custom_widget.sizeHint())

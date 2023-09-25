@@ -324,7 +324,7 @@ class Ui_deviceForm(object):
         self.label_6.setText(_translate("Form", "Mobile No"))
 
 class DeviceRegistrationForm(QtWidgets.QWidget):
-    def __init__(self, main_window):
+    def __init__(self, main_window=None):
         super().__init__()
         self.main_window = main_window
 
@@ -345,7 +345,7 @@ class DeviceRegistrationForm(QtWidgets.QWidget):
         else:
             # Device is not registered, show the device registration form
             self.show_device_registration_page()
-
+            
     def is_device_registered(self):
         # Check if there's existing data in the device table
         connection = sqlite3.connect("patient_data.db")
