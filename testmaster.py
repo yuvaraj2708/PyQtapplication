@@ -200,114 +200,96 @@ class Ui_testForm(object):
         self.fetch_and_display_test_data()
 
     def fetch_and_display_filtertest_data(self):
-     self.timer.stop()
-    # Connect to the database
-     common=self.lineEdit_18.text()
-     dept=self.lineEdit_19.text()
+      self.timer.stop()
+      # Connect to the database
+      common = self.lineEdit_18.text()
+      dept = self.lineEdit_19.text()
+
+      conn = sqlite3.connect('patient_data.db')
+      cursor = conn.cursor()
+
+      # Fetch reference data from the first table
+      query_common = "SELECT * FROM tests WHERE TestName LIKE ? OR TestCode LIKE ?"
+      parameters_common = ['%' + common + '%', '%' + common + '%']
+      cursor.execute(query_common, parameters_common)
+      common_test_data = cursor.fetchall()
+
+      # No need for query_dept and parameters_dept if you're not searching in another table
+
+      # Merge the results from the first table
+      test_data = common_test_data
+
+      self.listWidget.clear()
+      if test_data:
+          for row in test_data:
+              item = QtWidgets.QListWidgetItem()
+              self.listWidget.addItem(item)
+
+              custom_widget = QtWidgets.QFrame()
+              custom_widget.setFrameShape(QtWidgets.QFrame.Box)
+              custom_layout = QtWidgets.QHBoxLayout(custom_widget)
+              custom_layout.setAlignment(QtCore.Qt.AlignLeft)
+
+              i = 0
+              for value in row:
+                  if i == 0:
+                      value = f'{value:>20}'
+
+                  data_string = f'{value}'
+
+                  label = QtWidgets.QLabel(data_string)
+                  font = QtGui.QFont("Poppins", 8)
+                  label.setFont(font)
+
+                  if i == 0:
+                      label.setFixedSize(100, 15)
+                  elif i == 1:
+                      label.setFixedSize(100, 15)
+                  elif i == 2:
+                      label.setFixedSize(110, 15)
+                  elif i == 3:
+                      label.setFixedSize(120, 15)
+                  elif i == 4:
+                      label.setFixedSize(100, 15)
+                  elif i == 5:
+                      label.setFixedSize(100, 15)
+                  elif i == 6:
+                      label.setFixedSize(100, 15)
+                  elif i == 7:
+                      label.setFixedSize(100, 15)
+
+                  custom_layout.addWidget(label)
+
+                  line_label = QtWidgets.QLabel()
+                  line_label.setFrameShape(QtWidgets.QFrame.VLine)
+                  line_label.setFrameShadow(QtWidgets.QFrame.Sunken)
+                  custom_layout.addWidget(line_label)
+
+                  i += 1
+
+              button_layout = QtWidgets.QHBoxLayout()  # Create a layout for the buttons
+
+              delete_button = QtWidgets.QPushButton()
+              delete_button.setIcon(QtGui.QIcon(os.path.join('images', 'delete.png')))
+              delete_button.setFixedSize(20, 20)
+              delete_button.clicked.connect(lambda _, row=row: self.delete_test(row[0]))
+              button_layout.addWidget(delete_button)
+
+              edit_button = QtWidgets.QPushButton()
+              edit_button.setIcon(QtGui.QIcon(os.path.join('images', 'edit.png')))  # Change to the correct icon
+              edit_button.setFixedSize(20, 20)
+              edit_button.clicked.connect(lambda _, row=row: self.edit_refdr(row[0]))
+              button_layout.addWidget(edit_button)
+
+              button_layout.addSpacing(90)
+
+              custom_layout.addLayout(button_layout)  # Add the button layout to the custom layout
+              item.setSizeHint(custom_widget.sizeHint())
+              self.listWidget.setItemWidget(item, custom_widget)
+              item.test_data = row
 
 
-     conn = sqlite3.connect('patient_data.db')
-     cursor = conn.cursor()
- 
-     # Fetch reference data
-     query="SELECT * FROM tests where "
-     parameters = []
 
-     if common and dept=='':
-         query+='TestName like ? or Testcode like ?'
-         parameters.append('%'+common+'%')
-         parameters.append('%'+common+'%')
-     elif common and dept:
-         query +='TestName like ? or Testcode like ? '
-         parameters.extend(['%'+common+'%','%'+common+'%'])
-     cursor.execute(query, parameters)
-     test_data = cursor.fetchall()
-     
-     self.listWidget.clear()
-     if test_data:
-         for row in test_data:
-             item = QtWidgets.QListWidgetItem()
-             self.listWidget.addItem(item)
-     
-             custom_widget = QtWidgets.QFrame()
-             custom_widget.setFrameShape(QtWidgets.QFrame.Box) 
-             custom_layout = QtWidgets.QHBoxLayout(custom_widget)
-             custom_layout.setAlignment(QtCore.Qt.AlignLeft)
-             
-             i=0
-            # label = QtWidgets.QLabel(f"{row[0]:<10} {row[1]:<10} {row[2]:<10} {row[3]:<10} {row[4]:<10} {row[5]:<10}  ")
-             for value in row:
-                               # Create a vertical line (a QLabel with a border)
-                if i==0:
-                    value=f'{value:>20}'
-                  
-                data_string = f'{value}'
-
-                label = QtWidgets.QLabel(data_string)
-                font = QtGui.QFont("Poppins", 8)  # Replace "8" with the desired font size
-                label.setFont(font)
-
-                if i==0:
-                            
-                    label.setFixedSize(100, 15)
-                elif i==1:
-                            
-                    label.setFixedSize(100, 15)
-                elif i==2:
-                            
-                    label.setFixedSize(110, 15)
-                elif i==3:
-                            
-                    label.setFixedSize(120, 15)
-                elif i==4:
-                    label.setFixedSize(100, 15)
-                elif i==5:
-                    label.setFixedSize(100, 15)
-                elif i==6:
-                    label.setFixedSize(100, 15)
-                elif i==7:
-                    label.setFixedSize(100, 15)
-
-
-
-                custom_layout.addWidget(label)
-
-                line_label = QtWidgets.QLabel()
-                line_label.setFrameShape(QtWidgets.QFrame.VLine)
-                line_label.setFrameShadow(QtWidgets.QFrame.Sunken)
-                custom_layout.addWidget(line_label)
-             
-             
-                i=i+1
-             
-             
-             button_layout = QtWidgets.QHBoxLayout()  # Create a layout for the buttons 
-             
-             
-             
-             
-             delete_button = QtWidgets.QPushButton()
-             delete_button.setIcon(QtGui.QIcon(os.path.join('images', 'delete.png')))
-             delete_button.setFixedSize(20, 20)
-             delete_button.clicked.connect(lambda _, row=row: self.delete_test(row[0])) 
-             button_layout.addWidget(delete_button)
-             
-             edit_button = QtWidgets.QPushButton()
-             edit_button.setIcon(QtGui.QIcon(os.path.join('images', 'edit.png')))  # Change to the correct icon
-             edit_button.setFixedSize(20, 20)
-             edit_button.clicked.connect(lambda _, row=row: self.edit_refdr(row[0]))
-             button_layout.addWidget(edit_button)
-             
-             
-             
-             button_layout.addSpacing(90)
-     
-             custom_layout.addLayout(button_layout)  # Add the button layout to the custom layout
-             item.setSizeHint(custom_widget.sizeHint())
-             self.listWidget.setItemWidget(item, custom_widget)
-             item.test_data = row
-
-        
     
     def fetch_and_display_test_data(self):
      self.listWidget.clear()
@@ -450,8 +432,8 @@ class Ui_testForm(object):
         Form.setWindowTitle(_translate("Form", "Form"))
         self.pushButton_3.setText(_translate("Form", "Add Test"))
         self.label_14.setText(_translate("Form", "Actions"))
-        self.label_2.setText(_translate("Form", "Test Name / Code"))
-        self.label_3.setText(_translate("Form", "Specimen Type"))
+        self.label_2.setText(_translate("Form", "TestCode"))
+        self.label_3.setText(_translate("Form", "TestName"))
         self.label_17.setText(_translate("Form", "Specimen Type"))
         # self.label_10.setText(_translate("Form", "Date"))
         self.label_15.setText(_translate("Form", "Test Name"))

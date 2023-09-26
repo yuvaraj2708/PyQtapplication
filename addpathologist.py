@@ -420,13 +420,13 @@ class Ui_pathologisterForm(object):
         
      
     def save_refdr_data(self):
-        DoctorCode = self.lineEdit_9.text()
-        DoctorName = self.lineEdit_28.text()
+        DoctorCode = self.lineEdit_28.text()
+        DoctorName = self.lineEdit_11.text()
         Qualification = self.lineEdit_10.text()
-        Specialisation = self.lineEdit_11.text()
-        Address = self.lineEdit_29.text()
+        Specialisation = self.lineEdit_9.text()
+        Address = self.lineEdit_32.text()
         signature = self.lineEdit_30.text()
-        Mobile = self.lineEdit_32.text()
+        Mobile = self.lineEdit_29.text()
         
         current_datetime = datetime.datetime.now()
         current_date = current_datetime.strftime("%d%m%Y")

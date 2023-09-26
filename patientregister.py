@@ -141,6 +141,10 @@ class Ui_addpatientForm(object):
         self.lineEdit_24 = QtWidgets.QLineEdit(Form)
         self.lineEdit_24.setGeometry(QtCore.QRect(740, 330, 201, 31))#MOBILE
         font = QtGui.QFont()
+        validator = QtGui.QRegExpValidator(QtCore.QRegExp("\\d{10}"), self.lineEdit_24)
+        self.lineEdit_24.setValidator(validator)
+
+        
         font.setPointSize(-1)
         font.setBold(False)
         font.setWeight(50)
@@ -459,6 +463,7 @@ class Ui_addpatientForm(object):
         self.lineEdit_31.setInputMethodHints(QtCore.Qt.ImhNone)
         self.lineEdit_31.setFrame(True)
         self.lineEdit_31.setObjectName("lineEdit_31")
+        self.lineEdit_31.setMaximumDate(QDate.currentDate())
         self.lineEdit_31.setInputMethodHints(QtCore.Qt.ImhNone)
         self.lineEdit_31.setCalendarPopup(True) 
         self.lineEdit_31.setDate(QDate.currentDate())

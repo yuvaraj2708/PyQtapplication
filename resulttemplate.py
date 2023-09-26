@@ -190,105 +190,95 @@ class Ui_resulttemplateForm(object):
 
 
     def filter_report_data(self):
-     
-     self.timer.stop()
-     code=self.lineEdit_18.text()
-     name=self.lineEdit_19.text()
-    
-    # Connect to the database
-     conn = sqlite3.connect('patient_data.db')
-     cursor = conn.cursor()
- 
-     # Fetch reference data
-     query="SELECT * FROM reporttemplates where "
-     parameters=[]
-     if code and name=='':
-         query+='code like ?'
-         parameters.append('%'+code+'%')
-     
-     elif code=='' and name:
-         query+='name like ?'
-         parameters.append('%'+name+'%')
-     elif code and name:
-         query +='code like ? and name like ?'
-         parameters.extend(['%'+code+'%','%'+name+'%'])
-     cursor.execute(query, parameters)
+      self.timer.stop()
+      code = self.lineEdit_18.text()
+      name = self.lineEdit_19.text()
 
-     test_data = cursor.fetchall()
-     self.listWidget.clear()
-     if test_data:
-         for row in test_data:
-             item = QtWidgets.QListWidgetItem()
-             self.listWidget.addItem(item)
-     
-             custom_widget = QtWidgets.QFrame()
-             custom_widget.setFrameShape(QtWidgets.QFrame.Box) 
-             custom_layout = QtWidgets.QHBoxLayout(custom_widget)
-             custom_layout.setAlignment(QtCore.Qt.AlignLeft)
-            
-             i=0
-             #label = QtWidgets.QLabel(f"{row[0]:<10} {row[1]:<10} {row[2]:<10}  ")
-             for value in row:
-                               # Create a vertical line (a QLabel with a border)
+      # Connect to the database
+      conn = sqlite3.connect('patient_data.db')
+      cursor = conn.cursor()
 
-                        if i==0:
-                            value=f'{value:>15}'
+      # Fetch reference data
+      query = "SELECT * FROM reporttemplates WHERE"
+      parameters = []
+
+      if code:
+          query += " code LIKE ?"
+          parameters.append('%' + code + '%')
+
+      if name:
+          if code:
+              query += " AND"
+          query += " name LIKE ?"
+          parameters.append('%' + name + '%')
+
+      # Check if both fields are empty, and if so, fetch all data
+      if not code and not name:
+          query = "SELECT * FROM reporttemplates"
+
+      cursor.execute(query, parameters)
+      test_data = cursor.fetchall()
+      self.listWidget.clear()
+
+      if test_data:
+          for row in test_data:
+              item = QtWidgets.QListWidgetItem()
+              self.listWidget.addItem(item)
+
+              custom_widget = QtWidgets.QFrame()
+              custom_widget.setFrameShape(QtWidgets.QFrame.Box)
+              custom_layout = QtWidgets.QHBoxLayout(custom_widget)
+              custom_layout.setAlignment(QtCore.Qt.AlignLeft)
+
+              i = 0
+              for value in row:
+                  if i == 0:
+                      value = f'{value:>15}'
+
+                  data_string = f'{value}'
+
+                  label = QtWidgets.QLabel(data_string)
+                  font = QtGui.QFont("Poppins", 8)
+                  label.setFont(font)
+
+                  if i == 0:
+                      label.setFixedSize(100, 15)
+                  elif i == 1:
+                      label.setFixedSize(100, 15)
+                  elif i == 2:
+                      label.setFixedSize(500, 15)
+
+                  custom_layout.addWidget(label)
+
+                  line_label = QtWidgets.QLabel()
+                  line_label.setFrameShape(QtWidgets.QFrame.VLine)
+                  line_label.setFrameShadow(QtWidgets.QFrame.Sunken)
+                  custom_layout.addWidget(line_label)
+
+                  i += 1
+
+              button_layout = QtWidgets.QHBoxLayout()  # Create a layout for the buttons
+
+              delete_button = QtWidgets.QPushButton()
+              delete_button.setIcon(QtGui.QIcon(os.path.join('images', 'delete.png')))
+              delete_button.setFixedSize(20, 20)
+              delete_button.clicked.connect(lambda _, row=row: self.delete_test(row[0]))
+              button_layout.addWidget(delete_button)
+
+              edit_button = QtWidgets.QPushButton()
+              edit_button.setIcon(QtGui.QIcon(os.path.join('images', 'edit.png')))
+              edit_button.setFixedSize(20, 20)
+              edit_button.clicked.connect(lambda _, row=row: self.edit_report(row[0]))
+              button_layout.addWidget(edit_button)
+
+              button_layout.addSpacing(90)
+
+              custom_layout.addLayout(button_layout)
+              item.setSizeHint(custom_widget.sizeHint())
+              self.listWidget.setItemWidget(item, custom_widget)
+              item.test_data = row
 
 
-                        data_string = f'{value}'
-
-                        label = QtWidgets.QLabel(data_string)
-                        font = QtGui.QFont("Poppins", 8)  # Replace "8" with the desired font size
-                        label.setFont(font)
-
-
-                        if i==0:
-                            
-                            label.setFixedSize(100, 15)
-                        elif i==1:
-                            
-                            label.setFixedSize(100, 15)
-                        elif i==2:
-                            
-                            label.setFixedSize(500, 15)
-
-
-
-
-
-
-
-                        custom_layout.addWidget(label)
-
-                        line_label = QtWidgets.QLabel()
-                        line_label.setFrameShape(QtWidgets.QFrame.VLine)
-                        line_label.setFrameShadow(QtWidgets.QFrame.Sunken)
-                        custom_layout.addWidget(line_label)
-             
-             
-                        i=i+1
-             
-             
-             button_layout = QtWidgets.QHBoxLayout()  # Create a layout for the buttons 
-             
-             delete_button = QtWidgets.QPushButton()
-             delete_button.setIcon(QtGui.QIcon(os.path.join('images', 'delete.png')))
-             delete_button.setFixedSize(20, 20)
-             delete_button.clicked.connect(lambda _, row=row: self.delete_test(row[0])) 
-             button_layout.addWidget(delete_button)
-             
-             edit_button = QtWidgets.QPushButton()
-             edit_button.setIcon(QtGui.QIcon(os.path.join('images', 'edit.png')))  # Change to the correct icon
-             edit_button.setFixedSize(20, 20)
-             edit_button.clicked.connect(lambda _, row=row: self.edit_report(row[0]))
-             button_layout.addWidget(edit_button)
-             
-             button_layout.addSpacing(90)
-     
-             custom_layout.addLayout(button_layout)  # Add the button layout to the custom layout
-             item.setSizeHint(custom_widget.sizeHint())
-             self.listWidget.setItemWidget(item, custom_widget)
-             item.test_data = row
     
     def fetch_and_display_report_data(self):
      self.listWidget.clear()

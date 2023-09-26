@@ -348,13 +348,13 @@ class Ui_editpathologistForm(object):
             refdr_data = self.fetch_refdr_data_by_id(self.DoctorCode)
             if refdr_data:
                 # Populate the form fields with the patient data
-                self.lineEdit_9.setText(str(refdr_data[0]))
-                self.lineEdit_28.setText(refdr_data[1])  # Assuming the second item is the title
+                self.lineEdit_28.setText(str(refdr_data[0]))
+                self.lineEdit_11.setText(refdr_data[1])  # Assuming the second item is the title
                 self.lineEdit_10.setText(refdr_data[2])  # Assuming the third item is the patient name
-                self.lineEdit_11.setText(refdr_data[3])
-                self.lineEdit_29.setText(refdr_data[4])
-                self.lineEdit_30.setText(refdr_data[5])
-                self.lineEdit_32.setText(str(refdr_data[6]))
+                self.lineEdit_9.setText(refdr_data[3])
+                self.lineEdit_32.setText(refdr_data[4])
+                self.lineEdit_30.setText(refdr_data[7])
+                self.lineEdit_29.setText(str(refdr_data[5]))
                 
                 
     def fetch_refdr_data_by_id(self, DoctorCode):
@@ -393,13 +393,13 @@ class Ui_editpathologistForm(object):
         self.lineEdit_32.clear()
      
     def save_refdr_data(self):
-        DoctorCode = self.lineEdit_9.text()
-        DoctorName = self.lineEdit_28.text()
+        DoctorCode = self.lineEdit_28.text()
+        DoctorName = self.lineEdit_11.text()
         Qualification = self.lineEdit_10.text()
-        Specialisation = self.lineEdit_11.text()
-        Address = self.lineEdit_29.text()
+        Specialisation = self.lineEdit_9.text()
+        Address = self.lineEdit_32.text()
         signature = self.lineEdit_30.text()
-        Mobile = self.lineEdit_32.text()
+        Mobile = self.lineEdit_29.text()
         
         # Insert patient data into the database
         self.cursor.execute("UPDATE pathologist SET  DoctorName=?, Qualification=?, Specialisation=?, Address=?,  Mobile=?, signature=? WHERE DoctorCode=?", 

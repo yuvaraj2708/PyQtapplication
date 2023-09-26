@@ -144,6 +144,7 @@ class Ui_patientForm(object):
         self.lineEdit_17 = QtWidgets.QDateEdit(Form)
         self.lineEdit_17.setCalendarPopup(True) 
         self.lineEdit_17.setGeometry(QtCore.QRect(50, 160, 171, 31))
+        self.lineEdit_17.setMaximumDate(QDate.currentDate())
         self.lineEdit_17.setDate(QDate.currentDate())
         self.lineEdit_17.setDisplayFormat("dd-MMM-yyyy")#from date
         font = QtGui.QFont()
@@ -197,6 +198,7 @@ class Ui_patientForm(object):
 "")
         self.lineEdit_21.setInputMethodHints(QtCore.Qt.ImhNone)
         self.lineEdit_21.setCalendarPopup(True) 
+        self.lineEdit_21.setMaximumDate(QDate.currentDate())
         self.lineEdit_21.setDate(QDate.currentDate())
         self.lineEdit_21.setDisplayFormat("dd-MMM-yyyy")
         self.lineEdit_21.setFrame(True)# to date
