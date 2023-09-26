@@ -25,6 +25,7 @@ from report import Ui_reportingForm
 class Ui_patientForm(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
+        self.frame = QtWidgets.QFrame(Form)
         Form.resize(1032, 889)
         self.label_4 = QtWidgets.QLabel(Form)
         self.label_4.setGeometry(QtCore.QRect(450, 140, 81, 16))
@@ -102,6 +103,15 @@ class Ui_patientForm(object):
         self.label_11 = QtWidgets.QLabel(Form)
         self.label_11.setGeometry(QtCore.QRect(230, 290, 111, 16))
         self.label_11.setObjectName("label_11")
+        self.pushButton_3 = QtWidgets.QPushButton(self.frame)
+        self.pushButton_3.setMinimumSize(QtCore.QSize(20, 20))
+        self.pushButton_3.setMaximumSize(QtCore.QSize(20, 20))
+        self.pushButton_3.setText("")
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap("images/qr.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.pushButton_3.setIcon(icon)
+        self.pushButton_3.setIconSize(QtCore.QSize(20, 20))
+        self.pushButton_3.setObjectName("pushButton_3")
         self.label = QtWidgets.QLabel(Form)
         self.label.setEnabled(True)
         self.label.setGeometry(QtCore.QRect(47, 44, 301, 71))
@@ -630,18 +640,117 @@ class Ui_patientForm(object):
                     more_button.clicked.connect(lambda _, report_id=row[0]: self.preview_pdf(report_id))
                     button_layout.addWidget(more_button)
                     
-                    # more_button = QtWidgets.QCheckBox()
-                    # more_button.setIcon(QtGui.QIcon(os.path.join('images', 'barcode.png')))
-                    # more_button.setFixedSize(20, 20)
-                    # more_button.clicked.connect(lambda _, row=row: self.generate_bar_code_pdf(row))
-                    # button_layout.addWidget(more_button)
+                    more_button = QtWidgets.QPushButton()
+                    more_button.setIcon(QtGui.QIcon(os.path.join('images', 'share.png')))
+                    more_button.setFixedSize(20, 20)
+                    button_layout.addWidget(more_button)
+                    
+                    self.checkbox=QtWidgets.QCheckBox()
+                    self.timer.stop()
+                    self.checkbox.setChecked(False)
+                    self.checkbox.stateChanged.connect(lambda _,row=row: self.addqr(row[0]))
+                    button_layout.addWidget(self.checkbox)
                     
                     custom_layout.addLayout(button_layout)  # Add the button layout to the custom layout
                     item.setSizeHint(custom_widget.sizeHint())
                     self.listWidget.setItemWidget(item, custom_widget)
                     item.patient_data = row
     
-    
+    def addqr(self, id):
+
+        conn = sqlite3.connect('patient_data.db')
+        cursor = conn.cursor()
+
+        # Create the qrcodetable table with the 'id' column as Integer and NOT NULL
+        cursor.execute("CREATE TABLE IF NOT EXISTS qrcodetable (id INTEGER NOT NULL);")
+
+        cursor.execute("SELECT * FROM qrcodetable")
+        all_ids = [row[0] for row in cursor.fetchall()]
+
+
+        if id in all_ids:
+            # Use the DELETE statement to remove rows with a specific ID
+            cursor.execute("DELETE FROM qrcodetable WHERE id = ?", (id,))
+        else:
+            # Use the INSERT statement to insert a single value
+            cursor.execute("INSERT INTO qrcodetable VALUES (?)", (id,))
+
+        # Commit the changes to the database
+        conn.commit()
+        conn.close()
+
+
+    def selected_qrcode_generate(self):
+      conn = sqlite3.connect('patient_data.db')
+      cursor = conn.cursor()
+
+      cursor.execute("SELECT * FROM patients INNER JOIN qrcodetable ON patients.uhid == qrcodetable.id")
+      patient_info_all = cursor.fetchall()
+
+      conn.close()
+      img_group = []
+
+      pdf = FPDF()
+      pdf.add_page()
+
+      x_size = 10
+      y_size = 10
+      c = 0
+      for patient_info in patient_info_all:
+          if patient_info:
+              uhid, date, title, patientname, dob, age, gender, mobile, email, refdr, selectedtest, accession, id,id2 = patient_info
+
+              details_string = (
+                  f"Patient ID: {uhid}\n"
+                  f"Patient Name: {title} {patientname}\n"
+                  f"DOB: {dob}\n"
+                  f"Age: {age}\n"
+                  f"Gender: {gender}\n"
+                  f"Mobile: {mobile}\n"
+                  f"Email: {email}\n"
+                  f"Referring Doctor: {refdr}\n"
+                  f"Selected Test: {selectedtest}\n"
+                  f"Date: {date}\n"
+              )
+
+              qr = qrcode.QRCode(
+                  version=1,
+                  error_correction=qrcode.constants.ERROR_CORRECT_L,
+                  box_size=10,
+                  border=4,
+              )
+              qr.add_data(details_string)
+              qr.make(fit=True)
+
+              qr_img = qr.make_image(fill_color="black", back_color="white")
+              qr_img_file = f'qr_code_{id}.png'
+              qr_img.save(qr_img_file)
+
+              img_group.append(qr_img_file)
+
+              pdf.image(qr_img_file, x=x_size, y=y_size, w=30)  # Adjust x, y, and w as needed
+              x_size = x_size + 33
+              c = c + 1
+              if c % 5 == 0:
+                  y_size = y_size + 50
+                  x_size = 10
+              if y_size >= 250:  # Adjust this value as needed for your layout
+                  pdf.add_page()
+                  y_size = 10
+
+      pdf_file = "qrcodes.pdf"
+      pdf.output(pdf_file)
+
+      conn = sqlite3.connect('patient_data.db')
+      cursor = conn.cursor()
+
+      cursor.execute("DELETE FROM qrcodetable")
+      conn.commit()
+
+      conn.close()
+
+      self.fetch_and_display_patient_data()
+        
     def preview_pdf(self, report_id):
         # Fetch all report data for the patient from the database
         connection = sqlite3.connect("patient_data.db")
@@ -861,6 +970,8 @@ class Ui_patientForm(object):
         self.pushButton_2.setObjectName("pushButton_2")
         self.pushButton_2.clicked.connect(self.open_add_patient_form) 
         self.pushButton.clicked.connect(self.filter_patient_data)
+        self.pushButton_3.clicked.connect(self.selected_qrcode_generate)
+        
         
     def open_add_patient_form(self):
         #self.timer.start()
