@@ -105,11 +105,11 @@ class Ui_patientForm(object):
         self.label_11.setObjectName("label_11")
         self.pushButton_3 = QtWidgets.QPushButton(self.frame)
         self.pushButton_3.setMinimumSize(QtCore.QSize(20, 20))
-        self.pushButton_3.setMaximumSize(QtCore.QSize(20, 20))
         self.pushButton_3.setText("")
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("images/qr.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.pushButton_3.setIcon(icon)
+        self.pushButton_3.setGeometry(QtCore.QRect(850, 300, 20, 20))
         self.pushButton_3.setIconSize(QtCore.QSize(20, 20))
         self.pushButton_3.setObjectName("pushButton_3")
         self.label = QtWidgets.QLabel(Form)
@@ -618,7 +618,7 @@ class Ui_patientForm(object):
                     more_button = QtWidgets.QPushButton()
                     more_button.setIcon(QtGui.QIcon(os.path.join('images', 'qr.png')))
                     more_button.setFixedSize(20, 20)
-                    more_button.clicked.connect(lambda _, row=row: self.generate_qr_code_pdf())
+                    more_button.clicked.connect(lambda _, row=row: self.generate_qr_code_pdf(row))
                     button_layout.addWidget(more_button)
                     
                     more_button = QtWidgets.QPushButton()
@@ -698,8 +698,8 @@ class Ui_patientForm(object):
       c = 0
       for patient_info in patient_info_all:
           if patient_info:
-              uhid, date, title, patientname, dob, age, gender, mobile, email, refdr, selectedtest, accession, id,id2 = patient_info
-
+              uhid, date, title, patientname, dob, age, gender, mobile, email, refdr, selectedtest, accession, id = patient_info
+              id = uhid  # Update the 'id' variable to use the patient's ID
               details_string = (
                   f"Patient ID: {uhid}\n"
                   f"Patient Name: {title} {patientname}\n"
@@ -826,7 +826,7 @@ class Ui_patientForm(object):
     
         
     def generate_qr_code_pdf(self):
-    # visit_id, ref_dr, patient_category, patient_name, dob, age, gender, mobile, email, date, selected_test,acc= visit_data
+    #  ref_dr,patientname, dob, age, gender, mobile, email, date, selected_test,accession= patient_data
  
      # Retrieve patient information based on patient_id from the patients table
      conn = sqlite3.connect('patient_data.db')
@@ -848,7 +848,7 @@ class Ui_patientForm(object):
 
         # Create a formatted string with all the details
         details_string = (
-            # f"Visit ID: {visit_id}\n"
+            
             f"Patient ID: {patient_id}\n"
             f"Patient Name: {patientname}\n"
             f"DOB: {dob}\n"

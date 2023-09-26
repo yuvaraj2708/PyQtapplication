@@ -166,6 +166,8 @@ class Ui_refdrForm(object):
         self.lineEdit_22.setFrame(True)
         self.lineEdit_22.setObjectName("lineEdit_22")
         self.lineEdit_26 = QtWidgets.QLineEdit(self.groupBox)
+        validator = QtGui.QRegExpValidator(QtCore.QRegExp("\\d{10}"), self.lineEdit_26)
+        self.lineEdit_26.setValidator(validator)
         self.lineEdit_26.setGeometry(QtCore.QRect(320, 150, 191, 31))#mobile
         font = QtGui.QFont()
         font.setPointSize(-1)

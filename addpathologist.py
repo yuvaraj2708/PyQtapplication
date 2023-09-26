@@ -238,6 +238,8 @@ class Ui_pathologisterForm(object):
         self.lineEdit_11.setFrame(True)
         self.lineEdit_11.setObjectName("lineEdit_11")
         self.lineEdit_29 = QtWidgets.QLineEdit(self.groupBox)
+        validator = QtGui.QRegExpValidator(QtCore.QRegExp("\\d{10}"), self.lineEdit_29)
+        self.lineEdit_29.setValidator(validator)
         self.lineEdit_29.setGeometry(QtCore.QRect(330, 150, 231, 31))#mobile
         font = QtGui.QFont()
         font.setPointSize(-1)

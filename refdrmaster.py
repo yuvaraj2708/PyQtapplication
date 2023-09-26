@@ -212,7 +212,7 @@ class Ui_refdrmasterForm(object):
        cursor = conn.cursor()
    
        # Fetch reference data
-       query = "SELECT * FROM pathologist WHERE "
+       query = "SELECT * FROM refdr WHERE "
    
        parameters = []
    
@@ -227,7 +227,7 @@ class Ui_refdrmasterForm(object):
            parameters.append('%' + docname + '%')
    
        if not doccode and not docname:  # Both line edits are empty
-           query = "SELECT * FROM pathologist"  # Fetch all data
+           query = "SELECT * FROM refdr"  # Fetch all data
    
        cursor.execute(query, parameters)
    
@@ -453,8 +453,8 @@ class Ui_refdrmasterForm(object):
         Form.setWindowTitle(_translate("Form", "Ekon"))
         self.pushButton_3.setText(_translate("Form", "Add RefDr"))
         self.label_14.setText(_translate("Form", "Actions"))
-        self.label_2.setText(_translate("Form", "Doctor Name"))
-        self.label_3.setText(_translate("Form", "Doctor Code"))
+        self.label_2.setText(_translate("Form", "Doctor Code"))
+        self.label_3.setText(_translate("Form", "Doctor Name"))
         self.pushButton.setText(_translate("Form", "Search"))
         self.label.setText(_translate("Form", "RefDr Master"))
         self.label_18.setText(_translate("Form", "Mobile"))
