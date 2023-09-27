@@ -294,7 +294,10 @@ class Ui_testForm(object):
         # Fetch reference data
         query="SELECT * FROM tests where "
         parameters = []
-
+        
+        if not common and not spec:  # Both line edits are empty
+           query = "SELECT * FROM tests"
+        
         if common and spec=='':
                 query+='TestName like ? or Testcode like ?'
                 parameters.append('%'+common+'%')

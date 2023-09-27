@@ -348,7 +348,7 @@ class Ui_patientForm(object):
             more_button = QtWidgets.QPushButton()
             more_button.setIcon(QtGui.QIcon(os.path.join('images', 'print.png')))
             more_button.setFixedSize(20, 20)
-            more_button.clicked.connect(lambda _, report_id=row[0]: self.preview_pdf(report_id))
+            more_button.clicked.connect(lambda _, row=row: self.display_report_details(row[0]))
             button_layout.addWidget(more_button)
             
             more_button = QtWidgets.QPushButton()
@@ -494,7 +494,7 @@ class Ui_patientForm(object):
             more_button = QtWidgets.QPushButton()
             more_button.setIcon(QtGui.QIcon(os.path.join('images', 'print.png')))
             more_button.setFixedSize(20, 20)
-            more_button.clicked.connect(lambda _, report_id=row[0]: self.preview_pdf(report_id))
+            more_button.clicked.connect(lambda _, report_id=row[0]: self.display_report_details(report_id))
             button_layout.addWidget(more_button)
             
             more_button = QtWidgets.QPushButton()
@@ -515,7 +515,30 @@ class Ui_patientForm(object):
             # Set the container widget as a cell widget in the last column
             self.tableWidget.setCellWidget(r, c, button_container)
             r=r+1
+    
+    def display_report_details(self, patient_id):
+     connection = sqlite3.connect("patient_data.db")  # Replace with your actual database file
+     cursor = connection.cursor()
 
+     # Fetch details for the given patient_id
+     cursor.execute("SELECT * FROM patient_reports WHERE report_id = ?", (patient_id,))
+     report_details = cursor.fetchone()
+     print(report_details)
+     # Check if report_details is not None (i.e., the patient_id exists)
+     if report_details:
+         report_id, patient_name, report_template, pathologist, report_content, report_date = report_details
+         print(f"Report ID: {report_id}")
+         print(f"Patient Name: {patient_name}")
+         print(f"Report Template: {report_template}")
+         print(f"Pathologist: {pathologist}")
+         print(f"Report Content: {report_content}")
+         print(f"Report Date: {report_date}")
+     else:
+         print(f"Report with ID {patient_id} not found.")
+
+     connection.close()
+    
+    
     def addqr(self, id):
 
         conn = sqlite3.connect('patient_data.db')

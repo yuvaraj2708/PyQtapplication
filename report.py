@@ -515,7 +515,7 @@ class Ui_reportingForm(object):
         connection.close()
 
         # Extract the report names and add them to the combo box
-        pathology_names = [pathology[2] for pathology in pathologys]
+        pathology_names = [pathology[1] for pathology in pathologys]
         self.comboBox_24.addItems(pathology_names)
     
     

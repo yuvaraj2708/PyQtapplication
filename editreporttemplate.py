@@ -102,6 +102,32 @@ class Ui_editreportForm(object):
         self.lineEdit_6.setFrame(True)
         self.lineEdit_6.setObjectName("lineEdit_6")
         self.gridLayout.addWidget(self.lineEdit_6, 1, 1, 1, 1)
+        self.pushButton_1 = QtWidgets.QPushButton(Form)
+        self.pushButton_1.setGeometry(QtCore.QRect(500, 470, 131, 31))
+        font = QtGui.QFont()
+        font.setPointSize(-1)
+        font.setBold(True)
+        font.setWeight(62)
+        self.pushButton_1.setFont(font)
+        self.pushButton_1.setStyleSheet("QPushButton\n"
+"{\n"
+"    background-color: #0DBCC0;\n"
+"    border: 0;\n"
+"    font-size: 14px;\n"
+"    font-weight: 500;\n"
+"    border-radius: 4px;\n"
+"color: #ffffff;\n"
+"border: 0;\n"
+"}\n"
+"\n"
+"QPushButton:hover\n"
+"{\n"
+"background-color: #089598;\n"
+"}\n"
+"\n"
+"")
+        self.pushButton_1.setObjectName("pushButton_1")
+        
         self.pushButton_2 = QtWidgets.QPushButton(Form)
         self.pushButton_2.setMinimumSize(QtCore.QSize(26, 40))
         font = QtGui.QFont()
@@ -286,6 +312,8 @@ class Ui_editreportForm(object):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
         self.label_2.setText(_translate("Form", "Code"))
+        self.pushButton_1.setText(_translate("Form", "Close"))
+        self.pushButton_1.clicked.connect(Form.close)
         self.pushButton_2.setText(_translate("Form", "Save Template"))
         self.label_4.setText(_translate("Form", "Name"))
         self.comboBox.setItemText(0, _translate("Form", "8"))

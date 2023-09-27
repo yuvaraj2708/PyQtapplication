@@ -293,7 +293,10 @@ class Ui_resulttemplateForm(object):
         # Fetch reference data
         query="SELECT * FROM reporttemplates where "
         parameters = []
-
+        
+        if not code and not name:  # Both line edits are empty
+           query = "SELECT * FROM reporttemplates"
+        
         if code and name=='':
             query+='code like ?'
             parameters.append('%'+code+'%')

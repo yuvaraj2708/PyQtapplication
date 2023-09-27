@@ -240,7 +240,8 @@ class Ui_pathologistmasterForm(object):
         query="SELECT * FROM pathologist where "
         parameters=[]
 
-
+        if not docname and not code:  # Both line edits are empty
+           query = "SELECT * FROM pathologist"
 
         if docname and code:
                 query+='DoctorName like ? and DoctorCode like ?'

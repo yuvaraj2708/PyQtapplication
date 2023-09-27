@@ -238,8 +238,10 @@ class Ui_refdrmasterForm(object):
         query="SELECT * FROM refdr where "
         parameters=[]
 
-
-
+        if not code and not docname:  # Both line edits are empty
+           query = "SELECT * FROM refdr"
+        
+        
         if docname and code:
                 query+='DoctorName like ? and DoctorCode like ?'
                 parameters.extend(['%'+docname+'%','%'+code+'%'])
