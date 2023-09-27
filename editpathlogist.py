@@ -10,6 +10,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sqlite3
+from PyQt5.QtWidgets import QFileDialog, QLabel
 
 class Ui_editpathologistForm(object):
     def setupUi(self, Form,DoctorCode):
@@ -268,6 +269,8 @@ class Ui_editpathologistForm(object):
         self.lineEdit_29.setInputMethodHints(QtCore.Qt.ImhNone)
         self.lineEdit_29.setFrame(True)
         self.lineEdit_29.setObjectName("lineEdit_29")
+        self.imageLabel = QLabel(Form)
+        self.imageLabel.setGeometry(QtCore.QRect(830, 350, 100, 100))
         self.lineEdit_30 = QtWidgets.QLineEdit(self.groupBox)
         self.lineEdit_30.setGeometry(QtCore.QRect(590, 150, 231, 31))#signature
         font = QtGui.QFont()
@@ -343,7 +346,29 @@ class Ui_editpathologistForm(object):
         self.populate_refdr_data()
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
+        self.selectImageBtn = QtWidgets.QToolButton(self.groupBox)
+        self.selectImageBtn.setGeometry(QtCore.QRect(830, 150, 100, 19))  # Position the "Select Image" button near the QLineEdit
+        self.selectImageBtn.setText("Add Signature")
+        self.selectImageBtn.clicked.connect(self.selectImage)
         
+    def selectImage(self):
+        options = QFileDialog.Options()
+        options |= QFileDialog.ReadOnly
+        options |= QFileDialog.HideNameFilterDetails
+        options |= QFileDialog.DontUseNativeDialog
+
+        file_path, _ = QFileDialog.getOpenFileName(None, "Select Image File", "",
+                                                   "Image Files (*.png *.jpg *.bmp *.gif);;All Files (*)",
+                                                   options=options)
+
+        if file_path:
+            # Set the selected image file path in the QLineEdit
+            self.lineEdit_30.setText(file_path)
+
+            # Display the selected image in the QLabel
+            pixmap = QtGui.QPixmap(file_path)
+            self.imageLabel.setPixmap(pixmap)
+            self.imageLabel.setScaledContents(True)
     def populate_refdr_data(self):
         if self.DoctorCode:
             # Fetch patient data for the specified patient_id

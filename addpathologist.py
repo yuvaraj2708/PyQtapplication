@@ -4,8 +4,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 import sqlite3
 import datetime
 from PyQt5.QtWidgets import QPushButton
-from PyQt5.QtWidgets import QFileDialog
-
+from PyQt5.QtWidgets import QFileDialog, QLabel
 
 class Ui_pathologisterForm(object):
     def setupUi(self, Form):
@@ -266,6 +265,8 @@ class Ui_pathologisterForm(object):
         self.lineEdit_29.setInputMethodHints(QtCore.Qt.ImhNone)
         self.lineEdit_29.setFrame(True)
         self.lineEdit_29.setObjectName("lineEdit_29")
+        self.imageLabel = QLabel(Form)
+        self.imageLabel.setGeometry(QtCore.QRect(830, 350, 100, 100))  # Adjust the size and position as needed
         self.lineEdit_30 = QtWidgets.QLineEdit(self.groupBox)
         self.lineEdit_30.setGeometry(QtCore.QRect(590, 150, 231, 31))#signature
         font = QtGui.QFont()
@@ -349,16 +350,23 @@ class Ui_pathologisterForm(object):
         self.selectImageBtn.clicked.connect(self.selectImage)
         
     def selectImage(self):
-       options = QFileDialog.Options()
-       options |= QFileDialog.ReadOnly
-       options |= QFileDialog.HideNameFilterDetails
-       options |= QFileDialog.DontUseNativeDialog
+        options = QFileDialog.Options()
+        options |= QFileDialog.ReadOnly
+        options |= QFileDialog.HideNameFilterDetails
+        options |= QFileDialog.DontUseNativeDialog
 
-       file_path, _ = QFileDialog.getOpenFileName(self.f, "Select Image File", "", "Image Files (*.png *.jpg *.bmp *.gif);;All Files (*)", options=options)
+        file_path, _ = QFileDialog.getOpenFileName(None, "Select Image File", "",
+                                                   "Image Files (*.png *.jpg *.bmp *.gif);;All Files (*)",
+                                                   options=options)
 
-       if file_path:
-           # Set the selected image file path in the QLineEdit
-           self.lineEdit_30.setText(file_path)
+        if file_path:
+            # Set the selected image file path in the QLineEdit
+            self.lineEdit_30.setText(file_path)
+
+            # Display the selected image in the QLabel
+            pixmap = QtGui.QPixmap(file_path)
+            self.imageLabel.setPixmap(pixmap)
+            self.imageLabel.setScaledContents(True)
         
     def fetch_latest_refdr_number(self):
         try:

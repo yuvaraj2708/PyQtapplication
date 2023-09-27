@@ -106,7 +106,7 @@ class Ui_reportForm(object):
         self.label_4.setStyleSheet("color: #5E6278;")
         self.label_4.setObjectName("label_4")
         self.pushButton_2 = QtWidgets.QPushButton(Form)
-        self.pushButton_2.setGeometry(QtCore.QRect(420, 470, 131, 31))
+        self.pushButton_2.setGeometry(QtCore.QRect(360, 470, 131, 31))
         font = QtGui.QFont()
         font.setPointSize(-1)
         font.setBold(True)
@@ -131,6 +131,33 @@ class Ui_reportForm(object):
 "")
         self.pushButton_2.setObjectName("pushButton_2")
         self.pushButton_2.clicked.connect(self.save_template_to_database)
+
+        self.pushButton_1 = QtWidgets.QPushButton(Form)
+        self.pushButton_1.setGeometry(QtCore.QRect(500, 470, 131, 31))
+        font = QtGui.QFont()
+        font.setPointSize(-1)
+        font.setBold(True)
+        font.setWeight(62)
+        self.pushButton_1.setFont(font)
+        self.pushButton_1.setStyleSheet("QPushButton\n"
+"{\n"
+"    background-color: #0DBCC0;\n"
+"    border: 0;\n"
+"    font-size: 14px;\n"
+"    font-weight: 500;\n"
+"    border-radius: 4px;\n"
+"color: #ffffff;\n"
+"border: 0;\n"
+"}\n"
+"\n"
+"QPushButton:hover\n"
+"{\n"
+"background-color: #089598;\n"
+"}\n"
+"\n"
+"")
+        self.pushButton_1.setObjectName("pushButton_1")
+
         self.textEdit = QtWidgets.QTextEdit(Form)
         self.textEdit.setGeometry(QtCore.QRect(20, 250, 951, 201))
         self.textEdit.setObjectName("textEdit")
@@ -393,6 +420,8 @@ class Ui_reportForm(object):
         self.label_2.setText(_translate("Form", "Code"))
         self.label_10.setText(_translate("Form", "Template"))
         self.label_4.setText(_translate("Form", "Name"))
+        self.pushButton_1.setText(_translate("Form", "Close"))
+        self.pushButton_1.clicked.connect(Form.close)
         self.pushButton_2.setText(_translate("Form", "Save Template"))
         self.textEdit.setHtml(_translate("Form", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"

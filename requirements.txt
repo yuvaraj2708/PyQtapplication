@@ -1,0 +1,4 @@
+PyQt5==5.15.9
+qrcode==7.4.2
+fpdf==1.7.2
+barcode==1.0.3

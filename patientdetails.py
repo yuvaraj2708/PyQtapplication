@@ -618,7 +618,7 @@ class Ui_patientForm(object):
                     more_button = QtWidgets.QPushButton()
                     more_button.setIcon(QtGui.QIcon(os.path.join('images', 'qr.png')))
                     more_button.setFixedSize(20, 20)
-                    more_button.clicked.connect(lambda _, row=row: self.generate_qr_code_pdf(row))
+                    more_button.clicked.connect(lambda _, row=row[0]: self.generate_qr_code_pdf(row))
                     button_layout.addWidget(more_button)
                     
                     more_button = QtWidgets.QPushButton()
@@ -678,78 +678,100 @@ class Ui_patientForm(object):
         # Commit the changes to the database
         conn.commit()
         conn.close()
-
-
     def selected_qrcode_generate(self):
-      conn = sqlite3.connect('patient_data.db')
-      cursor = conn.cursor()
+        
+        conn = sqlite3.connect('patient_data.db')
+        cursor = conn.cursor()
+    
+        # cursor.execute("""
+        #         SELECT visit.visitid, visit.ref_dr,
+        #                 patients.patientname, patients.dob, patients.age, patients.gender, 
+        #                 patients.mobile, patients.email, visit.date, visit.selected_test,patients.uhid
+        #         FROM visit
+        #         INNER JOIN patients ON visit.patient_id = patients.uhid
+        #         INNER JOIN qrcodetable ON visit.id = qrcodetable.id
+        #     """)
+        cursor.execute("SELECT * FROM patients INNER JOIN qrcodetable ON patients.uhid == qrcodetable.id")
+        patient_info_all = cursor.fetchall()
+        
+    
+        conn.close()
+        img_group=[]
+        for patient_info in patient_info_all:
+            if patient_info:
+                
+               # visit_id, ref_dr, patient_category, patientname, gender, dob, age, mobile, email, date, selected_test,patient_id = patient_info
+                uhid,date,title,patientname,dob,age,gender,mobile,email,refdr,selectedtest,accession,id=patient_info
+                # Create a formatted string with all the details
+                details_string = (
+                    #f"Visit ID: {visit_id}\n"
+                    f"Patient ID: {uhid}\n"
+                    f"Patient Name: {title} {patientname}\n"
+                    f"DOB: {dob}\n"
+                    f"Age: {age}\n"
+                    f"Gender: {gender}\n"
+                    f"Mobile: {mobile}\n"
+                    f"Email: {email}\n"
+                   # f"Patient Category: {patient_category}\n"
+                    f"Referring Doctor: {refdr}\n"
+                    f"Selected Test: {selectedtest}\n"
+                    f"Date: {date}\n"
+                )
 
-      cursor.execute("SELECT * FROM patients INNER JOIN qrcodetable ON patients.uhid == qrcodetable.id")
-      patient_info_all = cursor.fetchall()
+                # Generate the QR code using the formatted details string
+                qr = qrcode.QRCode(
+                    version=1,
+                    error_correction=qrcode.constants.ERROR_CORRECT_L,
+                    box_size=10,
+                    border=4,
+                )
+                qr.add_data(details_string)
+                qr.make(fit=True)
 
-      conn.close()
-      img_group = []
+                # Generate the QR code image
+                qr_img = qr.make_image(fill_color="black", back_color="white")
+                
+                qr_img.save(f'qr_code_{uhid}.png')
+                img_group.append(f'qr_code_{uhid}.png')
 
-      pdf = FPDF()
-      pdf.add_page()
+        pdf = FPDF()
+        pdf.add_page()
 
-      x_size = 10
-      y_size = 10
-      c = 0
-      for patient_info in patient_info_all:
-          if patient_info:
-              uhid, date, title, patientname, dob, age, gender, mobile, email, refdr, selectedtest, accession, id = patient_info
-              id = uhid  # Update the 'id' variable to use the patient's ID
-              details_string = (
-                  f"Patient ID: {uhid}\n"
-                  f"Patient Name: {title} {patientname}\n"
-                  f"DOB: {dob}\n"
-                  f"Age: {age}\n"
-                  f"Gender: {gender}\n"
-                  f"Mobile: {mobile}\n"
-                  f"Email: {email}\n"
-                  f"Referring Doctor: {refdr}\n"
-                  f"Selected Test: {selectedtest}\n"
-                  f"Date: {date}\n"
-              )
+            # Loop through the image paths and add each image to the PDF
+        x_size=10
+        y_size=10
+        c=0
+        print(img_group)
 
-              qr = qrcode.QRCode(
-                  version=1,
-                  error_correction=qrcode.constants.ERROR_CORRECT_L,
-                  box_size=10,
-                  border=4,
-              )
-              qr.add_data(details_string)
-              qr.make(fit=True)
-
-              qr_img = qr.make_image(fill_color="black", back_color="white")
-              qr_img_file = f'qr_code_{id}.png'
-              qr_img.save(qr_img_file)
-
-              img_group.append(qr_img_file)
-
-              pdf.image(qr_img_file, x=x_size, y=y_size, w=30)  # Adjust x, y, and w as needed
-              x_size = x_size + 33
-              c = c + 1
-              if c % 5 == 0:
-                  y_size = y_size + 50
-                  x_size = 10
-              if y_size >= 250:  # Adjust this value as needed for your layout
-                  pdf.add_page()
-                  y_size = 10
-
-      pdf_file = "qrcodes.pdf"
-      pdf.output(pdf_file)
-
-      conn = sqlite3.connect('patient_data.db')
-      cursor = conn.cursor()
-
-      cursor.execute("DELETE FROM qrcodetable")
-      conn.commit()
-
-      conn.close()
-
-      self.fetch_and_display_patient_data()
+        for img in img_group:
+            
+            print(img)
+            pdf.image(img, x=x_size, y=y_size, w=30) 
+            pdf.output(f"qrcode{img}.pdf") # Adjust x, y, and w as needed
+            x_size=x_size+50
+            c=c+1
+            if c%5==0:
+                y_size=y_size+50
+                x_size=10
+            if y_size==240:
+                y_size=10
+                pdf.add_page()
+            # Output the PDF
+        pdf.output("qrcodes.pdf")
+                
+        conn = sqlite3.connect('patient_data.db')
+        cursor = conn.cursor()
+    
+        cursor.execute("""
+                delete from qrcodetable
+            """)
+        conn.commit()
+    
+        conn.close()
+        
+        self.listWidget.clear()
+       
+        self.fetch_and_display_patient_data()
         
     def preview_pdf(self, report_id):
         # Fetch all report data for the patient from the database
@@ -825,20 +847,20 @@ class Ui_patientForm(object):
     
     
         
-    def generate_qr_code_pdf(self):
+    def generate_qr_code_pdf(self,uhid):
     #  ref_dr,patientname, dob, age, gender, mobile, email, date, selected_test,accession= patient_data
  
      # Retrieve patient information based on patient_id from the patients table
      conn = sqlite3.connect('patient_data.db')
      cursor = conn.cursor()
  
-     cursor.execute("""
+     cursor.execute(("""
              SELECT  patients.refdr, 
                     patients.patientname, patients.dob, patients.age, patients.gender, 
                     patients.mobile, patients.email, patients.date, patients.selected_test,patients.uhid
-             FROM patients
+             FROM patients where uhid == ?
              
-         """)
+         """),(uhid,))
      patient_info = cursor.fetchone()
  
      conn.close()
@@ -909,7 +931,7 @@ class Ui_patientForm(object):
 
 
     def edit_patient(self, patient_uhid):
-        
+        self.timer.start()
         self.edit_patient_form = QtWidgets.QWidget()
         self.ui_edit_patient = Ui_editpatientForm()  # Replace with the correct class name
         self.ui_edit_patient.setupUi(self.edit_patient_form, patient_uhid)  # Pass the patient ID
