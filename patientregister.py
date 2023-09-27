@@ -3,6 +3,7 @@ import sqlite3
 import datetime
 from PyQt5.QtWidgets import QComboBox
 from PyQt5.QtCore import QDate
+from PyQt5.QtGui import QIntValidator
 
 class Ui_addpatientForm(object):
     def setupUi(self, Form):
@@ -351,6 +352,8 @@ class Ui_addpatientForm(object):
         self.lineEdit_30.setInputMethodHints(QtCore.Qt.ImhNone)
         self.lineEdit_30.setFrame(True)
         self.lineEdit_30.setObjectName("lineEdit_30")
+        int_validator = QIntValidator()
+        self.lineEdit_30.setValidator(int_validator)
         self.lineEdit_26 = QtWidgets.QLineEdit(Form)
         self.lineEdit_26.setGeometry(QtCore.QRect(270, 480, 211, 31))#TEST
         font = QtGui.QFont()

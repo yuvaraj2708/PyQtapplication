@@ -3,9 +3,7 @@ from patientregister import Ui_addpatientForm
 from patientdetails import Ui_patientForm 
 from refdrmaster import Ui_refdrmasterForm 
 from testmaster import Ui_testForm
-from registrationsummary import Ui_visitsummaryForm
 from reportformat import Ui_reportForm
-from scansummary import Ui_scansummaryForm
 import sqlite3
 from resulttemplate import Ui_resulttemplateForm
 from pathologistmaster import Ui_pathologistmasterForm
@@ -830,32 +828,32 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def show_patient_master_frame(self):
 
-        self.patient_master_ui.timer.start()
+        # self.patient_master_ui.timer.start()
         self.stacked_widget.setCurrentWidget(self.patient_master_frame)
         
     def show_refdr_frame(self):
 
-        self.add_refdr_ui.lineEdit_18.setText('')
+        self.add_refdr_ui.lineEdit_25.setText('')
 
-        self.add_refdr_ui.lineEdit_19.setText('')
+        self.add_refdr_ui.lineEdit_26.setText('')
         # self.add_refdr_ui.lineEdit_25.setText('')
-        self.add_refdr_ui.timer.start()
+        # self.add_refdr_ui.timer.start()
         self.stacked_widget.setCurrentWidget(self.add_refdr_frame)    
 
     def show_testmaster_frame(self):
-        self.add_testmaster_ui.lineEdit_19.setText('')
-        self.add_testmaster_ui.lineEdit_18.setText('')
-        self.add_testmaster_ui.timer.start()
+        self.add_testmaster_ui.lineEdit_26.setText('')
+        self.add_testmaster_ui.lineEdit_25.setText('')
+        # self.add_testmaster_ui.timer.start()
         self.stacked_widget.setCurrentWidget(self.add_testmaster_frame) 
     
-    def show_visitsummary_frame(self):
-        self.add_visitsummary_ui.lineEdit_18.setText('')
+    # def show_visitsummary_frame(self):
+    #     self.add_visitsummary_ui.lineEdit_25.setText('')
 
     
     def show_reportformat_frame(self):
-         self.reportformat_ui.lineEdit_18.setText('')
-         self.reportformat_ui.lineEdit_19.setText('')
-         self.reportformat_ui.timer.start()
+         self.reportformat_ui.lineEdit_25.setText('')
+         self.reportformat_ui.lineEdit_26.setText('')
+        #  self.reportformat_ui.timer.start()
          self.stacked_widget.setCurrentWidget(self.reportformat_frame)     
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)

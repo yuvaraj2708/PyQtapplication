@@ -14,157 +14,26 @@ import sqlite3
 import os
 from edittest import Ui_edittestForm
 from PyQt5.QtCore import QTime, QTimer
-
+from PyQt5.QtWidgets import QTableWidget,QTableWidgetItem
 
 
 class Ui_testForm(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(901, 889)
-        self.textEdit = QtWidgets.QTextEdit(Form)
-        self.textEdit.setGeometry(QtCore.QRect(0, 340, 1941, 601))
-        self.textEdit.setMinimumSize(QtCore.QSize(1500, 0))
-        self.textEdit.setObjectName("textEdit")
-        self.pushButton_3 = QtWidgets.QPushButton(Form)
-        self.pushButton_3.setGeometry(QtCore.QRect(600, 140, 111, 31))
-        font = QtGui.QFont()
-        font.setPointSize(-1)
-        font.setBold(True)
-        font.setWeight(62)
-        self.pushButton_3.setFont(font)
-        self.pushButton_3.setStyleSheet("QPushButton\n"
-"{\n"
-"    background-color: #0DBCC0;\n"
-"    border: 0;\n"
-"    font-size: 14px;\n"
-"    font-weight: 500;\n"
-"    border-radius: 4px;\n"
-"color: #ffffff;\n"
-"border: 0;\n"
-"}\n"
-"\n"
-"QPushButton:hover\n"
-"{\n"
-"background-color: #089598;\n"
-"}\n"
-"\n"
-"")
-        self.pushButton_3.setObjectName("pushButton_3")
-        self.label_14 = QtWidgets.QLabel(Form)
-        self.label_14.setGeometry(QtCore.QRect(720, 310, 41, 16))
-        self.label_14.setObjectName("label_14")
-        self.lineEdit_18 = QtWidgets.QLineEdit(Form)
-        self.lineEdit_18.setGeometry(QtCore.QRect(30, 140, 201, 31))
-        font = QtGui.QFont()
-        font.setPointSize(-1)
-        font.setBold(False)
-        font.setWeight(50)
-        self.lineEdit_18.setFont(font)
-        self.lineEdit_18.setStyleSheet("QLineEdit\n"
-"{\n"
-"font-size: 15px;\n"
-"    font-weight: 400;\n"
-"    color: #212529;\n"
-"    background-color: #ffffff;\n"
-"    background-clip: padding-box;\n"
-"    border: 1px solid #ced4da;\n"
-"    border-radius: 20px;\n"
-"    padding:0px 10px;\n"
-"}\n"
-"QLineEdit:focus\n"
-"{\n"
-"border:1px solid #3F4254;\n"
-"}\n"
-"\n"
-"")
-        self.lineEdit_18.setInputMethodHints(QtCore.Qt.ImhNone)
-        self.lineEdit_18.setFrame(True)
-        self.lineEdit_18.setObjectName("lineEdit_18")
-        self.label_2 = QtWidgets.QLabel(Form)
-        self.label_2.setGeometry(QtCore.QRect(30, 120, 111, 16))
-        font = QtGui.QFont()
-        font.setFamily("Poppins")
-        font.setPointSize(8)
-        self.label_2.setFont(font)
-        self.label_2.setStyleSheet("color: #5E6278;")
-        self.label_2.setObjectName("label_2")
-        self.label_3 = QtWidgets.QLabel(Form)
-        self.label_3.setGeometry(QtCore.QRect(250, 120, 101, 16))
-        font = QtGui.QFont()
-        font.setFamily("Poppins")
-        font.setPointSize(8)
-        self.label_3.setFont(font)
-        self.label_3.setStyleSheet("color: #5E6278;")
-        self.label_3.setObjectName("label_3")
-        self.lineEdit_19 = QtWidgets.QLineEdit(Form)
-        self.lineEdit_19.setGeometry(QtCore.QRect(250, 140, 201, 31))
-        font = QtGui.QFont()
-        font.setPointSize(-1)
-        font.setBold(False)
-        font.setWeight(50)
-        self.lineEdit_19.setFont(font)
-        self.lineEdit_19.setStyleSheet("QLineEdit\n"
-"{\n"
-"font-size: 15px;\n"
-"    font-weight: 400;\n"
-"    color: #212529;\n"
-"    background-color: #ffffff;\n"
-"    background-clip: padding-box;\n"
-"    border: 1px solid #ced4da;\n"
-"    border-radius: 20px;\n"
-"    padding:0px 10px;\n"
-"}\n"
-"QLineEdit:focus\n"
-"{\n"
-"border:1px solid #3F4254;\n"
-"}\n"
-"\n"
-"")
-        self.lineEdit_19.setInputMethodHints(QtCore.Qt.ImhNone)
-        self.lineEdit_19.setFrame(True)
-        self.lineEdit_19.setObjectName("lineEdit_19")
-        self.label_17 = QtWidgets.QLabel(Form)
-        self.label_17.setGeometry(QtCore.QRect(450, 310, 111, 16))
-        self.label_17.setObjectName("label_17")
-        # self.label_10 = QtWidgets.QLabel(Form)
-        # self.label_10.setGeometry(QtCore.QRect(40, 310, 26, 16))
-        # self.label_10.setObjectName("label_10")
-        self.label_15 = QtWidgets.QLabel(Form)
-        self.label_15.setGeometry(QtCore.QRect(240, 310, 51, 13))
-        self.label_15.setObjectName("label_15")
-        self.label_11 = QtWidgets.QLabel(Form)
-        self.label_11.setGeometry(QtCore.QRect(110, 310, 58, 16))
-        self.label_11.setObjectName("label_11")
-        self.pushButton = QtWidgets.QPushButton(Form)
-        self.pushButton.setGeometry(QtCore.QRect(470, 140, 111, 31))
-        font = QtGui.QFont()
-        font.setPointSize(-1)
-        font.setBold(True)
-        font.setWeight(62)
-        self.pushButton.setFont(font)
-        self.pushButton.setStyleSheet("QPushButton\n"
-"{\n"
-"    background-color: #0DBCC0;\n"
-"    border: 0;\n"
-"    font-size: 14px;\n"
-"    font-weight: 500;\n"
-"    border-radius: 4px;\n"
-"color: #ffffff;\n"
-"border: 0;\n"
-"}\n"
-"\n"
-"QPushButton:hover\n"
-"{\n"
-"background-color: #089598;\n"
-"}\n"
-"\n"
-"")
-        self.pushButton.setObjectName("pushButton")
-        self.label = QtWidgets.QLabel(Form)
+        Form.resize(832, 637)
+        Form.showMaximized() 
+        self.gridLayout_2 = QtWidgets.QGridLayout(Form)
+        self.gridLayout_2.setObjectName("gridLayout_2")
+        self.frame = QtWidgets.QFrame(Form)
+        self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame.setObjectName("frame")
+        self.gridLayout_3 = QtWidgets.QGridLayout(self.frame)
+        self.gridLayout_3.setObjectName("gridLayout_3")
+        self.label = QtWidgets.QLabel(self.frame)
         self.label.setEnabled(True)
-        self.label.setGeometry(QtCore.QRect(30, 40, 211, 35))
-        self.label.setMinimumSize(QtCore.QSize(5, 5))
-        self.label.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        self.label.setMinimumSize(QtCore.QSize(5, 50))
+        self.label.setMaximumSize(QtCore.QSize(16777215, 30))
         self.label.setSizeIncrement(QtCore.QSize(3, 3))
         font = QtGui.QFont()
         font.setPointSize(15)
@@ -172,290 +41,346 @@ class Ui_testForm(object):
         font.setWeight(75)
         self.label.setFont(font)
         self.label.setAutoFillBackground(False)
-        self.label.setStyleSheet("color: #181C32;")
+        self.label.setStyleSheet("color: #181C32;\n"
+"margin-top:10px;")
         self.label.setObjectName("label")
+        self.gridLayout_3.addWidget(self.label, 1, 0, 1, 1)
+        spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.gridLayout_3.addItem(spacerItem, 3, 0, 1, 1)
+        self.gridLayout = QtWidgets.QGridLayout()
+        self.gridLayout.setContentsMargins(-1, 50, -1, 30)
+        self.gridLayout.setHorizontalSpacing(23)
+        self.gridLayout.setVerticalSpacing(9)
+        self.gridLayout.setObjectName("gridLayout")
+        self.lineEdit_25 = QtWidgets.QLineEdit(self.frame)
+        self.lineEdit_25.setMinimumSize(QtCore.QSize(200, 35))
+        self.lineEdit_25.setMaximumSize(QtCore.QSize(250, 16777215))
+        font = QtGui.QFont()
+        font.setPointSize(-1)
+        font.setBold(False)
+        font.setWeight(50)
+        self.lineEdit_25.setFont(font)
+        self.lineEdit_25.setStyleSheet("QLineEdit\n"
+"{\n"
+"font-size: 15px;\n"
+"    font-weight: 400;\n"
+"    color: #212529;\n"
+"    background-color: #ffffff;\n"
+"    background-clip: padding-box;\n"
+"    border: 1px solid #ced4da;\n"
+"    border-radius: 20px;\n"
+"    padding:0px 10px;\n"
+"}\n"
+"QLineEdit:focus\n"
+"{\n"
+"border:1px solid #3F4254;\n"
+"}\n"
+"\n"
+"")
+        self.lineEdit_25.setInputMethodHints(QtCore.Qt.ImhNone)
+        self.lineEdit_25.setFrame(True)
+        self.lineEdit_25.setObjectName("lineEdit_25")
+        self.gridLayout.addWidget(self.lineEdit_25, 1, 0, 1, 1)
+        self.pushButton_5 = QtWidgets.QPushButton(self.frame)
+        self.pushButton_5.setMinimumSize(QtCore.QSize(150, 35))
+        self.pushButton_5.setMaximumSize(QtCore.QSize(165, 16777215))
+        font = QtGui.QFont()
+        font.setPointSize(-1)
+        font.setBold(True)
+        font.setWeight(62)
+        self.pushButton_5.setFont(font)
+        self.pushButton_5.setStyleSheet("QPushButton\n"
+"{\n"
+"    background-color: #0DBCC0;\n"
+"    border: 0;\n"
+"    font-size: 14px;\n"
+"    font-weight: 500;\n"
+"    border-radius: 4px;\n"
+"color: #ffffff;\n"
+"border: 0;\n"
+"}\n"
+"\n"
+"QPushButton:hover\n"
+"{\n"
+"background-color: #089598;\n"
+"}\n"
+"\n"
+"")
+        self.pushButton_5.setObjectName("pushButton_5")
+        self.gridLayout.addWidget(self.pushButton_5, 1, 3, 1, 1)
+        self.pushButton_4 = QtWidgets.QPushButton(self.frame)
+        self.pushButton_4.setMinimumSize(QtCore.QSize(150, 35))
+        self.pushButton_4.setMaximumSize(QtCore.QSize(165, 16777215))
+        font = QtGui.QFont()
+        font.setPointSize(-1)
+        font.setBold(True)
+        font.setWeight(62)
+        self.pushButton_4.setFont(font)
+        self.pushButton_4.setStyleSheet("QPushButton\n"
+"{\n"
+"    background-color: #0DBCC0;\n"
+"    border: 0;\n"
+"    font-size: 14px;\n"
+"    font-weight: 500;\n"
+"    border-radius: 4px;\n"
+"color: #ffffff;\n"
+"border: 0;\n"
+"}\n"
+"\n"
+"QPushButton:hover\n"
+"{\n"
+"background-color: #089598;\n"
+"}\n"
+"\n"
+"")
+        self.pushButton_4.setObjectName("pushButton_4")
+        self.gridLayout.addWidget(self.pushButton_4, 1, 2, 1, 1)
+        self.label_5 = QtWidgets.QLabel(self.frame)
+        self.label_5.setMinimumSize(QtCore.QSize(0, 25))
+        self.label_5.setMaximumSize(QtCore.QSize(16777215, 10))
+        font = QtGui.QFont()
+        font.setFamily("Poppins")
+        font.setPointSize(8)
+        self.label_5.setFont(font)
+        self.label_5.setStyleSheet("color: #5E6278;")
+        self.label_5.setObjectName("label_5")
+        self.gridLayout.addWidget(self.label_5, 0, 0, 1, 1)
+        self.label_6 = QtWidgets.QLabel(self.frame)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.label_6.sizePolicy().hasHeightForWidth())
+        self.label_6.setSizePolicy(sizePolicy)
+        self.label_6.setMinimumSize(QtCore.QSize(0, 25))
+        self.label_6.setMaximumSize(QtCore.QSize(16777215, 10))
+        font = QtGui.QFont()
+        font.setFamily("Poppins")
+        font.setPointSize(8)
+        self.label_6.setFont(font)
+        self.label_6.setStyleSheet("color: #5E6278;")
+        self.label_6.setObjectName("label_6")
+        self.gridLayout.addWidget(self.label_6, 0, 1, 1, 1)
+        self.lineEdit_26 = QtWidgets.QLineEdit(self.frame)
+        self.lineEdit_26.setMinimumSize(QtCore.QSize(200, 35))
+        self.lineEdit_26.setMaximumSize(QtCore.QSize(250, 16777215))
+        font = QtGui.QFont()
+        font.setPointSize(-1)
+        font.setBold(False)
+        font.setWeight(50)
+        self.lineEdit_26.setFont(font)
+        self.lineEdit_26.setStyleSheet("QLineEdit\n"
+"{\n"
+"font-size: 15px;\n"
+"    font-weight: 400;\n"
+"    color: #212529;\n"
+"    background-color: #ffffff;\n"
+"    background-clip: padding-box;\n"
+"    border: 1px solid #ced4da;\n"
+"    border-radius: 20px;\n"
+"    padding:0px 10px;\n"
+"}\n"
+"QLineEdit:focus\n"
+"{\n"
+"border:1px solid #3F4254;\n"
+"}\n"
+"\n"
+"")
+        self.lineEdit_26.setInputMethodHints(QtCore.Qt.ImhNone)
+        self.lineEdit_26.setFrame(True)
+        self.lineEdit_26.setObjectName("lineEdit_26")
+        self.gridLayout.addWidget(self.lineEdit_26, 1, 1, 1, 1)
+        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout.addItem(spacerItem1, 1, 4, 1, 1)
+        self.gridLayout_3.addLayout(self.gridLayout, 2, 0, 1, 1)
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.tableWidget = QtWidgets.QTableWidget(self.frame)
+        self.tableWidget.setMinimumSize(QtCore.QSize(0, 380))
+        self.tableWidget.setObjectName("tableWidget")
+        self.tableWidget.setColumnCount(0)
+        self.tableWidget.setRowCount(0)
+        self.tableWidget.horizontalHeader().setStretchLastSection(True)
+        self.verticalLayout_2.addWidget(self.tableWidget)
+        self.gridLayout_3.addLayout(self.verticalLayout_2, 4, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.frame, 0, 0, 1, 1)
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
-        self.pushButton_3.setObjectName("pushButton_3")
-        # self.textEdit = QtWidgets.QTextEdit(Form)
-        # self.textEdit.setGeometry(QtCore.QRect(-27, 280, 921, 421))
-        # self.textEdit.setObjectName("textEdit")
-        
-        
-        self.test_data = {}
-        self.listWidget = QtWidgets.QListWidget(Form)
-        self.listWidget.setGeometry(QtCore.QRect(0, 340, 1050, 600))  # Adjust the geometry as needed
-        self.listWidget.setObjectName("listWidget")
+        self.fetch_and_display_testdata()
 
-        self.retranslateUi(Form)
-        QtCore.QMetaObject.connectSlotsByName(Form)
-        self.timer = QTimer(Form)
-        # Set the interval to 1000 milliseconds (1 second)
-        self.timer.setInterval(1000)
-        # Connect the timeout signal to the function you want to call
-        self.timer.timeout.connect(self.fetch_and_display_test_data)
-        # Start the timer
-        self.timer.start()
-        self.fetch_and_display_test_data()
-
-    def fetch_and_display_filtertest_data(self):
-     self.timer.stop()
-     # Connect to the database
-     code = self.lineEdit_18.text()
-     name = self.lineEdit_19.text()
- 
-     conn = sqlite3.connect('patient_data.db')
-     cursor = conn.cursor()
- 
-     # Define the base query
-     base_query = "SELECT * FROM tests WHERE TestCode LIKE ? OR TestName LIKE ?"
-     parameters = ['%' + code + '%', '%' + name + '%']
- 
-     cursor.execute(base_query, parameters)
-     test_data = cursor.fetchall()
- 
-     # Merge the results from the first table
-     self.listWidget.clear()
- 
-     if test_data:
-         # Filter results where both TestCode and TestName match
-         filtered_results = []
-         for row in test_data:
-             if code.lower() in row[0].lower() and name.lower() in row[1].lower():
-                 filtered_results.append(row)
- 
-         for row in filtered_results:
-             item = QtWidgets.QListWidgetItem()
-             self.listWidget.addItem(item)
- 
-             custom_widget = QtWidgets.QFrame()
-             custom_widget.setFrameShape(QtWidgets.QFrame.Box)
-             custom_layout = QtWidgets.QHBoxLayout(custom_widget)
-             custom_layout.setAlignment(QtCore.Qt.AlignLeft)
- 
-             i = 0
-             for value in row:
-                 if i == 0:
-                     value = f'{value:>20}'
- 
-                 data_string = f'{value}'
- 
-                 label = QtWidgets.QLabel(data_string)
-                 font = QtGui.QFont("Poppins", 8)
-                 label.setFont(font)
- 
-                 if i == 0:
-                     label.setFixedSize(100, 15)
-                 elif i == 1:
-                     label.setFixedSize(100, 15)
-                 elif i == 2:
-                     label.setFixedSize(110, 15)
-                 elif i == 3:
-                     label.setFixedSize(120, 15)
-                 elif i == 4:
-                     label.setFixedSize(100, 15)
-                 elif i == 5:
-                     label.setFixedSize(100, 15)
-                 elif i == 6:
-                     label.setFixedSize(100, 15)
-                 elif i == 7:
-                     label.setFixedSize(100, 15)
- 
-                 custom_layout.addWidget(label)
- 
-                 line_label = QtWidgets.QLabel()
-                 line_label.setFrameShape(QtWidgets.QFrame.VLine)
-                 line_label.setFrameShadow(QtWidgets.QFrame.Sunken)
-                 custom_layout.addWidget(line_label)
- 
-                 i += 1
- 
-             button_layout = QtWidgets.QHBoxLayout()  # Create a layout for the buttons
- 
-             delete_button = QtWidgets.QPushButton()
-             delete_button.setIcon(QtGui.QIcon(os.path.join('images', 'delete.png')))
-             delete_button.setFixedSize(20, 20)
-             delete_button.clicked.connect(lambda _, row=row: self.delete_test(row[0]))
-             button_layout.addWidget(delete_button)
- 
-             edit_button = QtWidgets.QPushButton()
-             edit_button.setIcon(QtGui.QIcon(os.path.join('images', 'edit.png')))  # Change to the correct icon
-             edit_button.setFixedSize(20, 20)
-             edit_button.clicked.connect(lambda _, row=row: self.edit_refdr(row[0]))
-             button_layout.addWidget(edit_button)
- 
-             button_layout.addSpacing(90)
- 
-             custom_layout.addLayout(button_layout)  # Add the button layout to the custom layout
-             item.setSizeHint(custom_widget.sizeHint())
-             self.listWidget.setItemWidget(item, custom_widget)
-             item.test_data = row
- 
- 
- 
- 
+    def retranslateUi(self, Form):
+        _translate = QtCore.QCoreApplication.translate
+        Form.setWindowTitle(_translate("Form", "Form"))
+        self.label.setText(_translate("Form", "Test Master"))
+        self.pushButton_5.setText(_translate("Form", "Add Test"))
+        self.pushButton_4.setText(_translate("Form", "search"))
+        self.label_5.setText(_translate("Form", "Test Name / Code"))
+        self.label_6.setText(_translate("Form", "Specimen Type"))
+        self.pushButton_5.clicked.connect(self.addtest_form)
+        self.pushButton_4.clicked.connect(self.filter_test_data)
 
 
-    
-    def fetch_and_display_test_data(self):
-     self.listWidget.clear()
-    # Connect to the database
-     conn = sqlite3.connect('patient_data.db')
-     cursor = conn.cursor()
- 
-     # Fetch reference data
-     cursor.execute("SELECT * FROM tests")
-     test_data = cursor.fetchall()
-    #  self.listWidget.clear()
-     if test_data:
-         for row in test_data:
-             item = QtWidgets.QListWidgetItem()
-             self.listWidget.addItem(item)
-     
-             custom_widget = QtWidgets.QFrame()
-             custom_widget.setFrameShape(QtWidgets.QFrame.Box) 
-             custom_layout = QtWidgets.QHBoxLayout(custom_widget)
-             custom_layout.setAlignment(QtCore.Qt.AlignLeft)
-             
-             i=0
-            # label = QtWidgets.QLabel(f"{row[0]:<10} {row[1]:<10} {row[2]:<10} {row[3]:<10} {row[4]:<10} {row[5]:<10}  ")
-             for value in row:
-                               # Create a vertical line (a QLabel with a border)
-                if i==0:
-                    value=f'{value:>20}'
-                  
-                data_string = f'{value}'
-
-                label = QtWidgets.QLabel(data_string)
-                font = QtGui.QFont("Poppins", 8)  # Replace "8" with the desired font size
-                label.setFont(font)
-
-                if i==0:
-                            
-                    label.setFixedSize(100, 15)
-                elif i==1:
-                            
-                    label.setFixedSize(100, 15)
-                elif i==2:
-                            
-                    label.setFixedSize(110, 15)
-                elif i==3:
-                            
-                    label.setFixedSize(120, 15)
-                elif i==4:
-                    label.setFixedSize(100, 15)
-                elif i==5:
-                    label.setFixedSize(100, 15)
-                elif i==6:
-                    label.setFixedSize(100, 15)
-                elif i==7:
-                    label.setFixedSize(100, 15)
-
-
-
-                custom_layout.addWidget(label)
-
-                line_label = QtWidgets.QLabel()
-                line_label.setFrameShape(QtWidgets.QFrame.VLine)
-                line_label.setFrameShadow(QtWidgets.QFrame.Sunken)
-                custom_layout.addWidget(line_label)
-             
-             
-                i=i+1
-             
-             
-             button_layout = QtWidgets.QHBoxLayout()  # Create a layout for the buttons 
-             
-             
-             
-             
-             delete_button = QtWidgets.QPushButton()
-             delete_button.setIcon(QtGui.QIcon(os.path.join('images', 'delete.png')))
-             delete_button.setFixedSize(20, 20)
-             delete_button.clicked.connect(lambda _, row=row: self.delete_test(row[0])) 
-             button_layout.addWidget(delete_button)
-             
-             edit_button = QtWidgets.QPushButton()
-             edit_button.setIcon(QtGui.QIcon(os.path.join('images', 'edit.png')))  # Change to the correct icon
-             edit_button.setFixedSize(20, 20)
-             edit_button.clicked.connect(lambda _, row=row: self.edit_refdr(row[0]))
-             button_layout.addWidget(edit_button)
-             
-             
-             
-             button_layout.addSpacing(90)
-     
-             custom_layout.addLayout(button_layout)  # Add the button layout to the custom layout
-             item.setSizeHint(custom_widget.sizeHint())
-             self.listWidget.setItemWidget(item, custom_widget)
-             item.test_data = row
-       
-       
-       
-    def edit_refdr(self, Testcode):
-        self.edit_test_form = QtWidgets.QWidget()
-        self.ui_edit_test = Ui_edittestForm()  # Replace with the correct class name
-        self.ui_edit_test.setupUi(self.edit_test_form, Testcode)  # Pass the DoctorCode argument
-        self.edit_test_form.show()
-
-        # Fetch refdr data for the specified DoctorCode
-        test_data = self.fetch_test_data_by_id(Testcode)
-        if test_data:
-            self.edit_test_form.test_data = test_data  
-        
-        #self.listWidget.clear()
-        
-        self.ui_edit_test.pushButton_5.clicked.connect(self.fetch_and_display_test_data)
+    def fetch_and_display_testdata(self):
+        self.tableWidget.setColumnCount(4)
+        self.tableWidget.setColumnWidth(0,200)
+        self.tableWidget.setColumnWidth(1,350)
+        self.tableWidget.setColumnWidth(2,350)
+        self.tableWidget.setColumnWidth(3,150)
    
-    def fetch_test_data_by_id(self, Testcode):
+        self.tableWidget.setHorizontalHeaderLabels(['TestCode','TestName','Specimentype','Actions'])
+        #set header height
+        vertical_header = self.tableWidget.verticalHeader()
+        vertical_header.setDefaultSectionSize(40) 
+
+
+        conn=sqlite3.connect('patient_data.db')
+        cursor=conn.cursor()
+        cursor.execute("SELECT * FROM tests")
+        test_data = cursor.fetchall()
+        count=len(test_data)
+        
+        self.tableWidget.setRowCount(count)
+        r=0
+        c=0
+        for row in test_data:
+            c=0
+            for col in row:
+                self.tableWidget.setItem(r,c,QTableWidgetItem("   "+str(col)))
+                c=c+1
+            # Create a container widget to hold the "Edit" and "Delete" buttons
+            button_container = QtWidgets.QWidget()
+            button_layout = QtWidgets.QHBoxLayout(button_container)
+
+            delete_button = QtWidgets.QPushButton()
+            delete_button.setIcon(QtGui.QIcon(os.path.join('images', 'delete.png')))
+            delete_button.setFixedSize(20, 20)
+            delete_button.clicked.connect(lambda _, testid=row[0]: self.delete_testdata(testid))
+            button_layout.addWidget(delete_button)
+
+            edit_button = QtWidgets.QPushButton()
+            edit_button.setIcon(QtGui.QIcon(os.path.join('images', 'edit.png')))  # Change to the correct icon
+            edit_button.setFixedSize(20, 20)
+            edit_button.clicked.connect(lambda _, testid=row[0]: self.edit_test(testid))
+            button_layout.addWidget(edit_button)
+
+            button_layout.setContentsMargins(0, 0, 0, 0)
+            button_layout.setAlignment(QtCore.Qt.AlignCenter)
+
+            # Set the container widget as a cell widget in the last column
+            self.tableWidget.setCellWidget(r, c, button_container)
+            r=r+1
+        conn.close()
+
+    def filter_test_data(self):
+
+        self.tableWidget.setColumnCount(4)
+        self.tableWidget.setColumnWidth(0,200)
+        self.tableWidget.setColumnWidth(1,350)
+        self.tableWidget.setColumnWidth(2,350)
+        self.tableWidget.setColumnWidth(3,150)
+   
+        self.tableWidget.setHorizontalHeaderLabels(['TestCode','TestName','Specimentype','Actions'])
+        #set header height
+        vertical_header = self.tableWidget.verticalHeader()
+        vertical_header.setDefaultSectionSize(40) 
         # Connect to the database
+        common=self.lineEdit_25.text()
+        spec=self.lineEdit_26.text()
+
+
         conn = sqlite3.connect('patient_data.db')
         cursor = conn.cursor()
+        
+        # Fetch reference data
+        query="SELECT * FROM tests where "
+        parameters = []
 
-        # Fetch patient data by ID
-        cursor.execute("SELECT * FROM refdr WHERE DoctorCode = ?", (Testcode,))
-        test_data = cursor.fetchone()
+        if common and spec=='':
+                query+='TestName like ? or Testcode like ?'
+                parameters.append('%'+common+'%')
+                parameters.append('%'+common+'%')
+        elif common and spec:
+                query +='TestName like ? or Testcode like ? and specimentype like ?'
+                parameters.extend(['%'+common+'%','%'+common+'%','%'+spec+'%'])
+        elif spec:
+                query+='specimentype like ?'
+                parameters.append('%'+spec+'%')
+        cursor.execute(query, parameters)
+        test_data = cursor.fetchall()
+        count=len(test_data)
+        
+        self.tableWidget.setRowCount(count)
+        r=0
+        c=0
+        for row in test_data:
+            c=0
+            for col in row:
+                self.tableWidget.setItem(r,c,QTableWidgetItem("   "+str(col)))
+                c=c+1
+            # Create a container widget to hold the "Edit" and "Delete" buttons
+            button_container = QtWidgets.QWidget()
+            button_layout = QtWidgets.QHBoxLayout(button_container)
 
-        return test_data   
-    
-    def delete_test(self, Testcode):
+            delete_button = QtWidgets.QPushButton()
+            delete_button.setIcon(QtGui.QIcon(os.path.join('images', 'delete.png')))
+            delete_button.setFixedSize(20, 20)
+            delete_button.clicked.connect(lambda _, testid=row[0]: self.delete_testdata(testid))
+            button_layout.addWidget(delete_button)
+
+            edit_button = QtWidgets.QPushButton()
+            edit_button.setIcon(QtGui.QIcon(os.path.join('images', 'edit.png')))  # Change to the correct icon
+            edit_button.setFixedSize(20, 20)
+            edit_button.clicked.connect(lambda _, testid=row[0]: self.edit_test(testid))
+            button_layout.addWidget(edit_button)
+
+            button_layout.setContentsMargins(0, 0, 0, 0)
+            button_layout.setAlignment(QtCore.Qt.AlignCenter)
+
+            # Set the container widget as a cell widget in the last column
+            self.tableWidget.setCellWidget(r, c, button_container)
+            r=r+1
+        conn.close()
+
+
+
+    def delete_testdata(self, test_code):
+       
        # Connect to the database
        conn = sqlite3.connect('patient_data.db')
        cursor = conn.cursor()
 
        # Delete patient data from the database
-       cursor.execute("DELETE FROM tests WHERE testcode = ?", (Testcode,))
+       cursor.execute("DELETE FROM tests WHERE TestCode = ?", (test_code,))
        conn.commit()
-
+      # self.tableWidget.clear()
        # Refresh the displayed patient data immediately after deletion
-       self.fetch_and_display_test_data()
-    
-    
-     
-        
-    def retranslateUi(self, Form):
-        _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
-        self.pushButton_3.setText(_translate("Form", "Add Test"))
-        self.label_14.setText(_translate("Form", "Actions"))
-        self.label_2.setText(_translate("Form", "TestCode"))
-        self.label_3.setText(_translate("Form", "TestName"))
-        self.label_17.setText(_translate("Form", "Specimen Type"))
-        # self.label_10.setText(_translate("Form", "Date"))
-        self.label_15.setText(_translate("Form", "Test Name"))
-        self.label_11.setText(_translate("Form", "Test Code"))
-        self.pushButton.setText(_translate("Form", "Search"))
-        self.label.setText(_translate("Form", "Tests Master"))
-        self.pushButton.clicked.connect(self.fetch_and_display_filtertest_data)
-        self.pushButton_3.clicked.connect(self.open_add_test_form)
-        
-    def open_add_test_form(self):
+       self.fetch_and_display_testdata()
+
+
+    def addtest_form(self):
         self.add_test_form = QtWidgets.QWidget()
-        self.ui_add_test = Ui_addtestForm()
-        self.ui_add_test.setupUi(self.add_test_form)
-        self.ui_add_test.pushButton_5.clicked.connect(self.fetch_and_display_test_data)
+        self.ui_addtest = Ui_addtestForm()
+        self.ui_addtest.setupUi(self.add_test_form)
         self.add_test_form.show()
+        self.ui_addtest.pushButton_5.clicked.connect(self.fetch_and_display_testdata)
+
+
+
+    def edit_test(self, testcode):
+        self.edit_test_form = QtWidgets.QWidget()
+        self.ui_edit_test = Ui_edittestForm()  # Replace with the correct class name
+        self.ui_edit_test.setupUi(self.edit_test_form,testcode)  # Pass the DoctorCode argument
+        self.edit_test_form.show()
+
+        # Fetch refdr data for the specified DoctorCode
+        # refdr_data = self.fetch_refdr_data_by_id(DoctorCode)
+        # if refdr_data:
+        #     self.edit_refdr_form.refdr_data = refdr_data  
+        
+       # self.edit_refdr_form.show()
+        
+        self.ui_edit_test.pushButton_5.clicked.connect(self.fetch_and_display_testdata)
+
    
 if __name__ == "__main__":
     import sys
@@ -466,6 +391,6 @@ if __name__ == "__main__":
     Form.show()
     
     # Start the timer only once here
-    ui.timer.start()
+    # ui.timer.start()
     
     sys.exit(app.exec_())
