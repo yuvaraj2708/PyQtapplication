@@ -142,7 +142,7 @@ cursor.execute('''
     CREATE TABLE IF NOT EXISTS reporttemplates (
         code TEXT,
         name TEXT,
-        template TEXT
+        template BLOB
     )
 ''')
 

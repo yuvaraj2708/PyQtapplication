@@ -659,19 +659,30 @@ class Ui_patientForm(object):
         self.ui_add_test.pushButton_3.clicked.connect(self.fetch_and_display_patient)
 
     def delete_patient(self, patient_uhid):
-       
-       # Connect to the database
-       conn = sqlite3.connect('patient_data.db')
-       cursor = conn.cursor()
-
-       # Delete patient data from the database
-       cursor.execute("DELETE FROM patients WHERE uhid = ?", (patient_uhid,))
-       conn.commit()
-      # self.tableWidget.clear()
-       # Refresh the displayed patient data immediately after deletion
-       self.fetch_and_display_patient()
-
-
+    # Create a confirmation dialog
+      confirm_dialog = QMessageBox()
+      confirm_dialog.setIcon(QMessageBox.Question)
+      confirm_dialog.setText("Are you sure you want to delete this patient?")
+      confirm_dialog.setWindowTitle("Confirm Deletion")
+      confirm_dialog.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+  
+      # Show the dialog and wait for the user's response
+      response = confirm_dialog.exec_()
+  
+      # If the user confirms deletion, proceed with deletion
+      if response == QMessageBox.Yes:
+          # Connect to the database
+          conn = sqlite3.connect('patient_data.db')
+          cursor = conn.cursor()
+  
+          # Delete patient data from the database
+          cursor.execute("DELETE FROM patients WHERE uhid = ?", (patient_uhid,))
+          conn.commit()
+  
+          # Refresh the displayed patient data immediately after deletion
+          self.fetch_and_display_patient()
+  
+  
     def edit_patient(self, patient_uhid):
         
         self.edit_patient_form = QtWidgets.QWidget()

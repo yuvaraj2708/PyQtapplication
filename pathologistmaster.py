@@ -16,6 +16,7 @@ from editrefdr import Ui_editrefdrForm
 from PyQt5.QtCore import QTime, QTimer
 from addpathologist import Ui_pathologisterForm
 from editpathlogist import Ui_editpathologistForm
+from PyQt5.QtWidgets import QMessageBox
 
 class Ui_pathologistmasterForm(object):
     def setupUi(self, Form):
@@ -349,7 +350,17 @@ class Ui_pathologistmasterForm(object):
 
 
     def delete_pathologist(self, doc_code):
-       
+     confirm_dialog = QMessageBox()
+     confirm_dialog.setIcon(QMessageBox.Question)
+     confirm_dialog.setText("Are you sure you want to delete this pathologist?")
+     confirm_dialog.setWindowTitle("Confirm Deletion")
+     confirm_dialog.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+ 
+     # Show the dialog and wait for the user's response
+     response = confirm_dialog.exec_()
+ 
+     # If the user confirms deletion, proceed with deletion
+     if response == QMessageBox.Yes:
        # Connect to the database
        conn = sqlite3.connect('patient_data.db')
        cursor = conn.cursor()

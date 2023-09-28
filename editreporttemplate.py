@@ -366,15 +366,16 @@ class Ui_editreportForm(object):
         self.pushButton_2.clicked.connect(self.save_template_to_database)
 
     def populate_report_data(self):
-        if self.reportcode:
-            # Fetch patient data for the specified patient_id
-            reporttemplate_data = self.fetch_report_data_by_id(self.reportcode)
-            if reporttemplate_data:
-                # Populate the form fields with the patient data
-                # Assuming the second item is the title
-                self.lineEdit_18.setText(reporttemplate_data[0])  # Assuming the third item is the patient name
-                self.lineEdit_6.setText(reporttemplate_data[1])
-                self.textEdit.setPlainText(reporttemplate_data[2])
+     if self.reportcode:
+        # Fetch report data for the specified report code
+        report_data = self.fetch_report_data_by_id(self.reportcode)
+        if report_data:
+            # Populate the form fields with the report data
+            self.lineEdit_18.setText(report_data[0])  # Assuming the first item is the code
+            self.lineEdit_6.setText(report_data[1])   # Assuming the second item is the name
+
+            # Use setHtml() to display the HTML-formatted content with formatting
+            self.textEdit.setHtml(report_data[2])
 
                 
 

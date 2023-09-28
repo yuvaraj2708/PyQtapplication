@@ -15,6 +15,7 @@ import os
 from edittest import Ui_edittestForm
 from PyQt5.QtCore import QTime, QTimer
 from PyQt5.QtWidgets import QTableWidget,QTableWidgetItem
+from PyQt5.QtWidgets import QMessageBox
 
 
 class Ui_testForm(object):
@@ -347,17 +348,27 @@ class Ui_testForm(object):
 
 
     def delete_testdata(self, test_code):
-       
-       # Connect to the database
-       conn = sqlite3.connect('patient_data.db')
-       cursor = conn.cursor()
+       confirm_dialog = QMessageBox()
+       confirm_dialog.setIcon(QMessageBox.Question)
+       confirm_dialog.setText("Are you sure you want to delete this test?")
+       confirm_dialog.setWindowTitle("Confirm Deletion")
+       confirm_dialog.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+   
+       # Show the dialog and wait for the user's response
+       response = confirm_dialog.exec_()
+   
+       # If the user confirms deletion, proceed with deletion
+       if response == QMessageBox.Yes:
+          # Connect to the database
+          conn = sqlite3.connect('patient_data.db')
+          cursor = conn.cursor()
 
        # Delete patient data from the database
-       cursor.execute("DELETE FROM tests WHERE TestCode = ?", (test_code,))
-       conn.commit()
-      # self.tableWidget.clear()
-       # Refresh the displayed patient data immediately after deletion
-       self.fetch_and_display_testdata()
+          cursor.execute("DELETE FROM tests WHERE TestCode = ?", (test_code,))
+          conn.commit()
+         # self.tableWidget.clear()
+          # Refresh the displayed patient data immediately after deletion
+          self.fetch_and_display_testdata()
 
 
     def addtest_form(self):

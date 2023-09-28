@@ -244,8 +244,8 @@ class Ui_addtestForm(object):
     def save_test_data(self):
         try:
             Testcode = self.lineEdit_26.text()
-            TestName = self.lineEdit_25.text()
-            specimentype = self.lineEdit_23.text()
+            TestName = self.lineEdit_23.text()
+            specimentype = self.lineEdit_25.text()
             
     
             # Insert patient data into the database

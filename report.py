@@ -222,11 +222,16 @@ class Ui_reportingForm(object):
         
         
     def set_patient_data(self, patient_id):
-      # Convert the patient ID to a string
-      patient_name_str = str(patient_id)
-  
-      # Update line edit fields to display patient information
-      self.lineEdit_18.setText(patient_name_str)
+     connection = sqlite3.connect("patient_data.db")
+     cursor = connection.cursor()
+     cursor.execute("SELECT patientname FROM patients WHERE uhid = ?", (patient_id,))
+     result = cursor.fetchone()
+     connection.close()
+
+     if result:
+         self.lineEdit_18.setText(result[0])  # Assuming the patientname column is the first column in the result
+     else:
+        self.lineEdit_18.setText("Patient not found")
     
     def changeFontSizeInTextEdit(self, index):
         font_size = int(self.comboBox.itemText(index))
@@ -424,7 +429,7 @@ class Ui_reportingForm(object):
           self.tableView.hide()
           self.textEdit.show()
           # Display the template content in the QTextEdit
-          self.textEdit.setPlainText(template_content)
+          self.textEdit.setHtml(template_content)
             
     def previewpathologist(self, index):
          # Get the selected item from the combo box
@@ -441,6 +446,7 @@ class Ui_reportingForm(object):
          else:
              self.tableView.hide()
              self.textEdit.show()
+             
     def fetch_report_template(self, report_name):
       
       connection = sqlite3.connect("patient_data.db")
@@ -534,7 +540,7 @@ class Ui_reportingForm(object):
        # Here, you can add more fields like patient ID, date, etc.
 
        # Get the report content from the QTextEdit
-       edited_report = self.textEdit.toPlainText()
+       edited_report = self.textEdit.setHtml()
 
        # Create a new record in the patient-specific reports table
        connection = sqlite3.connect("patient_data.db")

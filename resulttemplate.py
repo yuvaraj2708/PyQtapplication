@@ -15,6 +15,8 @@ import os
 from editreporttemplate import Ui_editreportForm
 from PyQt5.QtCore import QTime, QTimer
 from PyQt5.QtWidgets import QTableWidget,QTableWidgetItem
+from PyQt5.QtWidgets import QMessageBox
+
 class Ui_resulttemplateForm(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
@@ -346,7 +348,17 @@ class Ui_resulttemplateForm(object):
 
 
     def delete_resulttemplatedata(self, reportcode):
-       
+      confirm_dialog = QMessageBox()
+      confirm_dialog.setIcon(QMessageBox.Question)
+      confirm_dialog.setText("Are you sure you want to delete this template?")
+      confirm_dialog.setWindowTitle("Confirm Deletion")
+      confirm_dialog.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+  
+      # Show the dialog and wait for the user's response
+      response = confirm_dialog.exec_()
+  
+      # If the user confirms deletion, proceed with deletion
+      if response == QMessageBox.Yes:
        # Connect to the database
        conn = sqlite3.connect('patient_data.db')
        cursor = conn.cursor()

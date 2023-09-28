@@ -443,7 +443,7 @@ class Ui_reportForm(object):
     def save_template_to_database(self):
         code = self.lineEdit_18.text()
         name = self.lineEdit_6.text()
-        template = self.textEdit.toPlainText()  # Get the plain text content of the QTextEdit
+        template = self.textEdit.toHtml()  # Get the plain text content of the QTextEdit
 
         # Connect to the database
         connection = sqlite3.connect("patient_data.db")
