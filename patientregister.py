@@ -4,6 +4,7 @@ import datetime
 from PyQt5.QtWidgets import QComboBox
 from PyQt5.QtCore import QDate
 from PyQt5.QtGui import QIntValidator
+import re
 
 class Ui_addpatientForm(object):
     def setupUi(self, Form):
@@ -298,6 +299,7 @@ class Ui_addpatientForm(object):
         self.lineEdit_28.setInputMethodHints(QtCore.Qt.ImhNone)
         self.lineEdit_28.setFrame(True)
         self.lineEdit_28.setObjectName("lineEdit_28")
+        self.lineEdit_28.textChanged.connect(self.validate_email)
         self.lineEdit_29 = QtWidgets.QLineEdit(Form)
         self.lineEdit_29.setGeometry(QtCore.QRect(270, 190, 211, 31))#TITLE
         font = QtGui.QFont()
@@ -543,6 +545,19 @@ class Ui_addpatientForm(object):
         # Populate comboBox_26 with data from the database
         selecttest_data = self.fetch_selecttest_from_database()
         self.populate_testdropdown(self.comboBox_26, selecttest_data)
+    
+    def validate_email(self):
+        email = self.lineEdit_28.text()
+        # Define a regular expression pattern for a simple email format
+        pattern = r'^[\w\.-]+@[\w\.-]+(\.\w+)+$'
+        
+        # Use re.match to check if the email matches the pattern
+        if re.match(pattern, email):
+            # Valid email format, set the border color to a default color
+            self.lineEdit_28.setStyleSheet("QLineEdit { border: 1px solid #ced4da; }")
+        else:
+            # Invalid email format, set the border color to red
+            self.lineEdit_28.setStyleSheet("QLineEdit { border: 1px solid red; }")
     
     def update_gender_options(self):
         # Get the selected title from the Title ComboBox
