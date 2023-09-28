@@ -384,26 +384,26 @@ class Ui_addpatientForm(object):
         self.lineEdit_25 = QtWidgets.QLineEdit(Form)
         self.lineEdit_25.setGeometry(QtCore.QRect(40, 190, 211, 31))#UHID
         self.lineEdit_25.setReadOnly(True)
-        self.comboBox_title = QComboBox(Form)
+        self.comboBox_title = QtWidgets.QComboBox(Form)
         self.comboBox_title.setGeometry(QtCore.QRect(270, 190, 211, 31))
         self.comboBox_title.setFont(font)
         self.comboBox_title.setStyleSheet("QComboBox\n"
-                                   "{\n"
-                                   "font-size: 15px;\n"
-                                   "font-weight: 400;\n"
-                                   "color: #212529;\n"
-                                   "background-color: #ffffff;\n"
-                                   "background-clip: padding-box;\n"
-                                   "border: 1px solid #ced4da;\n"
-                                   "border-radius: 20px;\n"
-                                   "padding: 0px 10px;\n"
-                                   "}\n"
-                                   "QComboBox:focus\n"
-                                   "{\n"
-                                   "border: 1px solid #3F4254;\n"
-                                   "}\n")
+                                          "{\n"
+                                          "font-size: 15px;\n"
+                                          "font-weight: 400;\n"
+                                          "color: #212529;\n"
+                                          "background-color: #ffffff;\n"
+                                          "background-clip: padding-box;\n"
+                                          "border: 1px solid #ced4da;\n"
+                                          "border-radius: 20px;\n"
+                                          "padding: 0px 10px;\n"
+                                          "}\n"
+                                          "QComboBox:focus\n"
+                                          "{\n"
+                                          "border: 1px solid #3F4254;\n"
+                                          "}\n")
         self.comboBox_title.setObjectName("comboBox_title")
-        
+
         # Populate the title dropdown with options
         self.comboBox_title.addItem("Mr")
         self.comboBox_title.addItem("SMT")
@@ -501,7 +501,7 @@ class Ui_addpatientForm(object):
         self.lineEdit_32.setFrame(True)
         self.lineEdit_32.setObjectName("lineEdit_32")
 
-
+        self.comboBox_title.currentTextChanged.connect(self.update_gender_options)
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
         self.fetch_latest_patient_number()
@@ -543,6 +543,26 @@ class Ui_addpatientForm(object):
         # Populate comboBox_26 with data from the database
         selecttest_data = self.fetch_selecttest_from_database()
         self.populate_testdropdown(self.comboBox_26, selecttest_data)
+    
+    def update_gender_options(self):
+        # Get the selected title from the Title ComboBox
+        selected_title = self.comboBox_title.currentText()
+
+        # Clear the Gender ComboBox
+        self.comboBox_gender.clear()
+
+        # Populate the Gender ComboBox based on the selected title
+        if selected_title == "Mr":
+            self.comboBox_gender.addItem("Male")
+        elif selected_title in ["SMT", "MRS", "MS"]:
+            self.comboBox_gender.addItem("Female")
+        elif selected_title in ["Others","Animal","Baby"]:  
+            self.comboBox_gender.addItem("Others")  
+        else:
+            self.comboBox_gender.addItem("Male")
+            self.comboBox_gender.addItem("Female")
+            self.comboBox_gender.addItem("Others")
+    
     
     def calculate_age(self):
         # Calculate age based on Date of Birth and update Age field
