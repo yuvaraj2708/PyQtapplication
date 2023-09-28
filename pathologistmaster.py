@@ -384,7 +384,7 @@ class Ui_pathologistmasterForm(object):
         
        # self.edit_pathologist_form.show()
         
-        self.ui_edit_pathologist.pushButton_4.clicked.connect(self.fetch_and_display_pathologist)
+        self.ui_edit_pathologist.pushButton_7.clicked.connect(self.fetch_and_display_pathologist)
 
 if __name__ == "__main__":
     import sys

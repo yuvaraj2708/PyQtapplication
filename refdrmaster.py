@@ -382,7 +382,7 @@ class Ui_refdrmasterForm(object):
         
        # self.edit_refdr_form.show()
         
-        self.ui_edit_refdr.pushButton_4.clicked.connect(self.fetch_and_display_refdr)
+        self.ui_edit_refdr.pushButton_5.clicked.connect(self.fetch_and_display_refdr)
 
 
 if __name__ == "__main__":
