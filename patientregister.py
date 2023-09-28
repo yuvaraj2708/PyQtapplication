@@ -440,6 +440,7 @@ class Ui_addpatientForm(object):
         
         
         self.lineEdit_31 = QtWidgets.QDateEdit(Form)
+        self.lineEdit_31.dateChanged.connect(self.calculate_age)
         self.lineEdit_31.setGeometry(QtCore.QRect(40, 330, 211, 31))#DOB
         font = QtGui.QFont()
         font.setPointSize(-1)
@@ -542,6 +543,13 @@ class Ui_addpatientForm(object):
         # Populate comboBox_26 with data from the database
         selecttest_data = self.fetch_selecttest_from_database()
         self.populate_testdropdown(self.comboBox_26, selecttest_data)
+    
+    def calculate_age(self):
+        # Calculate age based on Date of Birth and update Age field
+        dob = self.lineEdit_31.date()
+        current_date = QDate.currentDate()
+        age = dob.daysTo(current_date) // 365  # Calculate age in years
+        self.lineEdit_30.setText(str(age))
          
     def add_selected_test_to_list(self):
      selected_test = self.comboBox_26.currentText()
