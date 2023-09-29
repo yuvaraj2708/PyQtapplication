@@ -291,7 +291,7 @@ class Ui_patientForm(object):
         self.tableWidget.setColumnWidth(10,70)
         self.tableWidget.setColumnWidth(11,130)
         
-        self.tableWidget.setHorizontalHeaderLabels(['Uhid','Date','Title','PatientName','Gender','Dob','Age','Mobile','Email','RefDr','Accession','Actions'])
+        self.tableWidget.setHorizontalHeaderLabels(['UHID','Date','Title','Patient Name','Gender','DOB','Age','Mobile','Email','Ref Dr','Accession','Actions'])
         #set header height
         vertical_header = self.tableWidget.verticalHeader()
         vertical_header.setDefaultSectionSize(40) 
@@ -399,7 +399,7 @@ class Ui_patientForm(object):
       self.tableWidget.setColumnWidth(10,70)
       self.tableWidget.setColumnWidth(11,130)
         
-      self.tableWidget.setHorizontalHeaderLabels(['Uhid','Date','Title','PatientName','Gender','Dob','Age','Mobile','Email','RefDr','Accession','Actions'])
+      self.tableWidget.setHorizontalHeaderLabels(['UHID','Date','Title','Patient Name','Gender','Dob','Age','Mobile','Email','Ref Dr','Accession','Actions'])
         #set header height
       vertical_header = self.tableWidget.verticalHeader()
       vertical_header.setDefaultSectionSize(40) 
@@ -568,14 +568,7 @@ class Ui_patientForm(object):
         conn = sqlite3.connect('patient_data.db')
         cursor = conn.cursor()
     
-        # cursor.execute("""
-        #         SELECT visit.visitid, visit.ref_dr,
-        #                 patients.patientname, patients.dob, patients.age, patients.gender, 
-        #                 patients.mobile, patients.email, visit.date, visit.selected_test,patients.uhid
-        #         FROM visit
-        #         INNER JOIN patients ON visit.patient_id = patients.uhid
-        #         INNER JOIN qrcodetable ON visit.id = qrcodetable.id
-        #     """)
+        
         cursor.execute("SELECT * FROM patients INNER JOIN qrcodetable ON patients.uhid == qrcodetable.id")
         patient_info_all = cursor.fetchall()
         
@@ -622,22 +615,34 @@ class Ui_patientForm(object):
         pdf = FPDF()
         pdf.add_page()
 
-            # Loop through the image paths and add each image to the PDF
-        x_size=10
-        y_size=10
-        c=0
-        for img in img_group:
-            pdf.image(img, x=x_size, y=y_size, w=30)  # Adjust x, y, and w as needed
-            x_size=x_size+33
-            c=c+1
-            if c%5==0:
-                y_size=y_size+50
-                x_size=10
-            if y_size==240:
+        # Loop through the image paths and add each image to the PDF along with patient names
+        x_size = 10
+        y_size = 10
+        c = 0
+        for patient_info, img_path in zip(patient_info_all, img_group):
+            if not patient_info:
+                continue
+                
+            uhid, date, title, patientname, dob, age, gender, mobile, email, refdr, selectedtest, accession, id = patient_info
+
+            # Add patient name above the QR code
+            pdf.set_xy(x_size, y_size - 5)
+            pdf.set_font("Arial", "B", 12)
+            pdf.cell(0, 10, patientname + "|" + uhid, align='L')
+            # Add the QR code image
+            pdf.image(img_path, x=x_size, y=y_size + 5, w=30)  # Adjust y and w as needed
+
+            x_size = x_size + 33
+            c = c + 1
+            if c % 5 == 0:
+                y_size = y_size + 50
+                x_size = 10
+            if y_size == 240:
                 pdf.add_page()
-                y_size=10
-            # Output the PDF
+
+        # Output the PDF
         pdf.output("qrcodes.pdf")
+
                 
         conn = sqlite3.connect('patient_data.db')
         cursor = conn.cursor()

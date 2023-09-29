@@ -540,7 +540,7 @@ class Ui_reportingForm(object):
        # Here, you can add more fields like patient ID, date, etc.
 
        # Get the report content from the QTextEdit
-       edited_report = self.textEdit.setHtml()
+       edited_report = self.textEdit.toPlainText()
 
        # Create a new record in the patient-specific reports table
        connection = sqlite3.connect("patient_data.db")

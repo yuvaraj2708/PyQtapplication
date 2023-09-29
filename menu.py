@@ -649,7 +649,7 @@ class LoginDialog(QtWidgets.QDialog):
 
         # Add your login validation logic here
         if username == "admin" and password == "admin":
-            QtWidgets.QMessageBox.information(self, "Login Successful", "Welcome!")
+            QtWidgets.QMessageBox.information(self, "Success", "Welcome!")
             self.accept()  # Close the dialog and return QDialog.Accepted
         else:
             QtWidgets.QMessageBox.warning(self, "Login Failed", "Invalid username or password")

@@ -401,7 +401,7 @@ class Ui_editreportForm(object):
                             (code,name,template,self.reportcode)) 
 
         # Commit changes and close the connection
-        connection.commit()
+        # connection.commit()
         connection.close()
         self.f.close()
 
