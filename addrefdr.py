@@ -3,6 +3,8 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sqlite3
 import datetime
+import re
+from PyQt5.QtWidgets import QMessageBox
 
 class Ui_refdrForm(object):
     def setupUi(self, Form):
@@ -342,6 +344,41 @@ class Ui_refdrForm(object):
         self.label.setText(_translate("Form", "RefDr Master"))
         self.pushButton_5.clicked.connect(self.save_refdr_data)
         self.pushButton_6.clicked.connect(Form.close)
+
+    def validate(self,DoctorName,Qualification,Specialisation,Address,Mobile):
+            name_pattern=r'^[a-zA-z]+$'
+            mobile_pattern=r'[0-9]{10}'
+
+            i=0
+            if re.match(name_pattern,DoctorName):
+                i=i+1
+            else:
+                QMessageBox.information(self.f,'Information','Please enter the correct name')
+                self.lineEdit_9.clear()
+            if re.match(name_pattern,Qualification):
+                i=i+1
+            else:
+                QMessageBox.information(self.f,'Information','Please enter the correct Qualification')
+                self.lineEdit_10.clear()
+            if re.match(name_pattern,Specialisation):
+                i=i+1
+            else:
+                QMessageBox.information(self.f,'Information','Please enter the correct Specialisation')
+                self.lineEdit_8.clear()
+            if Address=='':
+                QMessageBox.information(self.f,'Information','Please enter the correct Address')
+            else:
+                i=i+1
+            if re.match(mobile_pattern,Mobile):
+                i=i+1
+            else:
+                QMessageBox.information(self.f,'Information','Please enter the correct Mobile')
+                self.lineEdit_26.clear()
+
+            if i==5:
+                return 1
+            else:
+                return 0
         
     def clear_input_fields(self):
         self.lineEdit_8.clear()
@@ -362,14 +399,26 @@ class Ui_refdrForm(object):
         current_datetime = datetime.datetime.now()
         current_date = current_datetime.strftime("%d%m%Y")
 
-        # Insert patient data into the database
-        self.cursor.execute("INSERT INTO refdr (DoctorCode, DoctorName, Qualification, Specialisation, Address,  Mobile,date) VALUES (?, ?, ?, ?, ?, ?, ?)",
-                            (DoctorCode, DoctorName, Qualification, Specialisation, Address, Mobile,current_date))
-        self.conn.commit()
+        value=self.validate(DoctorName,Qualification,Specialisation,Address,Mobile)
+        if value!=1:
+                DoctorCode = self.lineEdit_22.text()
+                DoctorName = self.lineEdit_9.text()
+                Qualification = self.lineEdit_10.text()
+                Specialisation = self.lineEdit_8.text()
+                Address = self.lineEdit_11.text()
+                Mobile = self.lineEdit_26.text()
+                current_datetime = datetime.datetime.now()
+                current_date = current_datetime.strftime("%d%m%Y")
 
-        # Clear the input fields after saving
-        self.clear_input_fields()
-        self.f.close()
+        if DoctorName and Qualification and Specialisation and Address and Mobile:
+        # Insert patient data into the database
+                self.cursor.execute("INSERT INTO refdr (DoctorCode, DoctorName, Qualification, Specialisation, Address,  Mobile,date) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                                (DoctorCode, DoctorName, Qualification, Specialisation, Address, Mobile,current_date))
+                self.conn.commit()
+
+                # Clear the input fields after saving
+                self.clear_input_fields()
+                self.f.close()
 
 if __name__ == "__main__":
     import sys

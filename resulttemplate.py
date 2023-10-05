@@ -236,7 +236,7 @@ class Ui_resulttemplateForm(object):
 
         conn=sqlite3.connect('patient_data.db')
         cursor=conn.cursor()
-        cursor.execute("SELECT * FROM reporttemplates")
+        cursor.execute("SELECT code,name,content FROM reporttemplates")
         test_data = cursor.fetchall()
         count=len(test_data)
         
@@ -293,11 +293,11 @@ class Ui_resulttemplateForm(object):
         cursor = conn.cursor()
         
         # Fetch reference data
-        query="SELECT * FROM reporttemplates where "
+        query="SELECT code,name,content FROM reporttemplates where "
         parameters = []
         
         if not code and not name:  # Both line edits are empty
-           query = "SELECT * FROM reporttemplates"
+           query = "SELECT code,name,content FROM reporttemplates"
         
         if code and name=='':
             query+='code like ?'

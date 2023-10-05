@@ -5,6 +5,10 @@ import sqlite3
 import datetime
 from PyQt5.QtWidgets import QPushButton
 from PyQt5.QtWidgets import QFileDialog, QLabel
+import re
+from PyQt5.QtWidgets import QMessageBox
+import os
+import shutil
 
 class Ui_pathologisterForm(object):
     def setupUi(self, Form):
@@ -359,14 +363,29 @@ class Ui_pathologisterForm(object):
                                                    "Image Files (*.png *.jpg *.bmp *.gif);;All Files (*)",
                                                    options=options)
 
-        if file_path:
-            # Set the selected image file path in the QLineEdit
-            self.lineEdit_30.setText(file_path)
 
-            # Display the selected image in the QLabel
-            pixmap = QtGui.QPixmap(file_path)
-            self.imageLabel.setPixmap(pixmap)
-            self.imageLabel.setScaledContents(True)
+        if file_path:
+                # Set the selected image file path in the QLineEdit
+                self.lineEdit_30.setText(file_path)
+                file_name = os.path.basename(file_path)
+        
+        # Create the destination folder if it doesn't exist
+        if not os.path.exists('signature/'):
+                os.makedirs('signature/')
+        
+        # Construct the new file path, including the 'pyqt/' prefix
+        new_path = os.path.join('signature/', file_name)
+        
+        # Copy the file to the new location
+        shutil.copy(file_path, new_path)
+        
+        # Update the QLineEdit to show the new file path
+        self.lineEdit_30.setText(new_path)
+
+        # Display the selected image in the QLabel
+        pixmap = QtGui.QPixmap(new_path)
+        self.imageLabel.setPixmap(pixmap)
+        self.imageLabel.setScaledContents(True)
         
     def fetch_latest_refdr_number(self):
         try:
@@ -427,6 +446,47 @@ class Ui_pathologisterForm(object):
         self.lineEdit_29.clear()
         self.lineEdit_30.clear()
         self.lineEdit_32.clear()
+
+
+    def validate(self,DoctorName,Qualification,Specialisation,Address,Mobile,signature):
+            name_pattern=r'^[a-zA-z]+$'
+            mobile_pattern=r'[0-9]{10}'
+
+            i=0
+            if re.match(name_pattern,DoctorName):
+                i=i+1
+            else:
+                QMessageBox.information(self.f,'Information','Please enter the correct name')
+                self.lineEdit_11.clear()
+            if re.match(name_pattern,Qualification):
+                i=i+1
+            else:
+                QMessageBox.information(self.f,'Information','Please enter the correct Qualification')
+                self.lineEdit_10.clear()
+            if re.match(name_pattern,Specialisation):
+                i=i+1
+            else:
+                QMessageBox.information(self.f,'Information','Please enter the correct Specialisation')
+                self.lineEdit_9.clear()
+            if Address=='':
+                QMessageBox.information(self.f,'Information','Please enter the correct Address')
+            else:
+                i=i+1
+            if re.match(mobile_pattern,Mobile):
+                i=i+1
+            else:
+                QMessageBox.information(self.f,'Information','Please enter the correct Mobile')
+                self.lineEdit_29.clear()
+            if signature=='':
+                QMessageBox.information(self.f,'Information','Please enter the correct Address')
+            else:
+                i=i+1
+            
+
+            if i==6:
+                return 1
+            else:
+                return 0
         
      
     def save_refdr_data(self):
@@ -441,14 +501,16 @@ class Ui_pathologisterForm(object):
         current_datetime = datetime.datetime.now()
         current_date = current_datetime.strftime("%d%m%Y")
 
-        # Insert patient data into the database
-        self.cursor.execute("INSERT INTO pathologist (DoctorCode, DoctorName, Qualification, Specialisation, Address, Mobile,signature,date) VALUES (?, ?, ?, ?, ?, ?, ?,?)",
-                            (DoctorCode, DoctorName, Qualification, Specialisation, Address,Mobile,signature,current_date))
-        self.conn.commit()
+        value=self.validate(DoctorName,Qualification,Specialisation,Address,Mobile,signature)
+        if value==1:
+                # Insert patient data into the database
+                self.cursor.execute("INSERT INTO pathologist (DoctorCode, DoctorName, Qualification, Specialisation, Address, Mobile,signature,date) VALUES (?, ?, ?, ?, ?, ?, ?,?)",
+                                (DoctorCode, DoctorName, Qualification, Specialisation, Address,Mobile,signature,current_date))
+                self.conn.commit()
 
-        # Clear the input fields after saving
-        self.clear_input_fields()
-        self.f.close()
+                # Clear the input fields after saving
+                self.clear_input_fields()
+                self.f.close()
 
 if __name__ == "__main__":
     import sys

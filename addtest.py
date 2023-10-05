@@ -1,5 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sqlite3
+import re
+from PyQt5.QtWidgets import QMessageBox
 
 class Ui_addtestForm(object):
         
@@ -237,7 +239,24 @@ class Ui_addtestForm(object):
         self.lineEdit_25.clear()
         self.lineEdit_26.clear()
         
-        
+    def validate(self,testname,specimen):
+        pattern=r'^[a-zA-Z]+$' 
+        i=0
+        if re.match(pattern,testname):
+            i=i+1
+        else:
+            QMessageBox.information(self.f,'Information','Please enter the correct testname')
+            self.lineEdit_23.clear()   
+        if re.match(pattern,specimen):
+            i=i+1
+        else:
+            QMessageBox.information(self.f,'Information','Please enter the correct specimen type')
+            self.lineEdit_25.clear()
+
+        if i==2:
+            return 1
+        else:
+            return 0
     
     
 
@@ -247,15 +266,16 @@ class Ui_addtestForm(object):
             TestName = self.lineEdit_23.text()
             specimentype = self.lineEdit_25.text()
             
-    
+            value=self.validate(TestName,specimentype)
+            if value==1:
             # Insert patient data into the database
-            self.cursor.execute("INSERT INTO tests (Testcode, TestName, specimentype) VALUES (?, ?, ?)",
-                                (Testcode, TestName, specimentype))
-            self.conn.commit()
-    
-            # Clear the input fields after saving
-            self.clear_input_fields_test()
-            self.f.close()
+                self.cursor.execute("INSERT INTO tests (Testcode, TestName, specimentype) VALUES (?, ?, ?)",
+                                    (Testcode, TestName, specimentype))
+                self.conn.commit()
+        
+                # Clear the input fields after saving
+                self.clear_input_fields_test()
+                self.f.close()
 
         except Exception as e:
             print("Error:", str(e))

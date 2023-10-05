@@ -2,15 +2,13 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 import sqlite3
 import datetime
 from PyQt5.QtWidgets import QComboBox
-from PyQt5.QtCore import QDate
-from PyQt5.QtGui import QIntValidator
-import re
-from PyQt5.QtWidgets import QMessageBox
 
-class Ui_addpatientForm(object):
-    def setupUi(self, Form):
+
+class Ui_visitpatientForm(object):
+    def setupUi(self, Form,patient_uhid):
         self.f=Form
         self.conn = sqlite3.connect("patient_data.db")
+        self.cursor = self.conn.cursor()
         Form.setWindowFlags(QtCore.Qt.CustomizeWindowHint | QtCore.Qt.WindowTitleHint)
         self.cursor = self.conn.cursor()
         Form.setObjectName("Form")
@@ -86,6 +84,7 @@ class Ui_addpatientForm(object):
         self.lineEdit_20.setObjectName("lineEdit_20")
         self.comboBox_gender = QComboBox(Form)
         self.comboBox_gender.setGeometry(QtCore.QRect(740, 190, 201, 31))
+        self.comboBox_gender.setEnabled(False)
         self.comboBox_gender.setFont(font)
         self.comboBox_gender.setStyleSheet("QComboBox\n"
                                    "{\n"
@@ -108,7 +107,6 @@ class Ui_addpatientForm(object):
         self.comboBox_gender.addItem("Male")
         self.comboBox_gender.addItem("Female")
         self.comboBox_gender.addItem("Others")
-        
         self.label_5 = QtWidgets.QLabel(Form)
         self.label_5.setGeometry(QtCore.QRect(740, 170, 71, 16))
         font = QtGui.QFont()
@@ -143,11 +141,8 @@ class Ui_addpatientForm(object):
         self.label_8.setObjectName("label_8")
         self.lineEdit_24 = QtWidgets.QLineEdit(Form)
         self.lineEdit_24.setGeometry(QtCore.QRect(740, 330, 201, 31))#MOBILE
+        self.lineEdit_24.setReadOnly(True)
         font = QtGui.QFont()
-        validator = QtGui.QRegExpValidator(QtCore.QRegExp("\\d{10}"), self.lineEdit_24)
-        self.lineEdit_24.setValidator(validator)
-
-        
         font.setPointSize(-1)
         font.setBold(False)
         font.setWeight(50)
@@ -248,6 +243,7 @@ class Ui_addpatientForm(object):
         self.pushButton_3.setObjectName("pushButton_3")
         self.lineEdit_27 = QtWidgets.QLineEdit(Form)
         self.lineEdit_27.setGeometry(QtCore.QRect(500, 190, 211, 31))#PATIENT NAME
+        self.lineEdit_27.setReadOnly(True)
         font = QtGui.QFont()
         font.setPointSize(-1)
         font.setBold(False)
@@ -275,6 +271,7 @@ class Ui_addpatientForm(object):
         self.lineEdit_27.setObjectName("lineEdit_27")
         self.lineEdit_28 = QtWidgets.QLineEdit(Form)
         self.lineEdit_28.setGeometry(QtCore.QRect(500, 330, 211, 31))#EMAILID
+        self.lineEdit_28.setReadOnly(True)
         font = QtGui.QFont()
         font.setPointSize(-1)
         font.setBold(False)
@@ -300,7 +297,6 @@ class Ui_addpatientForm(object):
         self.lineEdit_28.setInputMethodHints(QtCore.Qt.ImhNone)
         self.lineEdit_28.setFrame(True)
         self.lineEdit_28.setObjectName("lineEdit_28")
-        self.lineEdit_28.textChanged.connect(self.validate_email)
         self.lineEdit_29 = QtWidgets.QLineEdit(Form)
         self.lineEdit_29.setGeometry(QtCore.QRect(270, 190, 211, 31))#TITLE
         font = QtGui.QFont()
@@ -330,6 +326,7 @@ class Ui_addpatientForm(object):
         self.lineEdit_29.setObjectName("lineEdit_29")
         self.lineEdit_30 = QtWidgets.QLineEdit(Form)
         self.lineEdit_30.setGeometry(QtCore.QRect(270, 330, 211, 31))#AGE
+        self.lineEdit_30.setReadOnly(True)
         font = QtGui.QFont()
         font.setPointSize(-1)
         font.setBold(False)
@@ -355,8 +352,6 @@ class Ui_addpatientForm(object):
         self.lineEdit_30.setInputMethodHints(QtCore.Qt.ImhNone)
         self.lineEdit_30.setFrame(True)
         self.lineEdit_30.setObjectName("lineEdit_30")
-        int_validator = QIntValidator()
-        self.lineEdit_30.setValidator(int_validator)
         self.lineEdit_26 = QtWidgets.QLineEdit(Form)
         self.lineEdit_26.setGeometry(QtCore.QRect(270, 480, 211, 31))#TEST
         font = QtGui.QFont()
@@ -385,28 +380,34 @@ class Ui_addpatientForm(object):
         self.lineEdit_26.setFrame(True)
         self.lineEdit_26.setObjectName("lineEdit_26")
         self.lineEdit_25 = QtWidgets.QLineEdit(Form)
-        self.lineEdit_25.setGeometry(QtCore.QRect(40, 190, 211, 31))#UHID
         self.lineEdit_25.setReadOnly(True)
-        self.comboBox_title = QtWidgets.QComboBox(Form)
+        self.lineEdit_25.setGeometry(QtCore.QRect(40, 190, 211, 31))#UHID
+        
+        font = QtGui.QFont()
+        font.setPointSize(-1)
+        font.setBold(False)
+        font.setWeight(50)
+        self.comboBox_title = QComboBox(Form)
         self.comboBox_title.setGeometry(QtCore.QRect(270, 190, 211, 31))
+        self.comboBox_title.setEnabled(False)
         self.comboBox_title.setFont(font)
         self.comboBox_title.setStyleSheet("QComboBox\n"
-                                          "{\n"
-                                          "font-size: 15px;\n"
-                                          "font-weight: 400;\n"
-                                          "color: #212529;\n"
-                                          "background-color: #ffffff;\n"
-                                          "background-clip: padding-box;\n"
-                                          "border: 1px solid #ced4da;\n"
-                                          "border-radius: 20px;\n"
-                                          "padding: 0px 10px;\n"
-                                          "}\n"
-                                          "QComboBox:focus\n"
-                                          "{\n"
-                                          "border: 1px solid #3F4254;\n"
-                                          "}\n")
+                                   "{\n"
+                                   "font-size: 15px;\n"
+                                   "font-weight: 400;\n"
+                                   "color: #212529;\n"
+                                   "background-color: #ffffff;\n"
+                                   "background-clip: padding-box;\n"
+                                   "border: 1px solid #ced4da;\n"
+                                   "border-radius: 20px;\n"
+                                   "padding: 0px 10px;\n"
+                                   "}\n"
+                                   "QComboBox:focus\n"
+                                   "{\n"
+                                   "border: 1px solid #3F4254;\n"
+                                   "}\n")
         self.comboBox_title.setObjectName("comboBox_title")
-
+        
         # Populate the title dropdown with options
         self.comboBox_title.addItem("Mr")
         self.comboBox_title.addItem("SMT")
@@ -415,10 +416,6 @@ class Ui_addpatientForm(object):
         self.comboBox_title.addItem("Baby")
         self.comboBox_title.addItem("MS")
         self.comboBox_title.addItem("MRS")
-        font = QtGui.QFont()
-        font.setPointSize(-1)
-        font.setBold(False)
-        font.setWeight(50)
         self.lineEdit_25.setFont(font)
         self.lineEdit_25.setStyleSheet("QLineEdit\n"
 "{\n"
@@ -441,10 +438,9 @@ class Ui_addpatientForm(object):
         self.lineEdit_25.setFrame(True)
         self.lineEdit_25.setObjectName("lineEdit_25")
         
-        
-        self.lineEdit_31 = QtWidgets.QDateEdit(Form)
-        self.lineEdit_31.dateChanged.connect(self.calculate_age)
+        self.lineEdit_31 = QtWidgets.QLineEdit(Form)
         self.lineEdit_31.setGeometry(QtCore.QRect(40, 330, 211, 31))#DOB
+        self.lineEdit_31.setReadOnly(True)
         font = QtGui.QFont()
         font.setPointSize(-1)
         font.setBold(False)
@@ -470,12 +466,6 @@ class Ui_addpatientForm(object):
         self.lineEdit_31.setInputMethodHints(QtCore.Qt.ImhNone)
         self.lineEdit_31.setFrame(True)
         self.lineEdit_31.setObjectName("lineEdit_31")
-        self.lineEdit_31.setMaximumDate(QDate.currentDate())
-        self.lineEdit_31.setInputMethodHints(QtCore.Qt.ImhNone)
-        self.lineEdit_31.setCalendarPopup(True) 
-        self.lineEdit_31.setDate(QDate.currentDate())
-        self.lineEdit_31.setDisplayFormat("dd-MMM-yyyy")
-        self.lineEdit_31.setFrame(True)# to date
         self.lineEdit_32 = QtWidgets.QLineEdit(Form)
         self.lineEdit_32.setGeometry(QtCore.QRect(40, 480, 211, 31))#REFDR
         font = QtGui.QFont()
@@ -504,19 +494,20 @@ class Ui_addpatientForm(object):
         self.lineEdit_32.setFrame(True)
         self.lineEdit_32.setObjectName("lineEdit_32")
 
-        self.comboBox_title.currentTextChanged.connect(self.update_gender_options)
+
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
-        self.fetch_latest_patient_number()
-        latest_patient_number = self.fetch_latest_patient_number()
-        next_patient_number = self.generate_next_patient_number(latest_patient_number)
-        self.lineEdit_25.setText(next_patient_number)  # Set the generated test code
+        
+        latest_visit_number = self.fetch_latest_visit_number()
+        next_visit_number = self.generate_next_visit_number(latest_visit_number)
+        self.lineEdit_25.setText(next_visit_number)  # Set the generated test code
         
         self.fetch_latest_accession_number()
         latest_accession_number = self.fetch_latest_accession_number()
         next_accession_number = self.generate_next_accession_number(latest_accession_number)
         self.comboBox_25 = QtWidgets.QComboBox(Form)
         self.comboBox_25.setGeometry(QtCore.QRect(40, 480, 211, 31))
+        # self.comboBox_25.setEnabled(False)
         
         # Populate comboBox_25 with data from the database
         refdr_data = self.fetch_refdr_from_database()
@@ -525,6 +516,7 @@ class Ui_addpatientForm(object):
         # Create comboBox_26
         self.comboBox_26 = QtWidgets.QComboBox(Form)
         self.comboBox_26.setGeometry(QtCore.QRect(270, 480, 211, 31))
+        # self.comboBox_26.setEnabled(False)
 
         # Populate comboBox_26 with data from the database
         selecttest_data = self.fetch_selecttest_from_database()
@@ -546,47 +538,31 @@ class Ui_addpatientForm(object):
         # Populate comboBox_26 with data from the database
         selecttest_data = self.fetch_selecttest_from_database()
         self.populate_testdropdown(self.comboBox_26, selecttest_data)
-    
-    def validate_email(self):
-        email = self.lineEdit_28.text()
-        # Define a regular expression pattern for a simple email format
-        pattern = r'^[\w\.-]+@[\w\.-]+(\.\w+)+$'
+        self.patient_uhid = patient_uhid  # Store the patient ID
+        self.populate_patient_data() 
         
-        # Use re.match to check if the email matches the pattern
-        if re.match(pattern, email):
-            # Valid email format, set the border color to a default color
-            self.lineEdit_28.setStyleSheet("QLineEdit { border: 1px solid #ced4da; }")
-        else:
-            # Invalid email format, set the border color to red
-            self.lineEdit_28.setStyleSheet("QLineEdit { border: 1px solid red; }")
+    def populate_patient_data(self):
+        if self.patient_uhid:
+            # Fetch patient data for the specified patient_id
+            patient_data = self.fetch_patient_data_by_id(self.patient_uhid)
+            if patient_data:
+                # Populate the form fields with the patient data
+               
+                self.lineEdit_29.setText(patient_data[2])  # Assuming the second item is the title
+                self.lineEdit_27.setText(patient_data[3])  # Assuming the third item is the patient name
+                self.lineEdit_31.setText(str(patient_data[4]))
+                self.lineEdit_30.setText(patient_data[5])
+                self.lineEdit_20.setText(patient_data[6])
+                self.lineEdit_24.setText(patient_data[7])
+                self.lineEdit_28.setText(patient_data[8])
+                # self.comboBox_25.currentText(patient_data[9])
+                # self.comboBox_26.currentText(patient_data[10])
     
-    def update_gender_options(self):
-        # Get the selected title from the Title ComboBox
-        selected_title = self.comboBox_title.currentText()
-
-        # Clear the Gender ComboBox
-        self.comboBox_gender.clear()
-
-        # Populate the Gender ComboBox based on the selected title
-        if selected_title == "Mr":
-            self.comboBox_gender.addItem("Male")
-        elif selected_title in ["SMT", "MRS", "MS"]:
-            self.comboBox_gender.addItem("Female")
-        elif selected_title in ["Others","Animal","Baby"]:  
-            self.comboBox_gender.addItem("Others")  
-        else:
-            self.comboBox_gender.addItem("Male")
-            self.comboBox_gender.addItem("Female")
-            self.comboBox_gender.addItem("Others")
-    
-    
-    def calculate_age(self):
-        # Calculate age based on Date of Birth and update Age field
-        dob = self.lineEdit_31.date()
-        current_date = QDate.currentDate()
-        age = dob.daysTo(current_date) // 365  # Calculate age in years
-        self.lineEdit_30.setText(str(age))
-         
+    def fetch_patient_data_by_id(self, patient_uhid):
+        self.cursor.execute("SELECT * FROM patients WHERE uhid=?", (patient_uhid,))
+        patient_data = self.cursor.fetchone()
+        return patient_data    
+        
     def add_selected_test_to_list(self):
      selected_test = self.comboBox_26.currentText()
      if selected_test:
@@ -595,20 +571,20 @@ class Ui_addpatientForm(object):
     
     
         
-    def fetch_latest_patient_number(self):
+    def fetch_latest_visit_number(self):
         try:
-            self.cursor.execute("SELECT MAX(uhid) FROM patients")
+            self.cursor.execute("SELECT MAX(visitid) FROM visit")
             latest_test_number = self.cursor.fetchone()[0]
             return latest_test_number
         except Exception as e:
             print("Error fetching latest patient number:", str(e))
             return None
 
-    def generate_next_patient_number(self, latest_patient_number):
+    def generate_next_visit_number(self, latest_patient_number):
         if latest_patient_number is None:
-            return "P00001"
+            return "V00001"
 
-        prefix = "P"
+        prefix = "V"
         numeric_part = int(latest_patient_number[1:])  # Convert the numeric part to integer
         next_numeric_part = numeric_part + 1
         next_patient_number = f"{prefix}{next_numeric_part:05}"  # Format as "T00001"
@@ -693,7 +669,7 @@ class Ui_addpatientForm(object):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Ekon"))
         self.label.setText(_translate("Form", "Add Patient"))
-        self.label_2.setText(_translate("Form", "UHID"))
+        self.label_2.setText(_translate("Form", "visitID"))
         self.label_3.setText(_translate("Form", "Title"))
         self.label_4.setText(_translate("Form", "Patient Name"))
         self.label_5.setText(_translate("Form", "Gender"))
@@ -707,7 +683,8 @@ class Ui_addpatientForm(object):
         self.pushButton_3.setText(_translate("Form", "Save"))
         self.pushButton_3.clicked.connect(self.save_patient_data)
         self.pushButton_2.clicked.connect(Form.close)
-  
+        
+        
     def clear_input_fields(self):
         self.lineEdit_25.clear()
         self.lineEdit_29.clear()
@@ -720,54 +697,9 @@ class Ui_addpatientForm(object):
         self.comboBox_25.clear()
         self.comboBox_26.clear()
         
-
-    def validate(self,patientname,age,mobile,email,selected_test):
-        name_pattern=r'^[a-zA-z\s]+$'
-        age_pattern=r'[0-9]{1,2}'
-        mobile_pattern=r'[0-9]{10}'
-        email_pattern=r'^[a-z0-9._]+@gmail.com'
-
-        i=0
-        if re.match(name_pattern,patientname):
-            i=i+1
-        else:
-            QMessageBox.information(self.f,'Information','Please enter the correct name')
-        if re.match(age_pattern,age):
-            i=i+1
-        else:
-            QMessageBox.information(self.f,'Information','Please enter the correct age')
-        if re.match(mobile_pattern,mobile):
-             i=i+1
-        else:
-            QMessageBox.information(self.f,'Information','Please enter the correct mobile number')
-        if re.match(email_pattern,email):
-            i=i+1
-        else:
-            QMessageBox.information(self.f,'Information','Please enter the correct email')
-        if selected_test:
-            i=i+1
-        else:
-            QMessageBox.information(self.f,'Information','Select the test')
-
-
-        if i==5:
-            return 1
-        else:
-            return 0
-
-
-
-
-
-
-
-
-
-
-
     def save_patient_data(self):
      try:
-        uhid = self.lineEdit_25.text()
+        visitid = self.lineEdit_25.text()
         title = self.comboBox_title.currentText()
         patientname = self.lineEdit_27.text()
         dob = self.lineEdit_31.text()
@@ -776,16 +708,7 @@ class Ui_addpatientForm(object):
         mobile = self.lineEdit_24.text()
         email = self.lineEdit_28.text()
         refdr = self.comboBox_25.currentText()
-        selected_test = [self.listWidgetTestSelected.item(i).text() for i in range(self.listWidgetTestSelected.count())]
-
-        value=self.validate(patientname,age,mobile,email,selected_test)
-        if value!=1:
-            patientname=''
-            age=''
-            mobile=''
-            email=''
-
-            
+        selected_test = self.comboBox_26.currentText()
         
         # Uncomment the code to fetch the latest accession number
         latest_accession_number = self.fetch_latest_accession_number()
@@ -794,13 +717,15 @@ class Ui_addpatientForm(object):
         # Insert patient data into the database
         current_datetime = datetime.datetime.now()
         current_date = current_datetime.strftime("%d%m%Y")
-        if uhid and title and patientname and dob and age and gender and mobile and email and refdr and selected_test:
-            self.cursor.execute("INSERT INTO patients (uhid, title, patientname, dob, age, gender, mobile, email, date, refdr, selected_test, accession) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                                (uhid, title, patientname, dob, age, gender, mobile, email, current_date, refdr, ', '.join(selected_test),accession))
-            self.conn.commit()
-            self.f.close()
-            # Clear the input fields after saving
-            self.clear_input_fields()
+
+        self.cursor.execute("INSERT INTO VISIT (uhid,date,title,patientname,dob,age,gender,mobile,email,visitid,selectedtest,refdr) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
+                            (self.patient_uhid,current_date,title,patientname,dob,age,gender,mobile,email,visitid,selected_test,refdr))
+        self.conn.commit()
+        self.f.close()
+
+        # Clear the input fields after saving
+        self.clear_input_fields()
+        
      except sqlite3.Error as e:
         print("Error:", str(e))
       
@@ -810,7 +735,7 @@ if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     Form = QtWidgets.QWidget()
-    ui = Ui_addpatientForm()
+    ui = Ui_visitpatientForm()
     ui.setupUi(Form)
     Form.show()
     sys.exit(app.exec_())

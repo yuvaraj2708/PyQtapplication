@@ -2,11 +2,12 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from patientregister import Ui_addpatientForm
 import sys
 import sqlite3
-# from addvisit import Ui_addvisitForm
 import os
 from editpatientregister import Ui_editpatientForm
 from PyQt5.QtWidgets import QDateEdit, QCalendarWidget
-from PyQt5.QtCore import QTime, QTimer
+from PyQt5.QtGui import QTextDocument
+from PyQt5.QtPrintSupport import QPrinter
+from PyQt5.QtCore import QTime, QTimer,QDate
 import sys
 import threading
 import time
@@ -20,6 +21,10 @@ from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from report import Ui_reportingForm
 from PyQt5.QtGui import QIcon, QPixmap, QFont
+from visit1 import Ui_visitpatientForm
+from PyPDF2 import PdfReader, PdfWriter
+import subprocess
+
 
 class Ui_patientForm(object):
     def setupUi(self, Form):
@@ -315,6 +320,12 @@ class Ui_patientForm(object):
             button_container = QtWidgets.QWidget()
             button_layout = QtWidgets.QHBoxLayout(button_container)
 
+            visit_button = QtWidgets.QPushButton()
+            visit_button.setIcon(QtGui.QIcon(os.path.join('images', 'addvisit.png')))
+            visit_button.setFixedSize(20, 20)
+            visit_button.clicked.connect(lambda _, uhid=row[0]: self.generatevisitid_patient(uhid))
+            button_layout.addWidget(visit_button)
+
             delete_button = QtWidgets.QPushButton()
             delete_button.setIcon(QtGui.QIcon(os.path.join('images', 'delete.png')))
             delete_button.setFixedSize(20, 20)
@@ -348,8 +359,16 @@ class Ui_patientForm(object):
             more_button = QtWidgets.QPushButton()
             more_button.setIcon(QtGui.QIcon(os.path.join('images', 'print.png')))
             more_button.setFixedSize(20, 20)
-            more_button.clicked.connect(lambda _, row=row: self.display_report_details(row[0]))
+            more_button.clicked.connect(lambda _, row=row: self.display_report_details(row[3]))
             button_layout.addWidget(more_button)
+            
+            
+            view_button = QtWidgets.QPushButton()
+            view_button.setIcon(QtGui.QIcon(os.path.join('images', 'view.png')))
+            view_button.setFixedSize(20, 20)
+            view_button.clicked.connect(self.open_dicom_with_weasis)
+            button_layout.addWidget(view_button)
+
             
             more_button = QtWidgets.QPushButton()
             more_button.setIcon(QtGui.QIcon(os.path.join('images', 'share.png')))
@@ -371,6 +390,19 @@ class Ui_patientForm(object):
             self.tableWidget.setCellWidget(r, c, button_container)
             r=r+1
     
+    def open_dicom_with_weasis(self):
+     options = QFileDialog.Options()
+     options |= QFileDialog.ReadOnly
+ 
+     selected_file, _ = QFileDialog.getOpenFileName(None, "Open DICOM File", "", "DICOM Files (*.dcm *.dicom);;All Files (*)", options=options)
+ 
+     if selected_file:
+        # Use subprocess to run Weasis with the selected DICOM file as an argument
+        weasis_command = r'"C:\Program Files\Weasis\Weasis.exe" ' + selected_file
+        subprocess.Popen(weasis_command, shell=True)
+
+    
+    
     def open_add_report_form(self ,visit_data):
         #self.timer.start()
         self.add_test_form = QtWidgets.QWidget()
@@ -380,6 +412,37 @@ class Ui_patientForm(object):
         self.ui_add_test.set_patient_data(visit_data)
         
         self.add_test_form.show()   
+
+    def generatevisitid_patient(self,uhid):
+        conn=sqlite3.connect('patient_data.db')
+        cursor = conn.cursor()
+
+        # Create the qrcodetable table with the 'id' column as Integer and NOT NULL
+        cursor.execute('''CREATE TABLE IF NOT EXISTS visit (
+                    uhid TEXT NOT NULL,
+                    date DATE NOT NULL,
+                    title TEXT NOT NULL,
+                    patientname TEXT NOT NULL,
+                    dob DATE NOT NULL,
+                    age TEXT NOT NULL,
+                    gender TEXT NOT NULL,
+                    mobile TEXT NOT NULL,
+                    email TEXT NOT NULL,
+                    visitid Text Not NUll,
+                    selectedtest TEXT NOT NULL,
+                    refdr TEXT NOT NULL,
+                    id INTEGER NOT NULL,
+                    PRIMARY KEY("id" AUTOINCREMENT)
+                    
+        );''')
+        conn.commit()
+        conn.close()
+        self.visit_patient_form = QtWidgets.QWidget()
+        self.ui_visit_patient = Ui_visitpatientForm()  # Replace with the correct class name
+        self.ui_visit_patient.setupUi(self.visit_patient_form,uhid)  # Pass the patient ID
+
+        self.visit_patient_form.show()
+        self.ui_visit_patient.pushButton_3.clicked.connect(self.fetch_and_display_patient)
     
     
     def filter_patient_data(self):
@@ -516,27 +579,57 @@ class Ui_patientForm(object):
             self.tableWidget.setCellWidget(r, c, button_container)
             r=r+1
     
+
+
     def display_report_details(self, patient_id):
-     connection = sqlite3.connect("patient_data.db")  # Replace with your actual database file
-     cursor = connection.cursor()
+        connection = sqlite3.connect("patient_data.db")  # Replace with your actual database file
+        cursor = connection.cursor()
 
-     # Fetch details for the given patient_id
-     cursor.execute("SELECT * FROM patient_reports WHERE report_id = ?", (patient_id,))
-     report_details = cursor.fetchone()
-     print(report_details)
-     # Check if report_details is not None (i.e., the patient_id exists)
-     if report_details:
-         report_id, patient_name, report_template, pathologist, report_content, report_date = report_details
-         print(f"Report ID: {report_id}")
-         print(f"Patient Name: {patient_name}")
-         print(f"Report Template: {report_template}")
-         print(f"Pathologist: {pathologist}")
-         print(f"Report Content: {report_content}")
-         print(f"Report Date: {report_date}")
-     else:
-         print(f"Report with ID {patient_id} not found.")
+        # Fetch details for the given patient_id
+        cursor.execute("SELECT * FROM patient_reports WHERE patient_name = ?", (patient_id,))
+        report_details = cursor.fetchone()
 
-     connection.close()
+        # Check if report_details is not None (i.e., the patient_id exists)
+        if report_details:
+            report_id, patient_name, report_template, pathologist, report_content, report_date = report_details
+
+            # Retrieve the image path from the pathologist table
+            cursor.execute("SELECT signature FROM pathologist WHERE DoctorName = ?", (pathologist,))
+            signature_path = cursor.fetchone()[0]  # Assuming the signature path is in the first column
+
+            # Create a QTextDocument to render the HTML content with the image
+            report = f'''
+                <html>
+                <head>
+                </head>
+                <body style="margin: 0; padding: 0;">
+                    <h2>Patient Name: {patient_name}</h2><br>
+                    <h2>Report Template: {report_template}</h2><br>
+                    <h2>Pathologist: {pathologist}</h2><br>
+                    <h2>Report Content: {report_content}</h2><br>
+                    <h3>Report Date: {report_date}</h3><br>
+                    <div style='margin-left:450; margin-top:10'>
+                        <img src="{signature_path}" width='100' height='80'></img>
+                    </div>
+                </body>
+                </html>
+            '''
+        
+            document = QTextDocument()
+            document.setHtml(report)
+
+            # Create a QPrinter object for PDF printing
+            printer = QPrinter()
+            printer.setOutputFormat(QPrinter.PdfFormat)
+            printer.setOutputFileName(f'{report_id}.pdf')
+
+            # Print the QTextDocument to the PDF file
+            document.print_(printer)
+
+        else:
+            print(f"Report with ID {patient_id} not found.")
+        connection.close()
+     
     
     
     def addqr(self, id):
@@ -654,7 +747,6 @@ class Ui_patientForm(object):
     
         conn.close()
         self.fetch_and_display_patient()
-        
 
     def addpatient(self):
         self.add_test_form = QtWidgets.QWidget()

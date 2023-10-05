@@ -90,18 +90,23 @@ conn = sqlite3.connect('patient_data.db')
 cursor = conn.cursor()
 
 # Create the Visit table with the foreign key constraint
-create_visit_table_query = '''
-    CREATE TABLE IF NOT EXISTS visit (
-        id INTEGER PRIMARY KEY,
-        patient_id INTEGER,  -- Change this to INTEGER as per the ForeignKey relation
-        ref_dr TEXT,
-        selected_test TEXT,
-        visitid TEXT,
-        date DATE,
-        FOREIGN KEY (patient_id) REFERENCES patient(id)  -- Use the correct model name and field name
-        FOREIGN KEY (selected_test) REFERENCES visit_tests(id)  -- Use the correct model name and field name
-    );
-'''
+create_visit_table_query = '''CREATE TABLE IF NOT EXISTS visit (
+                    uhid TEXT NOT NULL,
+                    date DATE NOT NULL,
+                    title TEXT NOT NULL,
+                    patientname TEXT NOT NULL,
+                    dob DATE NOT NULL,
+                    age TEXT NOT NULL,
+                    gender TEXT NOT NULL,
+                    mobile TEXT NOT NULL,
+                    email TEXT NOT NULL,
+                    visitid Text Not NUll,
+                    selectedtest TEXT NOT NULL,
+                    refdr TEXT NOT NULL,
+                    id INTEGER NOT NULL,
+                    PRIMARY KEY("id" AUTOINCREMENT)
+                    
+        );'''
 
 cursor.execute(create_visit_table_query)
 conn.commit()
@@ -142,7 +147,8 @@ cursor.execute('''
     CREATE TABLE IF NOT EXISTS reporttemplates (
         code TEXT,
         name TEXT,
-        template BLOB
+        template BLOB,
+        content Text
     )
 ''')
 

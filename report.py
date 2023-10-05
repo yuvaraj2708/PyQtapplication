@@ -130,7 +130,7 @@ class Ui_reportingForm(object):
         
         self.comboBox_24 = QtWidgets.QComboBox(Form)
         self.comboBox_24.setGeometry(QtCore.QRect(350, 130, 161, 31))
-        self.comboBox_24.currentIndexChanged.connect(self.previewpathologist)
+#        self.comboBox_24.currentIndexChanged.connect(self.previewpathologist)
         
         
         
@@ -253,7 +253,7 @@ class Ui_reportingForm(object):
       # Check if a table is not selected (i.e., the cursor is within regular text)
       if cursor.currentTable() is None:
           block_format = cursor.blockFormat()
-          block_format.setAlignment(Qt.AlignLeft)
+          block_format.setAlignment(Qt.AlignLeft) # type: ignore
           cursor.setBlockFormat(block_format)
 
             
@@ -263,7 +263,7 @@ class Ui_reportingForm(object):
       # Check if a table is not selected (i.e., the cursor is within regular text)
          if cursor.currentTable() is None:
              block_format = cursor.blockFormat()
-             block_format.setAlignment(Qt.AlignCenter)
+             block_format.setAlignment(Qt.AlignCenter) # type: ignore
              cursor.setBlockFormat(block_format)   
                
     def alignTableTextRight(self):
@@ -281,7 +281,7 @@ class Ui_reportingForm(object):
         cursor = self.textEdit.textCursor()
 
         # Get the number of rows and columns from the user
-        rows, ok1 = QtWidgets.QInputDialog.getInt(None, "Table Rows", "Enter number of rows:")
+        rows, ok1 = QtWidgets.QInputDialog.getInt(None, "Table Rows", "Enter number of rows:") # type: ignore
         cols, ok2 = QtWidgets.QInputDialog.getInt(None, "Table Columns", "Enter number of columns:")
         
         if ok1 and ok2:
@@ -289,7 +289,7 @@ class Ui_reportingForm(object):
             table_format = table.format()
 
             # Set table properties
-            table_format.setAlignment(Qt.AlignCenter)
+            table_format.setAlignment(Qt.AlignCenter) # type: ignore
             table_format.setBorder(1)
             table_format.setCellSpacing(0)
             table_format.setCellPadding(10)
@@ -431,21 +431,21 @@ class Ui_reportingForm(object):
           # Display the template content in the QTextEdit
           self.textEdit.setHtml(template_content)
             
-    def previewpathologist(self, index):
-         # Get the selected item from the combo box
-         selected_pathologist = self.comboBox_24.currentText()
+    # def previewpathologist(self, index):
+    #      # Get the selected item from the combo box
+    #      selected_pathologist = self.comboBox_24.currentText()
   
-         # Fetch and display the pathology content based on the selected pathology
-         pathologist_content = self.fetch_pathologist_content(selected_pathologist)
-         self.textEdit.setPlainText(pathologist_content)
+    #      # Fetch and display the pathology content based on the selected pathology
+    #      pathologist_content = self.fetch_pathologist_content(selected_pathologist)
+    #      self.textEdit.setPlainText(pathologist_content)
   
-         # Show or hide the table and rich text editor based on the pathology content
-         if "table" in pathologist_content.lower():
-             self.tableView.show()
-             self.textEdit.hide()
-         else:
-             self.tableView.hide()
-             self.textEdit.show()
+    #      # Show or hide the table and rich text editor based on the pathology content
+    #      if "table" in pathologist_content.lower():
+    #          self.tableView.show()
+    #          self.textEdit.hide()
+    #      else:
+    #          self.tableView.hide()
+    #          self.textEdit.show()
              
     def fetch_report_template(self, report_name):
       
@@ -524,8 +524,8 @@ class Ui_reportingForm(object):
         pathology_names = [pathology[1] for pathology in pathologys]
         self.comboBox_24.addItems(pathology_names)
     
-    
-    
+
+        
     
     def saveReport(self):
        print("Save Report button clicked")
@@ -540,7 +540,8 @@ class Ui_reportingForm(object):
        # Here, you can add more fields like patient ID, date, etc.
 
        # Get the report content from the QTextEdit
-       edited_report = self.textEdit.toPlainText()
+       edited_report = self.textEdit.toHtml()
+
 
        # Create a new record in the patient-specific reports table
        connection = sqlite3.connect("patient_data.db")

@@ -11,6 +11,8 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sqlite3
 from PyQt5.QtWidgets import QFileDialog, QLabel
+import os
+import shutil
 
 class Ui_editpathologistForm(object):
     def setupUi(self, Form,DoctorCode):
@@ -362,13 +364,27 @@ class Ui_editpathologistForm(object):
                                                    options=options)
 
         if file_path:
-            # Set the selected image file path in the QLineEdit
-            self.lineEdit_30.setText(file_path)
+                # Set the selected image file path in the QLineEdit
+                self.lineEdit_30.setText(file_path)
+                file_name = os.path.basename(file_path)
+        
+        # Create the destination folder if it doesn't exist
+        if not os.path.exists('signature/'):
+                os.makedirs('signature/')
+        
+        # Construct the new file path, including the 'pyqt/' prefix
+        new_path = os.path.join('signature/', file_name)
+        
+        # Copy the file to the new location
+        shutil.copy(file_path, new_path)
+        
+        # Update the QLineEdit to show the new file path
+        self.lineEdit_30.setText(new_path)
 
-            # Display the selected image in the QLabel
-            pixmap = QtGui.QPixmap(file_path)
-            self.imageLabel.setPixmap(pixmap)
-            self.imageLabel.setScaledContents(True)
+        # Display the selected image in the QLabel
+        pixmap = QtGui.QPixmap(new_path)
+        self.imageLabel.setPixmap(pixmap)
+        self.imageLabel.setScaledContents(True)
     def populate_refdr_data(self):
         if self.DoctorCode:
             # Fetch patient data for the specified patient_id
@@ -379,7 +395,7 @@ class Ui_editpathologistForm(object):
                 self.lineEdit_11.setText(refdr_data[1])  # Assuming the second item is the title
                 self.lineEdit_10.setText(refdr_data[2])  # Assuming the third item is the patient name
                 self.lineEdit_9.setText(refdr_data[3])
-                self.lineEdit_32.setText(refdr_data[4])
+                self.lineEdit_32.setText(str(refdr_data[4]))
                 self.lineEdit_30.setText(refdr_data[7])
                 self.lineEdit_29.setText(str(refdr_data[5]))
                 

@@ -7,6 +7,7 @@ from PyQt5.QtGui import QTextCursor, QTextTableFormat, QTextCharFormat, QFont
 from PyQt5.QtWidgets import QFileDialog
 import os
 import sqlite3
+from PyQt5.QtWidgets import QMessageBox
 
 class Ui_reportForm(object):
     def setupUi(self, Form):
@@ -444,19 +445,22 @@ class Ui_reportForm(object):
         code = self.lineEdit_18.text()
         name = self.lineEdit_6.text()
         template = self.textEdit.toHtml()  # Get the plain text content of the QTextEdit
+        content=self.textEdit.toPlainText()
 
         # Connect to the database
         connection = sqlite3.connect("patient_data.db")
         cursor = connection.cursor()
+        if code and name and template:
+            # Insert the template into the report_templates table
+            cursor.execute("INSERT INTO reporttemplates (code, name, template,content) VALUES (?, ?, ?,?)", (code, name, template,content))
 
-        # Insert the template into the report_templates table
-        cursor.execute("INSERT INTO reporttemplates (code, name, template) VALUES (?, ?, ?)", (code, name, template))
-
-        # Commit changes and close the connection
-        connection.commit()
-        connection.close()
-        self.f.close()
-        print("Template saved to database.")
+            # Commit changes and close the connection
+            connection.commit()
+            connection.close()
+            self.f.close()
+        else:
+            QMessageBox.information(self.f,'Information','Please enter the correct all fields')
+        
 
 if __name__ == "__main__":
     import sys
