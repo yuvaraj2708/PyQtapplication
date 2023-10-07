@@ -511,6 +511,13 @@ class Ui_addpatientForm(object):
         latest_patient_number = self.fetch_latest_patient_number()
         next_patient_number = self.generate_next_patient_number(latest_patient_number)
         self.lineEdit_25.setText(next_patient_number)  # Set the generated test code
+
+
+
+        latest_visit_number = self.fetch_latest_visit_number()
+        next_visit_number = self.generate_next_visit_number(latest_visit_number)
+        self.visitid=next_visit_number # Set the generated visit code
+        
         
         self.fetch_latest_accession_number()
         latest_accession_number = self.fetch_latest_accession_number()
@@ -592,6 +599,25 @@ class Ui_addpatientForm(object):
      if selected_test:
         self.listWidgetTestSelected.addItem(selected_test)
     
+
+    def fetch_latest_visit_number(self):
+        try:
+            self.cursor.execute("SELECT MAX(visitid) FROM visit")
+            latest_test_number = self.cursor.fetchone()[0]
+            return latest_test_number
+        except Exception as e:
+            print("Error fetching latest patient number:", str(e))
+            return None
+
+    def generate_next_visit_number(self, latest_patient_number):
+        if latest_patient_number is None:
+            return "V00001"
+
+        prefix = "V"
+        numeric_part = int(latest_patient_number[1:])  # Convert the numeric part to integer
+        next_numeric_part = numeric_part + 1
+        next_patient_number = f"{prefix}{next_numeric_part:05}"  # Format as "T00001"
+        return next_patient_number
     
     
         
@@ -797,6 +823,9 @@ class Ui_addpatientForm(object):
         if uhid and title and patientname and dob and age and gender and mobile and email and refdr and selected_test:
             self.cursor.execute("INSERT INTO patients (uhid, title, patientname, dob, age, gender, mobile, email, date, refdr, selected_test, accession) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                                 (uhid, title, patientname, dob, age, gender, mobile, email, current_date, refdr, ', '.join(selected_test),accession))
+            
+            self.cursor.execute("INSERT INTO visit (uhid, date,title, patientname, dob, age, gender, mobile, email, visitid, selectedtest, refdr) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)",
+                               (uhid,current_date, title, patientname, dob, age, gender, mobile, email, self.visitid, ', '.join(selected_test) ,refdr))
             self.conn.commit()
             self.f.close()
             # Clear the input fields after saving

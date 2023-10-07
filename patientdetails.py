@@ -2,6 +2,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from patientregister import Ui_addpatientForm
 import sys
 import sqlite3
+# from addvisit import Ui_addvisitForm
 import os
 from editpatientregister import Ui_editpatientForm
 from PyQt5.QtWidgets import QDateEdit, QCalendarWidget
@@ -22,8 +23,8 @@ from reportlab.pdfgen import canvas
 from report import Ui_reportingForm
 from PyQt5.QtGui import QIcon, QPixmap, QFont
 from visit1 import Ui_visitpatientForm
-from PyPDF2 import PdfReader, PdfWriter
-import subprocess
+
+
 
 
 class Ui_patientForm(object):
@@ -296,7 +297,7 @@ class Ui_patientForm(object):
         self.tableWidget.setColumnWidth(10,70)
         self.tableWidget.setColumnWidth(11,130)
         
-        self.tableWidget.setHorizontalHeaderLabels(['UHID','Date','Title','Patient Name','Gender','DOB','Age','Mobile','Email','Ref Dr','Accession','Actions'])
+        self.tableWidget.setHorizontalHeaderLabels(['UHID','Date','Title','Patient Name','Gender','DOB','Age','Mobile','Email','Ref Dr','Visitid','Actions'])
         #set header height
         vertical_header = self.tableWidget.verticalHeader()
         vertical_header.setDefaultSectionSize(40) 
@@ -304,7 +305,7 @@ class Ui_patientForm(object):
 
         conn=sqlite3.connect('patient_data.db')
         cursor=conn.cursor()
-        cursor.execute("SELECT uhid,date,title,patientname,gender,dob,age,mobile,email,refdr,accession FROM patients")
+        cursor.execute("SELECT uhid,date,title,patientname,gender,dob,age,mobile,email,refdr,visitid FROM visit")
         patient_data = cursor.fetchall()
         count=len(patient_data)
         
@@ -329,31 +330,31 @@ class Ui_patientForm(object):
             delete_button = QtWidgets.QPushButton()
             delete_button.setIcon(QtGui.QIcon(os.path.join('images', 'delete.png')))
             delete_button.setFixedSize(20, 20)
-            delete_button.clicked.connect(lambda _, uhid=row[0]: self.delete_patient(uhid))
+            delete_button.clicked.connect(lambda _, vid=row[10]: self.delete_patient(vid))
             button_layout.addWidget(delete_button)
 
             edit_button = QtWidgets.QPushButton()
             edit_button.setIcon(QtGui.QIcon(os.path.join('images', 'edit.png')))  # Change to the correct icon
             edit_button.setFixedSize(20, 20)
-            edit_button.clicked.connect(lambda _, uhid=row[0]: self.edit_patient(uhid))
+            edit_button.clicked.connect(lambda _, vid=row[10]: self.edit_patient(vid))
             button_layout.addWidget(edit_button)
 
             qr_code_button = QtWidgets.QPushButton()
             qr_code_button.setIcon(QtGui.QIcon(os.path.join('images', 'qr.png')))
             qr_code_button.setFixedSize(20, 20)
-            qr_code_button.clicked.connect(lambda _, row=row[0]: self.generate_qr_code_pdf(row))
+            qr_code_button.clicked.connect(lambda _, row=row[10]: self.generate_qr_code_pdf(row))
             button_layout.addWidget(qr_code_button)
 
             bar_code_button = QtWidgets.QPushButton()
             bar_code_button.setIcon(QtGui.QIcon(os.path.join('images', 'barcode.png')))
             bar_code_button.setFixedSize(20, 20)
-            bar_code_button.clicked.connect(lambda _, row=row[10]: self.generate_bar_code_pdf(row))
+            bar_code_button.clicked.connect(lambda _, row=row[0]: self.generate_bar_code_pdf(row))
             button_layout.addWidget(bar_code_button)
 
             more_button = QtWidgets.QPushButton()
             more_button.setIcon(QtGui.QIcon(os.path.join('images', 'report.png')))
             more_button.setFixedSize(20, 20)
-            more_button.clicked.connect(lambda _, row=row: self.open_add_report_form(row[0]))
+            more_button.clicked.connect(lambda _, row=row[10]: self.open_add_report_form(row))
             button_layout.addWidget(more_button)
             
             more_button = QtWidgets.QPushButton()
@@ -361,14 +362,6 @@ class Ui_patientForm(object):
             more_button.setFixedSize(20, 20)
             more_button.clicked.connect(lambda _, row=row: self.display_report_details(row[3]))
             button_layout.addWidget(more_button)
-            
-            
-            view_button = QtWidgets.QPushButton()
-            view_button.setIcon(QtGui.QIcon(os.path.join('images', 'view.png')))
-            view_button.setFixedSize(20, 20)
-            view_button.clicked.connect(self.open_dicom_with_weasis)
-            button_layout.addWidget(view_button)
-
             
             more_button = QtWidgets.QPushButton()
             more_button.setIcon(QtGui.QIcon(os.path.join('images', 'share.png')))
@@ -379,7 +372,7 @@ class Ui_patientForm(object):
 
             self.checkbox=QtWidgets.QCheckBox()
             self.checkbox.setChecked(False)
-            self.checkbox.stateChanged.connect(lambda _,row=row: self.addqr(row[0]))
+            self.checkbox.stateChanged.connect(lambda _,row=row: self.addqr(row[10]))
             button_layout.addWidget(self.checkbox)
 
 
@@ -389,19 +382,6 @@ class Ui_patientForm(object):
             # Set the container widget as a cell widget in the last column
             self.tableWidget.setCellWidget(r, c, button_container)
             r=r+1
-    
-    def open_dicom_with_weasis(self):
-     options = QFileDialog.Options()
-     options |= QFileDialog.ReadOnly
- 
-     selected_file, _ = QFileDialog.getOpenFileName(None, "Open DICOM File", "", "DICOM Files (*.dcm *.dicom);;All Files (*)", options=options)
- 
-     if selected_file:
-        # Use subprocess to run Weasis with the selected DICOM file as an argument
-        weasis_command = r'"C:\Program Files\Weasis\Weasis.exe" ' + selected_file
-        subprocess.Popen(weasis_command, shell=True)
-
-    
     
     def open_add_report_form(self ,visit_data):
         #self.timer.start()
@@ -462,7 +442,7 @@ class Ui_patientForm(object):
       self.tableWidget.setColumnWidth(10,70)
       self.tableWidget.setColumnWidth(11,130)
         
-      self.tableWidget.setHorizontalHeaderLabels(['UHID','Date','Title','Patient Name','Gender','Dob','Age','Mobile','Email','Ref Dr','Accession','Actions'])
+      self.tableWidget.setHorizontalHeaderLabels(['UHID','Date','Title','Patient Name','Gender','Dob','Age','Mobile','Email','Ref Dr','Visitid','Actions'])
         #set header height
       vertical_header = self.tableWidget.verticalHeader()
       vertical_header.setDefaultSectionSize(40) 
@@ -476,7 +456,7 @@ class Ui_patientForm(object):
       cursor = conn.cursor()
 
       # Build the SQL query based on the filter criteria
-      query = "SELECT uhid,date,title,patientname,gender,dob,age,mobile,email,refdr,accession FROM patients WHERE "
+      query = "SELECT uhid,date,title,patientname,gender,dob,age,mobile,email,refdr,visitid FROM visit WHERE "
       parameters = []
 
       if patient_name and mobile=='' and from_date=='' and to_date=='':
@@ -524,47 +504,52 @@ class Ui_patientForm(object):
             button_container = QtWidgets.QWidget()
             button_layout = QtWidgets.QHBoxLayout(button_container)
 
+            visit_button = QtWidgets.QPushButton()
+            visit_button.setIcon(QtGui.QIcon(os.path.join('images', 'addvisit.png')))
+            visit_button.setFixedSize(20, 20)
+            visit_button.clicked.connect(lambda _, uhid=row[0]: self.generatevisitid_patient(uhid))
+            button_layout.addWidget(visit_button)
+
             delete_button = QtWidgets.QPushButton()
             delete_button.setIcon(QtGui.QIcon(os.path.join('images', 'delete.png')))
             delete_button.setFixedSize(20, 20)
-            delete_button.clicked.connect(lambda _, uhid=row[0]: self.delete_patient(uhid))
+            delete_button.clicked.connect(lambda _, vid=row[10]: self.delete_patient(vid))
             button_layout.addWidget(delete_button)
 
             edit_button = QtWidgets.QPushButton()
             edit_button.setIcon(QtGui.QIcon(os.path.join('images', 'edit.png')))  # Change to the correct icon
             edit_button.setFixedSize(20, 20)
-            edit_button.clicked.connect(lambda _, uhid=row[0]: self.edit_patient(uhid))
+            edit_button.clicked.connect(lambda _, vid=row[10]: self.edit_patient(vid))
             button_layout.addWidget(edit_button)
 
             qr_code_button = QtWidgets.QPushButton()
             qr_code_button.setIcon(QtGui.QIcon(os.path.join('images', 'qr.png')))
             qr_code_button.setFixedSize(20, 20)
-            qr_code_button.clicked.connect(lambda _, row=row[0]: self.generate_qr_code_pdf(row))
+            qr_code_button.clicked.connect(lambda _, row=row[10]: self.generate_qr_code_pdf(row))
             button_layout.addWidget(qr_code_button)
 
             bar_code_button = QtWidgets.QPushButton()
             bar_code_button.setIcon(QtGui.QIcon(os.path.join('images', 'barcode.png')))
             bar_code_button.setFixedSize(20, 20)
-            bar_code_button.clicked.connect(lambda _, row=row[10]: self.generate_bar_code_pdf(row))
+            bar_code_button.clicked.connect(lambda _, row=row[0]: self.generate_bar_code_pdf(row))
             button_layout.addWidget(bar_code_button)
 
             more_button = QtWidgets.QPushButton()
             more_button.setIcon(QtGui.QIcon(os.path.join('images', 'report.png')))
             more_button.setFixedSize(20, 20)
-            more_button.clicked.connect(lambda _, row=row: self.open_add_report_form(row[0]))
+            more_button.clicked.connect(lambda _, row=row[10]: self.open_add_report_form(row))
             button_layout.addWidget(more_button)
             
             more_button = QtWidgets.QPushButton()
             more_button.setIcon(QtGui.QIcon(os.path.join('images', 'print.png')))
             more_button.setFixedSize(20, 20)
-            more_button.clicked.connect(lambda _, report_id=row[0]: self.display_report_details(report_id))
+            more_button.clicked.connect(lambda _, row=row: self.display_report_details(row[3]))
             button_layout.addWidget(more_button)
             
             more_button = QtWidgets.QPushButton()
             more_button.setIcon(QtGui.QIcon(os.path.join('images', 'share.png')))
             more_button.setFixedSize(20, 20)
             button_layout.addWidget(more_button)
-
 
             self.checkbox=QtWidgets.QCheckBox()
             self.checkbox.setChecked(False)
@@ -661,8 +646,15 @@ class Ui_patientForm(object):
         conn = sqlite3.connect('patient_data.db')
         cursor = conn.cursor()
     
-        
-        cursor.execute("SELECT * FROM patients INNER JOIN qrcodetable ON patients.uhid == qrcodetable.id")
+        # cursor.execute("""
+        #         SELECT visit.visitid, visit.ref_dr,
+        #                 patients.patientname, patients.dob, patients.age, patients.gender, 
+        #                 patients.mobile, patients.email, visit.date, visit.selected_test,patients.uhid
+        #         FROM visit
+        #         INNER JOIN patients ON visit.patient_id = patients.uhid
+        #         INNER JOIN qrcodetable ON visit.id = qrcodetable.id
+        #     """)
+        cursor.execute("SELECT * FROM visit INNER JOIN qrcodetable ON visit.visitid == qrcodetable.id")
         patient_info_all = cursor.fetchall()
         
     
@@ -672,7 +664,7 @@ class Ui_patientForm(object):
             if patient_info:
                 
                # visit_id, ref_dr, patient_category, patientname, gender, dob, age, mobile, email, date, selected_test,patient_id = patient_info
-                uhid,date,title,patientname,dob,age,gender,mobile,email,refdr,selectedtest,accession,id=patient_info
+                uhid,date,title,patientname,dob,age,gender,mobile,email,visitid,selectedtest,refdr,id1,id=patient_info
                 # Create a formatted string with all the details
                 details_string = (
                     #f"Visit ID: {visit_id}\n"
@@ -683,6 +675,7 @@ class Ui_patientForm(object):
                     f"Gender: {gender}\n"
                     f"Mobile: {mobile}\n"
                     f"Email: {email}\n"
+                    f'Visitid: {visitid}\n'
                    # f"Patient Category: {patient_category}\n"
                     f"Referring Doctor: {refdr}\n"
                     f"Selected Test: {selectedtest}\n"
@@ -708,34 +701,22 @@ class Ui_patientForm(object):
         pdf = FPDF()
         pdf.add_page()
 
-        # Loop through the image paths and add each image to the PDF along with patient names
-        x_size = 10
-        y_size = 10
-        c = 0
-        for patient_info, img_path in zip(patient_info_all, img_group):
-            if not patient_info:
-                continue
-                
-            uhid, date, title, patientname, dob, age, gender, mobile, email, refdr, selectedtest, accession, id = patient_info
-
-            # Add patient name above the QR code
-            pdf.set_xy(x_size, y_size - 5)
-            pdf.set_font("Arial", "B", 12)
-            pdf.cell(0, 10, patientname + "|" + uhid, align='L')
-            # Add the QR code image
-            pdf.image(img_path, x=x_size, y=y_size + 5, w=30)  # Adjust y and w as needed
-
-            x_size = x_size + 33
-            c = c + 1
-            if c % 5 == 0:
-                y_size = y_size + 50
-                x_size = 10
-            if y_size == 240:
+            # Loop through the image paths and add each image to the PDF
+        x_size=10
+        y_size=10
+        c=0
+        for img in img_group:
+            pdf.image(img, x=x_size, y=y_size, w=30)  # Adjust x, y, and w as needed
+            x_size=x_size+33
+            c=c+1
+            if c%5==0:
+                y_size=y_size+50
+                x_size=10
+            if y_size==240:
                 pdf.add_page()
-
-        # Output the PDF
+                y_size=10
+            # Output the PDF
         pdf.output("qrcodes.pdf")
-
                 
         conn = sqlite3.connect('patient_data.db')
         cursor = conn.cursor()
@@ -747,6 +728,7 @@ class Ui_patientForm(object):
     
         conn.close()
         self.fetch_and_display_patient()
+        
 
     def addpatient(self):
         self.add_test_form = QtWidgets.QWidget()
@@ -755,7 +737,8 @@ class Ui_patientForm(object):
         self.add_test_form.show()
         self.ui_add_test.pushButton_3.clicked.connect(self.fetch_and_display_patient)
 
-    def delete_patient(self, patient_uhid):
+    def delete_patient(self, patient_vid):
+    
     # Create a confirmation dialog
       confirm_dialog = QMessageBox()
       confirm_dialog.setIcon(QMessageBox.Question)
@@ -773,18 +756,18 @@ class Ui_patientForm(object):
           cursor = conn.cursor()
   
           # Delete patient data from the database
-          cursor.execute("DELETE FROM patients WHERE uhid = ?", (patient_uhid,))
+          cursor.execute("DELETE FROM visit WHERE visitid = ?", (patient_vid,))
           conn.commit()
   
           # Refresh the displayed patient data immediately after deletion
           self.fetch_and_display_patient()
   
   
-    def edit_patient(self, patient_uhid):
+    def edit_patient(self, patient_vid):
         
         self.edit_patient_form = QtWidgets.QWidget()
         self.ui_edit_patient = Ui_editpatientForm()  # Replace with the correct class name
-        self.ui_edit_patient.setupUi(self.edit_patient_form, patient_uhid)  # Pass the patient ID
+        self.ui_edit_patient.setupUi(self.edit_patient_form, patient_vid)  # Pass the patient ID
         #self.edit_patient_form.show()
         # Fetch patient data for the specified patient_id
        # patient_data = self.fetch_patient_data_by_id(patient_uhid)
@@ -795,25 +778,31 @@ class Ui_patientForm(object):
         self.ui_edit_patient.pushButton_3.clicked.connect(self.fetch_and_display_patient)
 
 
-    def generate_bar_code_pdf(self, access):
-        barcode.generate('Code128', str(access), output=os.path.join('images', 'barcode1'))
+    def generate_bar_code_pdf(self, pid):
+        connection = sqlite3.connect("patient_data.db")  # Replace with your actual database file
+        cursor = connection.cursor()
+
+        # Fetch details for the given patient_id
+        cursor.execute("SELECT accession FROM patients WHERE uhid = ?", (pid,))
+        access = cursor.fetchone()[0]
+        barcode.generate('Code128', str(access),  writer=ImageWriter(),output=f'barcode{access}')
         x = 100  # Adjust the x-coordinate as needed
         y = 500  # Adjust the y-coordinate as needed
         width = 200  # Adjust the width as needed
         height = 50  
         # Create a PDF with the barcode image.
-        pdf_filename = f'barcode_{access[1]}.pdf'
+        pdf_filename = f'barcode_{access}.pdf'
         c = canvas.Canvas(pdf_filename)
-        c.drawImage(os.path.join('images', 'barcode.png'),x,y,height=100)  # Adjust x, y, width, height as needed
-        c.showPage()
+        c.drawImage(f'barcode{access}.png',x,y,height=100)  # Adjust x, y, width, height as needed
+       # c.showPage()
         c.save()
 
         # Optionally, you can open the generated PDF.
-        os.system(pdf_filename)
+       # os.system(pdf_filename)
 
 
 
-    def generate_qr_code_pdf(self,pid):
+    def generate_qr_code_pdf(self,vid):
     # visit_id, ref_dr, patient_category, patient_name, dob, age, gender, mobile, email, date, selected_test,acc= visit_data
  
         # Retrieve patient information based on patient_id from the patients table
@@ -827,25 +816,26 @@ class Ui_patientForm(object):
         #         FROM visit
         #         INNER JOIN patients ON visit.patient_id = patients.uhid
         #     """)
-        cursor.execute("SELECT * FROM patients where uhid==?",(pid,))
+        cursor.execute("SELECT * FROM visit where visitid==?",(vid,))
         patient_info = cursor.fetchone()
     
         conn.close()
     
         if patient_info:
-            uhid,date,title,patientname,dob,age,gender,mobile,email,refdr,selectedtest,accession=patient_info
+            uhid,date,title,patientname,dob,age,gender,mobile,email,visitid,selectedtest,refdr,id=patient_info
 
             # Create a formatted string with all the details
             details_string = (
               #  f"Visit ID: {visit_id}\n"
                 f"Patient ID: {uhid}\n"
-                f"Patient Name: {patientname}\n"
+                f"Patient Name: {title} {patientname}\n"
                 f"DOB: {dob}\n"
                 f"Age: {age}\n"
                 f"Gender: {gender}\n"
                 f"Mobile: {mobile}\n"
                 f"Email: {email}\n"
               #  f"Patient Category: {patient_category}\n"
+              f"Visit Id :{visitid}\n"
                 f"Referring Doctor: {refdr}\n"
                 f"Selected Test: {selectedtest}\n"
                 f"Date: {date}\n"
@@ -863,7 +853,7 @@ class Ui_patientForm(object):
 
             # Generate the QR code image
             qr_img = qr.make_image(fill_color="black", back_color="white")
-            qr_img.save(f'qr_code_{uhid}.png')
+            qr_img.save(f'qr_code_{visitid}.png')
 
             # Create a PDF with mm as the unit
             pdf = FPDF()
@@ -880,14 +870,14 @@ class Ui_patientForm(object):
             pdf.add_page()
 
             # Add the QR code to the PDF
-            pdf.image(f'qr_code_{uhid}.png', x=x_position, y=y_position, w=qr_size)
+            pdf.image(f'qr_code_{visitid}.png', x=x_position, y=y_position, w=qr_size)
 
             # Add visit details to the PDF
             #pdf.set_font("Arial", size=8)
         # pdf.multi_cell(150, 10, details_string, border=0, align="L")
 
             # Set the PDF file path
-            pdf_file_path = f'qr_code_{uhid}.pdf'
+            pdf_file_path = f'qr_code_{visitid}.pdf'
 
             # Output the PDF file
             pdf.output(pdf_file_path)
@@ -915,14 +905,6 @@ class Ui_patientForm(object):
         self.pushButton_3.clicked.connect(self.selected_qrcode_generate)
         self.pushButton_2.clicked.connect(self.filter_patient_data)
         
-
-
-
-
-
-    
-
-
 
 
 

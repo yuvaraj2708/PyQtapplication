@@ -5,8 +5,9 @@ from PyQt5.QtWidgets import QComboBox
 
 
 class Ui_editpatientForm(object):
-    def setupUi(self, Form,patient_uhid):
+    def setupUi(self, Form,patient_vid):
         self.conn = sqlite3.connect("patient_data.db")
+        self.i=0
         self.cursor = self.conn.cursor()
         Form.setWindowFlags(QtCore.Qt.CustomizeWindowHint | QtCore.Qt.WindowTitleHint)
         self.cursor = self.conn.cursor()
@@ -321,7 +322,7 @@ class Ui_editpatientForm(object):
         self.lineEdit_29.setObjectName("lineEdit_29")
         self.lineEdit_30 = QtWidgets.QLineEdit(Form)
         self.lineEdit_30.setGeometry(QtCore.QRect(270, 330, 211, 31))#AGE
-        self.lineEdit_30.setReadOnly(True)
+        #self.lineEdit_30.setReadOnly(True)
         font = QtGui.QFont()
         font.setPointSize(-1)
         font.setBold(False)
@@ -434,7 +435,7 @@ class Ui_editpatientForm(object):
         
         self.lineEdit_31 = QtWidgets.QLineEdit(Form)
         self.lineEdit_31.setGeometry(QtCore.QRect(40, 330, 211, 31))#DOB
-        self.lineEdit_31.setReadOnly(True)
+        #self.lineEdit_31.setReadOnly(True)
         font = QtGui.QFont()
         font.setPointSize(-1)
         font.setBold(False)
@@ -491,14 +492,8 @@ class Ui_editpatientForm(object):
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
-        self.fetch_latest_patient_number()
-        latest_patient_number = self.fetch_latest_patient_number()
-        next_patient_number = self.generate_next_patient_number(latest_patient_number)
-        self.lineEdit_25.setText(next_patient_number)  # Set the generated test code
-        
-        self.fetch_latest_accession_number()
-        latest_accession_number = self.fetch_latest_accession_number()
-        next_accession_number = self.generate_next_accession_number(latest_accession_number)
+
+
         self.comboBox_25 = QtWidgets.QComboBox(Form)
         self.comboBox_25.setGeometry(QtCore.QRect(40, 480, 211, 31))
         
@@ -530,14 +525,17 @@ class Ui_editpatientForm(object):
         # Populate comboBox_26 with data from the database
         selecttest_data = self.fetch_selecttest_from_database()
         self.populate_testdropdown(self.comboBox_26, selecttest_data)
-        self.patient_uhid = patient_uhid  # Store the patient ID
+        # Store the patient ID
+        self.patient_vid = patient_vid 
         self.populate_patient_data() 
         
+        
     def populate_patient_data(self):
-        if self.patient_uhid:
+        if self.patient_vid:
             # Fetch patient data for the specified patient_id
-            patient_data = self.fetch_patient_data_by_id(self.patient_uhid)
+            patient_data = self.fetch_patient_data_by_id(self.patient_vid)
             if patient_data:
+                
                 # Populate the form fields with the patient data
                 self.lineEdit_25.setText(str(patient_data[0]))
                 self.lineEdit_29.setText(patient_data[2])  # Assuming the second item is the title
@@ -547,77 +545,28 @@ class Ui_editpatientForm(object):
                 self.lineEdit_20.setText(patient_data[6])
                 self.lineEdit_24.setText(patient_data[7])
                 self.lineEdit_28.setText(patient_data[8])
-                # self.comboBox_25.currentText(patient_data[9])
+                self.comboBox_25.setCurrentText(patient_data[11])
                 # self.comboBox_26.currentText(patient_data[10])
+                self.listWidgetTestSelected.addItem(patient_data[10])
     
-    def fetch_patient_data_by_id(self, patient_uhid):
-        self.cursor.execute("SELECT * FROM patients WHERE uhid=?", (patient_uhid,))
+    def fetch_patient_data_by_id(self, patient_vid):
+        self.cursor.execute("SELECT * FROM visit WHERE visitid=?", (patient_vid,))
         patient_data = self.cursor.fetchone()
         return patient_data    
-        
+    
+    
     def add_selected_test_to_list(self):
+     
+     if self.i==0:
+        self.listWidgetTestSelected.clear()
+        self.i=self.i+1
      selected_test = self.comboBox_26.currentText()
      if selected_test:
         self.listWidgetTestSelected.addItem(selected_test)
     
     
     
-        
-    def fetch_latest_patient_number(self):
-        try:
-            self.cursor.execute("SELECT MAX(uhid) FROM patients")
-            latest_test_number = self.cursor.fetchone()[0]
-            return latest_test_number
-        except Exception as e:
-            print("Error fetching latest patient number:", str(e))
-            return None
 
-    def generate_next_patient_number(self, latest_patient_number):
-        if latest_patient_number is None:
-            return "P00001"
-
-        prefix = "P"
-        numeric_part = int(latest_patient_number[1:])  # Convert the numeric part to integer
-        next_numeric_part = numeric_part + 1
-        next_patient_number = f"{prefix}{next_numeric_part:05}"  # Format as "T00001"
-        return next_patient_number
-    
-    def fetch_latest_accession_number(self):
-        try:
-            self.cursor.execute("SELECT MAX(accession) FROM patients")
-            latest_test_number = self.cursor.fetchone()[0]
-            return latest_test_number
-        except Exception as e:
-            print("Error fetching latest patient number:", str(e))
-            return None
-    
-    
-    def generate_next_accession_number(self, latest_accession_number):
-        if latest_accession_number is None:
-            return "100001"
-    
-        numeric_part = int(latest_accession_number)
-        next_numeric_part = numeric_part + 1
-        next_accession_number = str(next_numeric_part).zfill(6)
-        return next_accession_number
-    
-    def save_accession_data(self):
-        try:
-            DoctorCode = self.generate_next_accession_number()
-            # ... rest of your save_test_data function ...
-
-        except Exception as e:
-            print("Error:", str(e))
-    
-    
-    def save_patient_data(self):
-        try:
-            DoctorCode = self.generate_next_patient_number()
-            # ... rest of your save_test_data function ...
-
-        except Exception as e:
-            print("Error:", str(e))
-    
     
     
     def fetch_refdr_from_database(self):
@@ -688,6 +637,7 @@ class Ui_editpatientForm(object):
         self.lineEdit_28.clear()
         self.comboBox_25.clear()
         self.comboBox_26.clear()
+        self.listWidgetTestSelected.clear()
         
     def save_patient_data(self):
      try:
@@ -700,20 +650,19 @@ class Ui_editpatientForm(object):
         mobile = self.lineEdit_24.text()
         email = self.lineEdit_28.text()
         refdr = self.comboBox_25.currentText()
-        selected_test = self.comboBox_26.currentText()
-        
-        # Uncomment the code to fetch the latest accession number
-        latest_accession_number = self.fetch_latest_accession_number()
-        accession = self.generate_next_accession_number(latest_accession_number)
-
+        selected_test = [self.listWidgetTestSelected.item(i).text() for i in range(self.listWidgetTestSelected.count())]
         # Insert patient data into the database
         current_datetime = datetime.datetime.now()
         current_date = current_datetime.strftime("%d%m%Y")
 
-        self.cursor.execute("UPDATE patients SET title=?, patientname=?, dob=?, age=?, gender=?, mobile=?, email=?, date=?, refdr=?, selected_test=?, accession=? WHERE uhid=?",
-                            (title, patientname, dob, age, gender, mobile, email, current_date, refdr, selected_test,accession,uhid))
+        self.cursor.execute("UPDATE visit SET title=?, patientname=?, dob=?, age=?, gender=?, mobile=?, email=?, date=?, refdr=?, selectedtest=? WHERE visitid=?",
+                            (title, patientname, dob, age, gender, mobile, email, current_date, refdr,','.join(selected_test),self.patient_vid))
         self.conn.commit()
-        # self.f.close()
+
+        self.cursor.execute("UPDATE visit SET title=?,patientname=?,dob=?,age=?,gender=?,mobile=?,email=? WHERE uhid=?",
+                            (title,patientname,dob,age,gender,mobile,email,uhid))
+        self.conn.commit()
+        #self.f.close()
 
         # Clear the input fields after saving
         self.clear_input_fields()

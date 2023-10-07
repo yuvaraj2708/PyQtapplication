@@ -390,18 +390,19 @@ class Ui_editreportForm(object):
     def save_template_to_database(self):
         code = self.lineEdit_18.text()
         name = self.lineEdit_6.text()
-        template = self.textEdit.toPlainText()  # Get the plain text content of the QTextEdit
+        template = self.textEdit.toHtml()  # Get the plain text content of the QTextEdit
+        content=self.textEdit.toPlainText()
 
         # Connect to the database
         connection = sqlite3.connect("patient_data.db")
         cursor = connection.cursor()
 
         # Insert the template into the report_templates table
-        cursor.execute("UPDATE reporttemplates SET code=?, name=?, template=? where code == ?",
-                            (code,name,template,self.reportcode)) 
+        cursor.execute("UPDATE reporttemplates SET code=?, name=?, template=? ,content=? where code == ?",
+                            (code,name,template,content,self.reportcode)) 
 
         # Commit changes and close the connection
-        # connection.commit()
+        connection.commit()
         connection.close()
         self.f.close()
 

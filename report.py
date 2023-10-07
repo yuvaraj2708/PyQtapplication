@@ -221,10 +221,10 @@ class Ui_reportingForm(object):
         QtCore.QMetaObject.connectSlotsByName(Form)
         
         
-    def set_patient_data(self, patient_id):
+    def set_patient_data(self, v_id):
      connection = sqlite3.connect("patient_data.db")
      cursor = connection.cursor()
-     cursor.execute("SELECT patientname FROM patients WHERE uhid = ?", (patient_id,))
+     cursor.execute("SELECT patientname FROM visit WHERE visitid = ?", (v_id,))
      result = cursor.fetchone()
      connection.close()
 
