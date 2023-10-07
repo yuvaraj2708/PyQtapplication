@@ -23,7 +23,7 @@ from reportlab.pdfgen import canvas
 from report import Ui_reportingForm
 from PyQt5.QtGui import QIcon, QPixmap, QFont
 from visit1 import Ui_visitpatientForm
-
+import subprocess
 
 
 
@@ -362,13 +362,19 @@ class Ui_patientForm(object):
             more_button.setFixedSize(20, 20)
             more_button.clicked.connect(lambda _, row=row: self.display_report_details(row[3]))
             button_layout.addWidget(more_button)
+           
+            view_button = QtWidgets.QPushButton()
+            view_button.setIcon(QtGui.QIcon(os.path.join('images', 'view.png')))
+            view_button.setFixedSize(20, 20)
+            view_button.clicked.connect(self.open_dicom_with_weasis)
+            button_layout.addWidget(view_button)
             
             more_button = QtWidgets.QPushButton()
             more_button.setIcon(QtGui.QIcon(os.path.join('images', 'share.png')))
             more_button.setFixedSize(20, 20)
             button_layout.addWidget(more_button)
             
-
+            
 
             self.checkbox=QtWidgets.QCheckBox()
             self.checkbox.setChecked(False)
@@ -546,6 +552,12 @@ class Ui_patientForm(object):
             more_button.clicked.connect(lambda _, row=row: self.display_report_details(row[3]))
             button_layout.addWidget(more_button)
             
+            view_button = QtWidgets.QPushButton()
+            view_button.setIcon(QtGui.QIcon(os.path.join('images', 'view.png')))
+            view_button.setFixedSize(20, 20)
+            view_button.clicked.connect(self.open_dicom_with_weasis)
+            button_layout.addWidget(view_button)
+            
             more_button = QtWidgets.QPushButton()
             more_button.setIcon(QtGui.QIcon(os.path.join('images', 'share.png')))
             more_button.setFixedSize(20, 20)
@@ -565,7 +577,17 @@ class Ui_patientForm(object):
             r=r+1
     
 
-
+    def open_dicom_with_weasis(self):
+     options = QFileDialog.Options()
+     options |= QFileDialog.ReadOnly
+ 
+     selected_file, _ = QFileDialog.getOpenFileName(None, "Open DICOM File", "", "DICOM Files (*.dcm *.dicom);;All Files (*)", options=options)
+ 
+     if selected_file:
+        # Use subprocess to run Weasis with the selected DICOM file as an argument
+        weasis_command = r'"C:\Program Files\Weasis\Weasis.exe" ' + selected_file
+        subprocess.Popen(weasis_command, shell=True)
+        
     def display_report_details(self, patient_id):
         connection = sqlite3.connect("patient_data.db")  # Replace with your actual database file
         cursor = connection.cursor()
@@ -702,20 +724,31 @@ class Ui_patientForm(object):
         pdf.add_page()
 
             # Loop through the image paths and add each image to the PDF
-        x_size=10
-        y_size=10
-        c=0
-        for img in img_group:
-            pdf.image(img, x=x_size, y=y_size, w=30)  # Adjust x, y, and w as needed
-            x_size=x_size+33
-            c=c+1
-            if c%5==0:
-                y_size=y_size+50
-                x_size=10
-            if y_size==240:
+        x_size = 10
+        y_size = 10
+        c = 0
+        for patient_info, img_path in zip(patient_info_all, img_group):
+            if not patient_info:
+                continue
+                
+            uhid,date,title,patientname,dob,age,gender,mobile,email,visitid,selectedtest,refdr,id1,id=patient_info
+
+            # Add patient name above the QR code
+            pdf.set_xy(x_size, y_size - 5)
+            pdf.set_font("Arial", "B", 12)
+            pdf.cell(0, 10, patientname + "|" + uhid, align='L')
+            # Add the QR code image
+            pdf.image(img_path, x=x_size, y=y_size + 5, w=30)  # Adjust y and w as needed
+
+            x_size = x_size + 33
+            c = c + 1
+            if c % 5 == 0:
+                y_size = y_size + 50
+                x_size = 10
+            if y_size == 240:
                 pdf.add_page()
-                y_size=10
-            # Output the PDF
+
+        # Output the PDF
         pdf.output("qrcodes.pdf")
                 
         conn = sqlite3.connect('patient_data.db')
