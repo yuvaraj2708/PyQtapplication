@@ -504,6 +504,35 @@ class Ui_addpatientForm(object):
         self.lineEdit_32.setFrame(True)
         self.lineEdit_32.setObjectName("lineEdit_32")
 
+
+        self.lineEdit_33 = QtWidgets.QLineEdit(Form)
+        self.lineEdit_33.setGeometry(QtCore.QRect(270, 480, 211, 31))#test
+        font = QtGui.QFont()
+        font.setPointSize(-1)
+        font.setBold(False)
+        font.setWeight(50)
+        self.lineEdit_33.setFont(font)
+        self.lineEdit_33.setStyleSheet("QLineEdit\n"
+"{\n"
+"font-size: 15px;\n"
+"    font-weight: 400;\n"
+"    color: #212529;\n"
+"    background-color: #ffffff;\n"
+"    background-clip: padding-box;\n"
+"    border: 1px solid #ced4da;\n"
+"    border-radius: 20px;\n"
+"    padding:0px 10px;\n"
+"}\n"
+"QLineEdit:focus\n"
+"{\n"
+"border:1px solid #3F4254;\n"
+"}\n"
+"\n"
+"")
+        self.lineEdit_33.setInputMethodHints(QtCore.Qt.ImhNone)
+        self.lineEdit_33.setFrame(True)
+        self.lineEdit_33.setObjectName("lineEdit_33")
+
         self.comboBox_title.currentTextChanged.connect(self.update_gender_options)
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -523,7 +552,7 @@ class Ui_addpatientForm(object):
         latest_accession_number = self.fetch_latest_accession_number()
         next_accession_number = self.generate_next_accession_number(latest_accession_number)
         self.comboBox_25 = QtWidgets.QComboBox(Form)
-        self.comboBox_25.setGeometry(QtCore.QRect(40, 480, 211, 31))
+        self.comboBox_25.setGeometry(QtCore.QRect(40, 520, 211, 31))
         
         # Populate comboBox_25 with data from the database
         refdr_data = self.fetch_refdr_from_database()
@@ -531,16 +560,16 @@ class Ui_addpatientForm(object):
 
         # Create comboBox_26
         self.comboBox_26 = QtWidgets.QComboBox(Form)
-        self.comboBox_26.setGeometry(QtCore.QRect(270, 480, 211, 31))
+        self.comboBox_26.setGeometry(QtCore.QRect(270, 520, 211, 31))
 
         # Populate comboBox_26 with data from the database
         selecttest_data = self.fetch_selecttest_from_database()
         self.comboBox_26.addItems(selecttest_data)
         
         self.listWidgetTestSelected = QtWidgets.QListWidget(Form)
-        self.listWidgetTestSelected.setGeometry(QtCore.QRect(270, 510, 211, 111))
+        self.listWidgetTestSelected.setGeometry(QtCore.QRect(270, 570, 211, 111))
         self.listWidgetTestSelected.setObjectName("listWidgetTestSelected") 
-        
+
         
         self.pushButtonAddTest = QtWidgets.QPushButton(Form)
         self.pushButtonAddTest.setGeometry(QtCore.QRect(500, 480, 51, 31))
@@ -553,6 +582,23 @@ class Ui_addpatientForm(object):
         # Populate comboBox_26 with data from the database
         selecttest_data = self.fetch_selecttest_from_database()
         self.populate_testdropdown(self.comboBox_26, selecttest_data)
+
+        self.lineEdit_32.textChanged.connect(self.filter_refdrcombo)
+        self.lineEdit_33.textChanged.connect(self.filter_selectedtextcombo)
+
+    def filter_refdrcombo(self):
+        refdr_data = self.fetch_refdr_from_database()
+        self.comboBox_25.clear()
+        search=self.lineEdit_32.text()
+        filtered_items = [item for item in refdr_data if search.lower() in item.lower()]
+        self.comboBox_25.addItems(filtered_items)
+        
+    def filter_selectedtextcombo(self):
+        selecttest_data = self.fetch_selecttest_from_database()
+        self.comboBox_26.clear()
+        search=self.lineEdit_33.text()
+        filtered_items = [item for item in selecttest_data if search.lower() in item.lower()]
+        self.comboBox_26.addItems(filtered_items)
     
     def validate_email(self):
         email = self.lineEdit_28.text()
