@@ -865,7 +865,7 @@ class Ui_addpatientForm(object):
 
         # Insert patient data into the database
         current_datetime = datetime.datetime.now()
-        current_date = current_datetime.strftime("%d%m%Y")
+        current_date = current_datetime.strftime("%d %b %Y")
         if uhid and title and patientname and dob and age and gender and mobile and email and refdr and selected_test:
             self.cursor.execute("INSERT INTO patients (uhid, title, patientname, dob, age, gender, mobile, email, date, refdr, selected_test, accession) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                                 (uhid, title, patientname, dob, age, gender, mobile, email, current_date, refdr, ', '.join(selected_test),accession))

@@ -340,7 +340,7 @@ class Ui_deviceForm(object):
                
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
+        Form.setWindowTitle(_translate("Form", "Ekon"))
         self.label.setText(_translate("Form", "Register Device"))
         self.pushButton.setText(_translate("Form", "Save"))
         self.label_4.setText(_translate("Form", "Address"))
@@ -401,7 +401,7 @@ class DeviceRegistrationForm(QtWidgets.QWidget):
               clientid = self.ui.lineEdit_15.text()
                          
               # Make an API call to check if the deviceid and clientid are available
-              api_url = f'http://106.201.238.238:8000/register_client/?clientid={clientid}&deviceid={deviceid}'  # Replace with your API URL
+              api_url = f'http://127.0.0.1:8000/register_client/?clientid={clientid}&deviceid={deviceid}'  # Replace with your API URL
               try:
                  response = requests.get(api_url)
                  if response.status_code == 200:
